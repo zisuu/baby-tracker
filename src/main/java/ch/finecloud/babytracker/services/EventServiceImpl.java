@@ -66,33 +66,35 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateEventById(UUID eventId, EventDTO eventDTO) {
+    public Optional<EventDTO> updateEventById(UUID eventId, EventDTO eventDTO) {
         EventDTO existingEventDTO = eventMap.get(eventId);
         existingEventDTO.setEventType(eventDTO.getEventType());
         existingEventDTO.setNotes(eventDTO.getNotes());
         existingEventDTO.setEndDate(eventDTO.getEndDate());
         eventMap.put(existingEventDTO.getId(), existingEventDTO);
+        return Optional.of(existingEventDTO);
     }
 
     @Override
-    public void deleteById(UUID eventId) {
+    public Boolean deleteById(UUID eventId) {
         eventMap.remove(eventId);
+        return true;
     }
 
     @Override
     public void patchEventById(UUID eventId, EventDTO eventDTO) {
-        EventDTO existingBeer = eventMap.get(eventId);
+        EventDTO existingEvent = eventMap.get(eventId);
 
         if(StringUtils.hasText(eventDTO.getNotes())) {
-            existingBeer.setNotes(eventDTO.getNotes());
+            existingEvent.setNotes(eventDTO.getNotes());
         }
 
         if(eventDTO.getEndDate() != null) {
-            existingBeer.setEndDate(eventDTO.getEndDate());
+            existingEvent.setEndDate(eventDTO.getEndDate());
         }
 
         if(eventDTO.getEventType() != null) {
-            existingBeer.setEventType(eventDTO.getEventType());
+            existingEvent.setEventType(eventDTO.getEventType());
         }
 
     }

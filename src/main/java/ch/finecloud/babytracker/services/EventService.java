@@ -13,9 +13,9 @@ public interface EventService {
     Optional<EventDTO> getEventById(UUID id);
     EventDTO saveNewEvent(EventDTO eventDTO);
 
-    void updateEventById(UUID eventId, EventDTO eventDTO);
+    Optional<EventDTO> updateEventById(UUID eventId, EventDTO eventDTO);
 
-    void deleteById(UUID eventId);
+    Boolean deleteById(UUID eventId);
 
     void patchEventById(UUID eventId, EventDTO eventDTO);
 }

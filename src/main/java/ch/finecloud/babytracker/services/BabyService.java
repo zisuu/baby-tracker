@@ -13,9 +13,9 @@ public interface BabyService {
 
     BabyDTO saveNewBaby(BabyDTO babyDTO);
 
-    void updateBabyById(UUID babyId, BabyDTO babyDTO);
+    Optional<BabyDTO> updateBabyById(UUID babyId, BabyDTO babyDTO);
 
-    void deleteById(UUID babyId);
+    Boolean deleteById(UUID babyId);
 
     void patchBabyById(UUID babyId, BabyDTO babyDTO);
 }

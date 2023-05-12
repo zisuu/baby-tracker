@@ -1,0 +1,111 @@
+package ch.finecloud.babytracker.controller;
+
+import ch.finecloud.babytracker.entities.Baby;
+import ch.finecloud.babytracker.mappers.BabyMapper;
+import ch.finecloud.babytracker.model.BabyDTO;
+import ch.finecloud.babytracker.repositories.BabyRepository;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
+
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@SpringBootTest
+public class BabyControllerIT {
+
+    @Autowired
+    BabyController babyController;
+
+    @Autowired
+    BabyRepository babyRepository;
+
+    @Autowired
+    BabyMapper babyMapper;
+
+    @Test
+    void testDeleteByIdNotFound() {
+        assertThrows(NotFoundException.class, () -> babyController.deleteById(UUID.randomUUID()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void deleteByIdFound() {
+        Baby testBaby = babyRepository.findAll().get(0);
+        ResponseEntity responseEntity = babyController.deleteById(testBaby.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+        assertThat(babyRepository.findById(testBaby.getId()).isEmpty());
+    }
+
+    @Test
+    void testUpdateNotFound() {
+        assertThrows(NotFoundException.class, () -> babyController.updateById(UUID.randomUUID(), BabyDTO.builder().build()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void updateExistingBaby() {
+        Baby testBaby = babyRepository.findAll().get(0);
+        BabyDTO babyDTO = babyMapper.babyToBabyDto(testBaby);
+        babyDTO.setId(null);
+        babyDTO.setVersion(null);
+        babyDTO.setName("Updated Baby");
+        ResponseEntity responseEntity = babyController.updateById(testBaby.getId(), babyDTO);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+        Baby updatedBaby = babyRepository.findById(testBaby.getId()).get();
+        assertThat(updatedBaby.getName()).isEqualTo("Updated Baby");
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void saveNewBabyTest() {
+        BabyDTO babyDTO = BabyDTO.builder()
+                .name("New Baby")
+                .build();
+        ResponseEntity responseEntity = babyController.handlePost(babyDTO);
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(201);
+        assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
+        String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
+        UUID savedUUID = UUID.fromString(locationUUID[4]);
+        Baby baby = babyRepository.findById(savedUUID).get();
+        assertThat(baby).isNotNull();
+    }
+
+    @Test
+    void testBabyByIdNotFound() {
+        assertThrows(NotFoundException.class, () -> babyController.getBabyById(UUID.randomUUID()));
+    }
+
+    @Test
+    void testGetById() {
+        Baby testBaby = babyRepository.findAll().get(0);
+        BabyDTO babyDTO = babyController.getBabyById(testBaby.getId());
+        assertThat(babyDTO).isNotNull();
+    }
+
+    @Test
+    void testListBabys() {
+        List<BabyDTO> babyDTOList = babyController.listBabys();
+        assertThat(babyDTOList.size()).isEqualTo(3);
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testEmptyList() {
+        babyRepository.deleteAll();
+        List<BabyDTO> babyDTOList = babyController.listBabys();
+        assertThat(babyDTOList.size()).isEqualTo(0);
+    }
+}
+

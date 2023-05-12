@@ -28,13 +28,17 @@ public class EventController {
 
     @DeleteMapping(BASE_URL_ID)
     public ResponseEntity deleteById(@PathVariable("eventId") UUID eventId) {
-        eventService.deleteById(eventId);
+        if (!eventService.deleteById(eventId)) {
+            throw new NotFoundException();
+        }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID)
     public ResponseEntity updateById(@PathVariable("eventId") UUID eventId, @RequestBody EventDTO eventDTO) {
-        eventService.updateEventById(eventId, eventDTO);
+        if (eventService.updateEventById(eventId, eventDTO).isEmpty()) {
+            throw new NotFoundException();
+        }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

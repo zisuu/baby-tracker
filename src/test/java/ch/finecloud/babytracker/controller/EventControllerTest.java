@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.services.EventService;
 import ch.finecloud.babytracker.services.EventServiceImpl;
@@ -72,6 +73,7 @@ class EventControllerTest {
     @Test
     void testDeleteCustomer() throws Exception {
         EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        given(eventService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/events/" + testEventDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -84,6 +86,7 @@ class EventControllerTest {
     @Test
     void testUpdateCustomer() throws Exception {
         EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        given(eventService.updateEventById(any(UUID.class), any(EventDTO.class))).willReturn(Optional.of(testEventDTO));
         mockMvc.perform(put("/api/v1/events/" + testEventDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)

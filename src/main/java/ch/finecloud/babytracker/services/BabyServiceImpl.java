@@ -72,15 +72,17 @@ public class BabyServiceImpl implements BabyService {
     }
 
     @Override
-    public void updateBabyById(UUID beerId, BabyDTO babyDTO) {
-        BabyDTO existingBabyDTO = babyMap.get(beerId);
+    public Optional<BabyDTO> updateBabyById(UUID babyId, BabyDTO babyDTO) {
+        BabyDTO existingBabyDTO = babyMap.get(babyId);
         existingBabyDTO.setName(babyDTO.getName());
         babyMap.put(existingBabyDTO.getId(), existingBabyDTO);
+        return Optional.of(existingBabyDTO);
     }
 
     @Override
-    public void deleteById(UUID babyId) {
+    public Boolean deleteById(UUID babyId) {
         babyMap.remove(babyId);
+        return true;
     }
 
     @Override

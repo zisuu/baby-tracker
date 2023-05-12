@@ -28,13 +28,17 @@ public class BabyController {
 
     @DeleteMapping(BASE_URL_ID)
     public ResponseEntity deleteById(@PathVariable("babyId") UUID babyId) {
-        babyService.deleteById(babyId);
+        if (!babyService.deleteById(babyId)) {
+            throw new NotFoundException();
+        }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID)
     public ResponseEntity updateById(@PathVariable("babyId") UUID babyId, @RequestBody BabyDTO babyDTO) {
-        babyService.updateBabyById(babyId, babyDTO);
+        if (babyService.updateBabyById(babyId, babyDTO).isEmpty()) {
+            throw new NotFoundException();
+        }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -47,13 +51,13 @@ public class BabyController {
     }
 
     @GetMapping(BASE_URL)
-    public List<BabyDTO> listCustomers() {
+    public List<BabyDTO> listBabys() {
         log.debug("listCustomers was called, in Controller");
         return babyService.listBabys();
     }
 
     @GetMapping(BASE_URL_ID)
-    public BabyDTO getCustomerById(@PathVariable("babyId") UUID babyId) {
+    public BabyDTO getBabyById(@PathVariable("babyId") UUID babyId) {
         log.debug("getCustomerById was called with id: " + babyId + ", in Controller");
         return babyService.getBabyById(babyId).orElseThrow(NotFoundException::new);
     }

@@ -55,7 +55,7 @@ class BabyControllerTest {
     }
 
     @Test
-    void testPatchBeer() throws Exception {
+    void testPatchBaby() throws Exception {
         BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
         Map<String, Object> babyMap = new HashMap<>();
         babyMap.put("name", "New BabyDTO Name");
@@ -70,8 +70,9 @@ class BabyControllerTest {
     }
 
     @Test
-    void testDeleteBeer() throws Exception {
+    void testDeleteBaby() throws Exception {
         BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        given(babyService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -81,8 +82,9 @@ class BabyControllerTest {
     }
 
     @Test
-    void testUpdateBeer() throws Exception {
+    void testUpdateBaby() throws Exception {
         BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        given(babyService.updateBabyById(any(UUID.class), any(BabyDTO.class))).willReturn(Optional.of(testBabyDTO));
         mockMvc.perform(put("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
