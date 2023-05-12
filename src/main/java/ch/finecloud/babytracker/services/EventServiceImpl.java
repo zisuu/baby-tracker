@@ -1,7 +1,7 @@
 package ch.finecloud.babytracker.services;
 
 
-import ch.finecloud.babytracker.model.Event;
+import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,65 +13,65 @@ import java.util.*;
 @Service
 public class EventServiceImpl implements EventService {
 
-    private Map<UUID, Event> eventMap;
+    private Map<UUID, EventDTO> eventMap;
 
     public EventServiceImpl() {
         this.eventMap = new HashMap<>();
 
-        Event event1 = Event.builder()
+        EventDTO eventDTO1 = EventDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .eventType(EventType.SLEEPING)
                 .build();
 
-        Event event2 = Event.builder()
+        EventDTO eventDTO2 = EventDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .eventType(EventType.DIAPER)
                 .build();
 
-        Event event3 = Event.builder()
+        EventDTO eventDTO3 = EventDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .eventType(EventType.FEEDING)
                 .build();
 
-        eventMap.put(event1.getId(), event1);
-        eventMap.put(event2.getId(), event2);
-        eventMap.put(event3.getId(), event3);
+        eventMap.put(eventDTO1.getId(), eventDTO1);
+        eventMap.put(eventDTO2.getId(), eventDTO2);
+        eventMap.put(eventDTO3.getId(), eventDTO3);
     }
     
     @Override
-    public List<Event> listEvents() {
+    public List<EventDTO> listEvents() {
         return new ArrayList<>(eventMap.values());
     }
 
     @Override
-    public Optional<Event> getEventById(UUID id) {
+    public Optional<EventDTO> getEventById(UUID id) {
         log.debug("getEventById was called with id: " + id + ", in Service");
         return Optional.of(eventMap.get(id));
     }
 
     @Override
-    public Event saveNewEvent(Event event) {
-        Event savedEvent = Event.builder()
+    public EventDTO saveNewEvent(EventDTO eventDTO) {
+        EventDTO savedEventDTO = EventDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
-                .eventType(event.getEventType())
-                .notes(event.getNotes())
-                .endDate(event.getEndDate())
+                .eventType(eventDTO.getEventType())
+                .notes(eventDTO.getNotes())
+                .endDate(eventDTO.getEndDate())
                 .build();
-        eventMap.put(savedEvent.getId(), savedEvent);
-        return savedEvent;
+        eventMap.put(savedEventDTO.getId(), savedEventDTO);
+        return savedEventDTO;
     }
 
     @Override
-    public void updateEventById(UUID eventId, Event event) {
-        Event existingEvent = eventMap.get(eventId);
-        existingEvent.setEventType(event.getEventType());
-        existingEvent.setNotes(event.getNotes());
-        existingEvent.setEndDate(event.getEndDate());
-        eventMap.put(existingEvent.getId(), existingEvent);
+    public void updateEventById(UUID eventId, EventDTO eventDTO) {
+        EventDTO existingEventDTO = eventMap.get(eventId);
+        existingEventDTO.setEventType(eventDTO.getEventType());
+        existingEventDTO.setNotes(eventDTO.getNotes());
+        existingEventDTO.setEndDate(eventDTO.getEndDate());
+        eventMap.put(existingEventDTO.getId(), existingEventDTO);
     }
 
     @Override
@@ -80,19 +80,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void patchEventById(UUID eventId, Event event) {
-        Event existingBeer = eventMap.get(eventId);
+    public void patchEventById(UUID eventId, EventDTO eventDTO) {
+        EventDTO existingBeer = eventMap.get(eventId);
 
-        if(StringUtils.hasText(event.getNotes())) {
-            existingBeer.setNotes(event.getNotes());
+        if(StringUtils.hasText(eventDTO.getNotes())) {
+            existingBeer.setNotes(eventDTO.getNotes());
         }
 
-        if(event.getEndDate() != null) {
-            existingBeer.setEndDate(event.getEndDate());
+        if(eventDTO.getEndDate() != null) {
+            existingBeer.setEndDate(eventDTO.getEndDate());
         }
 
-        if(event.getEventType() != null) {
-            existingBeer.setEventType(event.getEventType());
+        if(eventDTO.getEventType() != null) {
+            existingBeer.setEventType(eventDTO.getEventType());
         }
 
     }

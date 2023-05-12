@@ -1,21 +1,21 @@
 package ch.finecloud.babytracker.services;
 
-import ch.finecloud.babytracker.model.Baby;
+import ch.finecloud.babytracker.model.BabyDTO;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BabyService {
-    List<Baby> listBabys();
+    List<BabyDTO> listBabys();
 
-    Optional<Baby> getBabyById(UUID id);
+    Optional<BabyDTO> getBabyById(UUID id);
 
-    Baby saveNewBaby(Baby baby);
+    BabyDTO saveNewBaby(BabyDTO babyDTO);
 
-    void updateBabyById(UUID babyId, Baby baby);
+    void updateBabyById(UUID babyId, BabyDTO babyDTO);
 
     void deleteById(UUID babyId);
 
-    void patchBabyById(UUID babyId, Baby baby);
+    void patchBabyById(UUID babyId, BabyDTO babyDTO);
 }

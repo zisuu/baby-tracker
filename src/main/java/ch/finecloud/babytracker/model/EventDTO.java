@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class Event {
+public class EventDTO {
     private UUID id;
     private Integer version;
     private EventType eventType;

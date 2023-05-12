@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class Baby {
+public class BabyDTO {
     private UUID id;
     private String name;
     private Integer version;

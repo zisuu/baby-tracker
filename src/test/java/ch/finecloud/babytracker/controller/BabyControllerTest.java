@@ -1,6 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
-import ch.finecloud.babytracker.model.Baby;
+import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.services.BabyService;
 import ch.finecloud.babytracker.services.BabyServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +21,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -45,7 +44,7 @@ class BabyControllerTest {
     BabyServiceImpl babyServiceImpl;
 
     @Captor
-    ArgumentCaptor<Baby> babyArgumentCaptor;
+    ArgumentCaptor<BabyDTO> babyArgumentCaptor;
 
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
@@ -57,51 +56,51 @@ class BabyControllerTest {
 
     @Test
     void testPatchBeer() throws Exception {
-        Baby testBaby = babyServiceImpl.listBabys().get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
         Map<String, Object> babyMap = new HashMap<>();
-        babyMap.put("name", "New Baby Name");
-        mockMvc.perform(patch("/api/v1/babys/" + testBaby.getId())
+        babyMap.put("name", "New BabyDTO Name");
+        mockMvc.perform(patch("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(babyMap)))
                 .andExpect(status().isNoContent());
         verify(babyService).patchBabyById(uuidArgumentCaptor.capture(), babyArgumentCaptor.capture());
-        assertThat(testBaby.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(testBabyDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(babyMap.get("name")).isEqualTo(babyArgumentCaptor.getValue().getName());
     }
 
     @Test
     void testDeleteBeer() throws Exception {
-        Baby testBaby = babyServiceImpl.listBabys().get(0);
-        mockMvc.perform(delete("/api/v1/babys/" + testBaby.getId())
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        mockMvc.perform(delete("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
         verify(babyService).deleteById(uuidArgumentCaptor.capture());
-        assertThat(testBaby.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(testBabyDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
     @Test
     void testUpdateBeer() throws Exception {
-        Baby testBaby = babyServiceImpl.listBabys().get(0);
-        mockMvc.perform(put("/api/v1/babys/" + testBaby.getId())
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        mockMvc.perform(put("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testBaby)))
+                        .content(objectMapper.writeValueAsString(testBabyDTO)))
                 .andExpect(status().isNoContent());
-        verify(babyService).updateBabyById(any(UUID.class), any(Baby.class));
+        verify(babyService).updateBabyById(any(UUID.class), any(BabyDTO.class));
     }
 
     @Test
     void testCreateNewBaby() throws Exception {
-        Baby testBaby = babyServiceImpl.listBabys().get(0);
-        testBaby.setId(null);
-        testBaby.setVersion(null);
-        given(babyService.saveNewBaby(any(Baby.class))).willReturn(babyServiceImpl.listBabys().get(1));
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        testBabyDTO.setId(null);
+        testBabyDTO.setVersion(null);
+        given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabys().get(1));
         mockMvc.perform(post("/api/v1/babys")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testBaby)))
+                        .content(objectMapper.writeValueAsString(testBabyDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
@@ -118,14 +117,14 @@ class BabyControllerTest {
 
     @Test
     void getBabyById() throws Exception {
-        Baby testBaby = babyServiceImpl.listBabys().get(0);
-        given(babyService.getBabyById(testBaby.getId())).willReturn(Optional.of(testBaby));
-        mockMvc.perform(get("/api/v1/babys/" + testBaby.getId())
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        given(babyService.getBabyById(testBabyDTO.getId())).willReturn(Optional.of(testBabyDTO));
+        mockMvc.perform(get("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(testBaby.getId().toString())))
-                .andExpect(jsonPath("$.name", is(testBaby.getName().toString())));
+                .andExpect(jsonPath("$.id", is(testBabyDTO.getId().toString())))
+                .andExpect(jsonPath("$.name", is(testBabyDTO.getName().toString())));
     }
 
     @Test

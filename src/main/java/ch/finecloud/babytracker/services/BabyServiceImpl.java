@@ -1,6 +1,6 @@
 package ch.finecloud.babytracker.services;
 
-import ch.finecloud.babytracker.model.Baby;
+import ch.finecloud.babytracker.model.BabyDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,12 +13,12 @@ import java.util.*;
 public class BabyServiceImpl implements BabyService {
 
 
-    private Map<UUID, Baby> babyMap;
+    private Map<UUID, BabyDTO> babyMap;
 
     public BabyServiceImpl() {
         this.babyMap = new HashMap<>();
 
-        Baby baby1 = Baby.builder()
+        BabyDTO babyDTO1 = BabyDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .name("Hans Fischer")
@@ -26,7 +26,7 @@ public class BabyServiceImpl implements BabyService {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        Baby baby2 = Baby.builder()
+        BabyDTO babyDTO2 = BabyDTO.builder()
                 .id(UUID.randomUUID())
                 .version(2)
                 .name("Peter Muster")
@@ -34,7 +34,7 @@ public class BabyServiceImpl implements BabyService {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        Baby baby3 = Baby.builder()
+        BabyDTO babyDTO3 = BabyDTO.builder()
                 .id(UUID.randomUUID())
                 .version(3)
                 .name("Max Müller")
@@ -42,40 +42,40 @@ public class BabyServiceImpl implements BabyService {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        babyMap.put(baby1.getId(), baby1);
-        babyMap.put(baby2.getId(), baby2);
-        babyMap.put(baby3.getId(), baby3);
+        babyMap.put(babyDTO1.getId(), babyDTO1);
+        babyMap.put(babyDTO2.getId(), babyDTO2);
+        babyMap.put(babyDTO3.getId(), babyDTO3);
     }
 
     @Override
-    public List<Baby> listBabys() {
+    public List<BabyDTO> listBabys() {
         return new ArrayList<>(babyMap.values());
     }
 
     @Override
-    public Optional<Baby> getBabyById(UUID id) {
+    public Optional<BabyDTO> getBabyById(UUID id) {
         log.debug("getBabyById was called with id: " + id + ", in Service");
         return Optional.of(babyMap.get(id));
     }
 
     @Override
-    public Baby saveNewBaby(Baby baby) {
-        Baby savedBaby = Baby.builder()
+    public BabyDTO saveNewBaby(BabyDTO babyDTO) {
+        BabyDTO savedBabyDTO = BabyDTO.builder()
                 .id(UUID.randomUUID())
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
-                .name(baby.getName())
+                .name(babyDTO.getName())
                 .build();
 
-        babyMap.put(savedBaby.getId(), savedBaby);
-        return savedBaby;
+        babyMap.put(savedBabyDTO.getId(), savedBabyDTO);
+        return savedBabyDTO;
     }
 
     @Override
-    public void updateBabyById(UUID beerId, Baby baby) {
-        Baby existingBaby = babyMap.get(beerId);
-        existingBaby.setName(baby.getName());
-        babyMap.put(existingBaby.getId(), existingBaby);
+    public void updateBabyById(UUID beerId, BabyDTO babyDTO) {
+        BabyDTO existingBabyDTO = babyMap.get(beerId);
+        existingBabyDTO.setName(babyDTO.getName());
+        babyMap.put(existingBabyDTO.getId(), existingBabyDTO);
     }
 
     @Override
@@ -84,11 +84,11 @@ public class BabyServiceImpl implements BabyService {
     }
 
     @Override
-    public void patchBabyById(UUID babyId, Baby baby) {
-        Baby existingBaby = babyMap.get(babyId);
+    public void patchBabyById(UUID babyId, BabyDTO babyDTO) {
+        BabyDTO existingBabyDTO = babyMap.get(babyId);
 
-        if(StringUtils.hasText(baby.getName())) {
-            existingBaby.setName(baby.getName());
+        if(StringUtils.hasText(babyDTO.getName())) {
+            existingBabyDTO.setName(babyDTO.getName());
         }
     }
 }

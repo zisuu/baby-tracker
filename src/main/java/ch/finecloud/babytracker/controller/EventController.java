@@ -1,6 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
-import ch.finecloud.babytracker.model.Event;
+import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.services.EventService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -22,8 +21,8 @@ public class EventController {
     public static final String BASE_URL_ID = BASE_URL + "/{eventId}";
 
     @PatchMapping(BASE_URL_ID)
-    public ResponseEntity updateEventPatchById(@PathVariable("eventId") UUID eventId, @RequestBody Event event) {
-        eventService.patchEventById(eventId, event);
+    public ResponseEntity updateEventPatchById(@PathVariable("eventId") UUID eventId, @RequestBody EventDTO eventDTO) {
+        eventService.patchEventById(eventId, eventDTO);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -34,27 +33,27 @@ public class EventController {
     }
 
     @PutMapping(BASE_URL_ID)
-    public ResponseEntity updateById(@PathVariable("eventId") UUID eventId, @RequestBody Event event) {
-        eventService.updateEventById(eventId, event);
+    public ResponseEntity updateById(@PathVariable("eventId") UUID eventId, @RequestBody EventDTO eventDTO) {
+        eventService.updateEventById(eventId, eventDTO);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(BASE_URL)
-    public ResponseEntity handlePost(@RequestBody Event event) {
-        Event savedEvent = eventService.saveNewEvent(event);
+    public ResponseEntity handlePost(@RequestBody EventDTO eventDTO) {
+        EventDTO savedEventDTO = eventService.saveNewEvent(eventDTO);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/events/" + savedEvent.getId().toString());
+        headers.add("Location", "/api/v1/events/" + savedEventDTO.getId().toString());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(BASE_URL)
-    public List<Event> listEvents() {
+    public List<EventDTO> listEvents() {
         log.debug("listEvents was called, in Controller");
         return eventService.listEvents();
     }
 
     @GetMapping(BASE_URL_ID)
-    public Event getEventById(@PathVariable("eventId")  UUID eventId) {
+    public EventDTO getEventById(@PathVariable("eventId")  UUID eventId) {
         log.debug("getEventById was called with id: " + eventId + ", in Controller");
         return eventService.getEventById(eventId).orElseThrow(NotFoundException::new);
     }
