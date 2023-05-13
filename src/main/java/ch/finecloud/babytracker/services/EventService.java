@@ -17,5 +17,5 @@ public interface EventService {
 
     Boolean deleteById(UUID eventId);
 
-    void patchEventById(UUID eventId, EventDTO eventDTO);
+    Optional<EventDTO> patchEventById(UUID eventId, EventDTO eventDTO);
 }

@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void patchEventById(UUID eventId, EventDTO eventDTO) {
+    public Optional<EventDTO> patchEventById(UUID eventId, EventDTO eventDTO) {
         EventDTO existingEvent = eventMap.get(eventId);
 
         if(StringUtils.hasText(eventDTO.getNotes())) {
@@ -96,6 +96,6 @@ public class EventServiceImpl implements EventService {
         if(eventDTO.getEventType() != null) {
             existingEvent.setEventType(eventDTO.getEventType());
         }
-
+        return Optional.of(existingEvent);
     }
 }

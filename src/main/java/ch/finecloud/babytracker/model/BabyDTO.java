@@ -10,8 +10,8 @@ import java.util.UUID;
 @Data
 public class BabyDTO {
     private UUID id;
-    @NotBlank
     @NotNull
+    @NotBlank
     private String name;
     private Integer version;
     private LocalDateTime createdDate;

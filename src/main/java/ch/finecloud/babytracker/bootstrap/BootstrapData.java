@@ -3,8 +3,6 @@ package ch.finecloud.babytracker.bootstrap;
 
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
-import ch.finecloud.babytracker.model.BabyDTO;
-import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
@@ -13,7 +11,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Component
@@ -27,12 +24,6 @@ public class BootstrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
         loadBabyData();
         loadEventData();
-
-
-        System.out.println("Loading Baby Data");
-        System.out.println("Number of Babys: " + babyRepository.count());
-        System.out.println("Loading Event Data");
-        System.out.println("Number of Events: " + eventRepository.count());
     }
 
     private void loadBabyData() {
@@ -61,7 +52,9 @@ public class BootstrapData implements CommandLineRunner {
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
-            babyRepository.saveAll(Arrays.asList(baby1, baby2, baby3));
+            babyRepository.save(baby1);
+            babyRepository.save(baby2);
+            babyRepository.save(baby3);
         }
     }
 
@@ -85,7 +78,9 @@ public class BootstrapData implements CommandLineRunner {
                     .eventType(EventType.FEEDING)
                     .build();
 
-            eventRepository.saveAll(Arrays.asList(event1, event2, event3));
+            eventRepository.save(event1);
+            eventRepository.save(event2);
+            eventRepository.save(event3);
         }
     }
 }

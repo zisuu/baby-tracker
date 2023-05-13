@@ -17,5 +17,5 @@ public interface BabyService {
 
     Boolean deleteById(UUID babyId);
 
-    void patchBabyById(UUID babyId, BabyDTO babyDTO);
+    Optional<BabyDTO> patchBabyById(UUID babyId, BabyDTO babyDTO);
 }

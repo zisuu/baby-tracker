@@ -3,6 +3,7 @@ package ch.finecloud.babytracker.controller;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.services.EventService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class EventController {
     private final EventService eventService;

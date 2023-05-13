@@ -62,6 +62,7 @@ public class BabyServiceImpl implements BabyService {
     public BabyDTO saveNewBaby(BabyDTO babyDTO) {
         BabyDTO savedBabyDTO = BabyDTO.builder()
                 .id(UUID.randomUUID())
+                .version(1)
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .name(babyDTO.getName())
@@ -72,11 +73,10 @@ public class BabyServiceImpl implements BabyService {
     }
 
     @Override
-    public Optional<BabyDTO> updateBabyById(UUID babyId, BabyDTO babyDTO) {
-        BabyDTO existingBabyDTO = babyMap.get(babyId);
-        existingBabyDTO.setName(babyDTO.getName());
-        babyMap.put(existingBabyDTO.getId(), existingBabyDTO);
-        return Optional.of(existingBabyDTO);
+    public Optional<BabyDTO> updateBabyById(UUID babyId, BabyDTO baby) {
+        BabyDTO existing = babyMap.get(babyId);
+        existing.setName(baby.getName());
+        return Optional.of(existing);
     }
 
     @Override
@@ -85,12 +85,16 @@ public class BabyServiceImpl implements BabyService {
         return true;
     }
 
-    @Override
-    public void patchBabyById(UUID babyId, BabyDTO babyDTO) {
-        BabyDTO existingBabyDTO = babyMap.get(babyId);
 
-        if(StringUtils.hasText(babyDTO.getName())) {
-            existingBabyDTO.setName(babyDTO.getName());
+    @Override
+    public Optional<BabyDTO> patchBabyById(UUID babyId, BabyDTO baby) {
+        BabyDTO existing = babyMap.get(babyId);
+
+        if (StringUtils.hasText(baby.getName())) {
+            existing.setName(baby.getName());
         }
+
+        return Optional.of(existing);
     }
+
 }

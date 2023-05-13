@@ -62,7 +62,7 @@ public class EventServiceJPA implements EventService {
     }
 
     @Override
-    public void patchEventById(UUID eventId, EventDTO eventDTO) {
+    public Optional<EventDTO> patchEventById(UUID eventId, EventDTO eventDTO) {
         AtomicReference<Optional<EventDTO>> atomicReference = new AtomicReference<>();
         eventRepository.findById(eventId).ifPresentOrElse(foundEvent -> {
             EventDTO existingEventDTO = eventMapper.eventToEventDto(foundEvent);
@@ -74,5 +74,6 @@ public class EventServiceJPA implements EventService {
         }, () -> {
             atomicReference.set(Optional.empty());
         });
+        return atomicReference.get();
     }
 }

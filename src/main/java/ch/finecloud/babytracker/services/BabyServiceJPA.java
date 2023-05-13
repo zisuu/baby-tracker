@@ -64,17 +64,19 @@ public class BabyServiceJPA implements BabyService {
     }
 
     @Override
-    public void patchBabyById(UUID babyId, BabyDTO babyDTO) {
+    public Optional<BabyDTO> patchBabyById(UUID babyId, BabyDTO babyDTO) {
         AtomicReference<Optional<BabyDTO>> atomicReference = new AtomicReference<>();
-        babyRepository.findById(babyId).ifPresentOrElse(foundBaby -> {
-            BabyDTO existingBabyDTO = babyMapper.babyToBabyDto(foundBaby);
 
-        if(StringUtils.hasText(babyDTO.getName())) {
-            existingBabyDTO.setName(babyDTO.getName());
-        }
-            atomicReference.set(Optional.of(babyMapper.babyToBabyDto(babyRepository.save(foundBaby))));
+        babyRepository.findById(babyId).ifPresentOrElse(foundBaby -> {
+            if (StringUtils.hasText(babyDTO.getName())){
+                foundBaby.setName(babyDTO.getName());
+            }
+            atomicReference.set(Optional.of(babyMapper
+                    .babyToBabyDto(babyRepository.save(foundBaby))));
         }, () -> {
             atomicReference.set(Optional.empty());
         });
+
+        return atomicReference.get();
     }
 }

@@ -1,7 +1,5 @@
-package ch.finecloud.eventtracker.controller;
+package ch.finecloud.babytracker.controller;
 
-import ch.finecloud.babytracker.controller.EventController;
-import ch.finecloud.babytracker.controller.NotFoundException;
 import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
@@ -91,8 +89,8 @@ public class EventControllerIT {
     @Test
     void testGetById() {
         Event testEvent = eventRepository.findAll().get(0);
-        EventDTO babyDTO = eventController.getEventById(testEvent.getId());
-        assertThat(babyDTO).isNotNull();
+        EventDTO eventDTO = eventController.getEventById(testEvent.getId());
+        assertThat(eventDTO).isNotNull();
     }
 
     @Test
