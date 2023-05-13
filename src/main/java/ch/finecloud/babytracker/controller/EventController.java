@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class EventController {
     }
 
     @PutMapping(BASE_URL_ID)
-    public ResponseEntity updateById(@PathVariable("eventId") UUID eventId, @RequestBody EventDTO eventDTO) {
+    public ResponseEntity updateById(@PathVariable("eventId") UUID eventId, @Validated @RequestBody EventDTO eventDTO) {
         if (eventService.updateEventById(eventId, eventDTO).isEmpty()) {
             throw new NotFoundException();
         }
@@ -43,7 +44,7 @@ public class EventController {
     }
 
     @PostMapping(BASE_URL)
-    public ResponseEntity handlePost(@RequestBody EventDTO eventDTO) {
+    public ResponseEntity handlePost(@Validated @RequestBody EventDTO eventDTO) {
         EventDTO savedEventDTO = eventService.saveNewEvent(eventDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/events/" + savedEventDTO.getId().toString());

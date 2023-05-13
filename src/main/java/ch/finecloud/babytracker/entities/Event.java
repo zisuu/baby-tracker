@@ -2,6 +2,9 @@ package ch.finecloud.babytracker.entities;
 
 import ch.finecloud.babytracker.model.EventType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -22,9 +25,12 @@ public class Event {
     private UUID id;
     @Version
     private Integer version;
+    @NotNull
     private EventType eventType;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime lastModifiedDate;
+    @Size(max = 255)
+    @Column(length = 255)
     private String notes;
 }

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class BabyController {
     }
 
     @PutMapping(BASE_URL_ID)
-    public ResponseEntity updateById(@PathVariable("babyId") UUID babyId, @RequestBody BabyDTO babyDTO) {
+    public ResponseEntity updateById(@PathVariable("babyId") UUID babyId, @Validated @RequestBody BabyDTO babyDTO) {
         if (babyService.updateBabyById(babyId, babyDTO).isEmpty()) {
             throw new NotFoundException();
         }
@@ -43,7 +44,7 @@ public class BabyController {
     }
 
     @PostMapping(BASE_URL)
-    public ResponseEntity handlePost(@RequestBody BabyDTO babyDTO) {
+    public ResponseEntity handlePost(@Validated @RequestBody BabyDTO babyDTO) {
         BabyDTO savedBabyDTO = babyService.saveNewBaby(babyDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/babys/" + savedBabyDTO.getId().toString());

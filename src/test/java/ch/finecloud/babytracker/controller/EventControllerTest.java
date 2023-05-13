@@ -1,6 +1,5 @@
 package ch.finecloud.babytracker.controller;
 
-import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.services.EventService;
 import ch.finecloud.babytracker.services.EventServiceImpl;
@@ -14,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +53,37 @@ class EventControllerTest {
     @BeforeEach
     void setUp() {
         eventServiceImpl = new EventServiceImpl();
+    }
+
+
+    @Test
+    void testCreateEventNullEventName() throws Exception {
+        EventDTO eventDTO = EventDTO.builder().build();
+        given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents().get(1));
+        MvcResult MvcResult = mockMvc.perform(post(EventController.BASE_URL)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+        System.out.println(MvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateEventBlankType() throws Exception {
+        EventDTO eventDTO = eventServiceImpl.listEvents().get(0);
+        eventDTO.setEventType(null);
+        eventDTO.setNotes("New EventDTO Notes");
+        given(eventService.updateEventById(any(UUID.class), any(EventDTO.class))).willReturn(Optional.of(eventDTO));
+        MvcResult MvcResult = mockMvc.perform(put(EventController.BASE_URL_ID, eventDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+        System.out.println(MvcResult.getResponse().getContentAsString());
     }
 
     @Test

@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,35 @@ class BabyControllerTest {
     @BeforeEach
     void setUp() {
         babyServiceImpl = new BabyServiceImpl();
+    }
+
+    @Test
+    void testCreateBabyNullBabyName() throws Exception {
+        BabyDTO babyDTO = BabyDTO.builder().build();
+        given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabys().get(1));
+        MvcResult MvcResult = mockMvc.perform(post(BabyController.BASE_URL)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(babyDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andReturn();
+        System.out.println(MvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateBabyBlankName() throws Exception {
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys().get(0);
+        testBabyDTO.setName("");
+        given(babyService.updateBabyById(any(UUID.class), any(BabyDTO.class))).willReturn(Optional.of(testBabyDTO));
+        MvcResult MvcResult = mockMvc.perform(put(BabyController.BASE_URL_ID, testBabyDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testBabyDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+        System.out.println(MvcResult.getResponse().getContentAsString());
     }
 
     @Test
