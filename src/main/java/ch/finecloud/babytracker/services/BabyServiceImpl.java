@@ -50,7 +50,7 @@ public class BabyServiceImpl implements BabyService {
     }
 
     @Override
-    public Page<BabyDTO> listBabys(String name, Integer pageNumber, Integer pageSize) {
+    public Page<BabyDTO> listBabies(String name, Integer pageNumber, Integer pageSize) {
         return new PageImpl<>(new ArrayList<>(babyMap.values()));
     }
 

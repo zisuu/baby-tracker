@@ -55,7 +55,7 @@ public class BootstrapData implements CommandLineRunner {
             });
         }
         if (babyRepository.count() < 10) {
-            File file = ResourceUtils.getFile("classpath:csvdata/babys.csv");
+            File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
 
             List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
 

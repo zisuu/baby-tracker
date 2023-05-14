@@ -20,7 +20,7 @@ import java.util.UUID;
 @RestController
 public class BabyController {
     private final BabyService babyService;
-    public static final String BASE_URL = "/api/v1/babys";
+    public static final String BASE_URL = "/api/v1/babies";
     public static final String BASE_URL_ID = BASE_URL + "/{babyId}";
 
     @PatchMapping(BASE_URL_ID)
@@ -49,16 +49,16 @@ public class BabyController {
     public ResponseEntity handlePost(@Validated @RequestBody BabyDTO babyDTO) {
         BabyDTO savedBabyDTO = babyService.saveNewBaby(babyDTO);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/babys/" + savedBabyDTO.getId().toString());
+        headers.add("Location", "/api/v1/babies/" + savedBabyDTO.getId().toString());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(BASE_URL)
-    public Page<BabyDTO> listBabys(@RequestParam(required = false) String name,
+    public Page<BabyDTO> listBabies(@RequestParam(required = false) String name,
                                    @RequestParam(required = false) Integer pageNumber,
                                    @RequestParam(required = false) Integer pageSize) {
-        log.debug("listBabys was called, in Controller");
-        return babyService.listBabys(name, pageNumber, pageSize);
+        log.debug("listBabies was called, in Controller");
+        return babyService.listBabies(name, pageNumber, pageSize);
     }
 
     @GetMapping(BASE_URL_ID)

@@ -144,8 +144,8 @@ public class BabyControllerIT {
     }
 
     @Test
-    void testListBabys() {
-        Page<BabyDTO> babyDTOList = babyController.listBabys(null, 1, 25);
+    void testListBabies() {
+        Page<BabyDTO> babyDTOList = babyController.listBabies(null, 1, 25);
         assertThat(babyDTOList.getContent().size()).isEqualTo(13);
     }
 
@@ -154,7 +154,7 @@ public class BabyControllerIT {
     @Test
     void testEmptyList() {
         babyRepository.deleteAll();
-        Page<BabyDTO> babyDTOList = babyController.listBabys(null, 1, 25);
+        Page<BabyDTO> babyDTOList = babyController.listBabies(null, 1, 25);
         assertThat(babyDTOList.getContent().size()).isEqualTo(0);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BabyService {
-    Page<BabyDTO> listBabys(String name, Integer pageNumber, Integer pageSize);
+    Page<BabyDTO> listBabies(String name, Integer pageNumber, Integer pageSize);
 
     Optional<BabyDTO> getBabyById(UUID id);
 

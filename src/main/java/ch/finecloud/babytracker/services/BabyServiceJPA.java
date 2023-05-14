@@ -33,7 +33,7 @@ public class BabyServiceJPA implements BabyService {
     private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public Page<BabyDTO> listBabys(String name, Integer pageNumber, Integer pageSize) {
+    public Page<BabyDTO> listBabies(String name, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
         Page<Baby> beerPage;
         if (StringUtils.hasText(name)) {
