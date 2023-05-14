@@ -96,7 +96,7 @@ public class EventControllerIT {
     @Test
     void testListEvents() {
         List<EventDTO> eventDTOList = eventController.listEvents();
-        assertThat(eventDTOList.size()).isEqualTo(3);
+        assertThat(eventDTOList.size()).isEqualTo(7);
     }
 
     @Rollback

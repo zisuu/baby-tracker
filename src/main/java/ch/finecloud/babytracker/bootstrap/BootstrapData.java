@@ -3,14 +3,22 @@ package ch.finecloud.babytracker.bootstrap;
 
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.model.EventCSVRecord;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
+import ch.finecloud.babytracker.services.EventCsvService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,11 +27,30 @@ public class BootstrapData implements CommandLineRunner {
 
     private final BabyRepository babyRepository;
     private final EventRepository eventRepository;
+    private final EventCsvService eventCsvService;
 
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
         loadBabyData();
+        loadCsvData();
         loadEventData();
+    }
+
+    private void loadCsvData() throws FileNotFoundException {
+        if (eventRepository.count() < 10) {
+            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
+
+            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
+
+            eventCSVRecords.forEach(eventCSVRecord -> {
+                EventType eventType = eventCSVRecord.getEventType();
+
+                eventRepository.save(Event.builder()
+                        .eventType(eventType)
+                        .build());
+            });
+        }
     }
 
     private void loadBabyData() {
