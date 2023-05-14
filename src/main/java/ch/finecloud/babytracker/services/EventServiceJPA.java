@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -59,7 +60,8 @@ public class EventServiceJPA implements EventService {
                 queryPageSize = pageSize;
             }
         }
-        return PageRequest.of(queryPageNumber, queryPageSize);
+        Sort sort = Sort.by(Sort.Order.asc("createdDate"));
+        return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
     public Page<Event> listEventByType(EventType eventType, Pageable pageable) {
@@ -103,9 +105,9 @@ public class EventServiceJPA implements EventService {
         eventRepository.findById(eventId).ifPresentOrElse(foundEvent -> {
             EventDTO existingEventDTO = eventMapper.eventToEventDto(foundEvent);
 
-        if(StringUtils.hasText(eventDTO.getNotes())) {
-            existingEventDTO.setNotes(eventDTO.getNotes());
-        }
+            if (StringUtils.hasText(eventDTO.getNotes())) {
+                existingEventDTO.setNotes(eventDTO.getNotes());
+            }
             atomicReference.set(Optional.of(eventMapper.eventToEventDto(eventRepository.save(foundEvent))));
         }, () -> {
             atomicReference.set(Optional.empty());

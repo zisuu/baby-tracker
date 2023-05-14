@@ -15,6 +15,7 @@ public class EventDTO {
     private EventType eventType;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
     private String notes;
 }
