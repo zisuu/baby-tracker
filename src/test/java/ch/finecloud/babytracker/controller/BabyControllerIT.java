@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class BabyControllerIT {
     void testListBabyByName() throws Exception {
         mockMvc.perform(get(BabyController.BASE_URL).queryParam("name", "Hans Fischer"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", CoreMatchers.is(1)));
+                .andExpect(jsonPath("$.content.length()", CoreMatchers.is(1)));
     }
 
     @Test
@@ -144,8 +145,8 @@ public class BabyControllerIT {
 
     @Test
     void testListBabys() {
-        List<BabyDTO> babyDTOList = babyController.listBabys(null);
-        assertThat(babyDTOList.size()).isEqualTo(13);
+        Page<BabyDTO> babyDTOList = babyController.listBabys(null, 1, 25);
+        assertThat(babyDTOList.getContent().size()).isEqualTo(13);
     }
 
     @Rollback
@@ -153,8 +154,8 @@ public class BabyControllerIT {
     @Test
     void testEmptyList() {
         babyRepository.deleteAll();
-        List<BabyDTO> babyDTOList = babyController.listBabys(null);
-        assertThat(babyDTOList.size()).isEqualTo(0);
+        Page<BabyDTO> babyDTOList = babyController.listBabys(null, 1, 25);
+        assertThat(babyDTOList.getContent().size()).isEqualTo(0);
     }
 }
 

@@ -6,6 +6,9 @@ import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,22 +28,43 @@ public class BabyServiceJPA implements BabyService {
     private final BabyRepository babyRepository;
     private final BabyMapper babyMapper;
 
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public List<BabyDTO> listBabys(String name) {
-        List<Baby> babyList;
+    public Page<BabyDTO> listBabys(String name, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+        Page<Baby> beerPage;
         if (StringUtils.hasText(name)) {
-            babyList = listBabyByName(name);
+            beerPage = listBabyByName(name, pageRequest);
         } else {
-            babyList = babyRepository.findAll();
+            beerPage = babyRepository.findAll(pageRequest);
         }
-        return babyList.stream()
-                .map(babyMapper::babyToBabyDto)
-                .collect(Collectors.toList());
+        return beerPage.map(babyMapper::babyToBabyDto);
     }
 
-    public List<Baby> listBabyByName(String name) {
-        return babyRepository.findAllByNameIsLikeIgnoreCase("%" + name + "%");
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+        int queryPageNumber;
+        int queryPageSize;
+        if (pageNumber != null && pageNumber > 0) {
+            queryPageNumber = pageNumber - 1;
+        } else {
+            queryPageNumber = DEFAULT_PAGE;
+        }
+        if (pageSize == null) {
+            queryPageSize = DEFAULT_PAGE_SIZE;
+        } else {
+            if (pageSize > 1000) {
+                queryPageSize = 1000;
+            } else {
+                queryPageSize = pageSize;
+            }
+        }
+        return PageRequest.of(queryPageNumber, queryPageSize);
+    }
+
+    public Page<Baby> listBabyByName(String name, Pageable pageable) {
+        return babyRepository.findAllByNameIsLikeIgnoreCase("%" + name + "%", pageable);
     }
 
     @Override

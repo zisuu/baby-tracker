@@ -5,6 +5,7 @@ import ch.finecloud.babytracker.services.BabyService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +54,11 @@ public class BabyController {
     }
 
     @GetMapping(BASE_URL)
-    public List<BabyDTO> listBabys(@RequestParam(required = false) String name) {
+    public Page<BabyDTO> listBabys(@RequestParam(required = false) String name,
+                                   @RequestParam(required = false) Integer pageNumber,
+                                   @RequestParam(required = false) Integer pageSize) {
         log.debug("listBabys was called, in Controller");
-        return babyService.listBabys(name);
+        return babyService.listBabys(name, pageNumber, pageSize);
     }
 
     @GetMapping(BASE_URL_ID)

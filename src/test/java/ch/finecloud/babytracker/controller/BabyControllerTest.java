@@ -4,6 +4,7 @@ import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.services.BabyService;
 import ch.finecloud.babytracker.services.BabyServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -58,7 +59,7 @@ class BabyControllerTest {
     @Test
     void testCreateBabyNullName() throws Exception {
         BabyDTO babyDTO = BabyDTO.builder().build();
-        given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabys(null).get(1));
+        given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabys(null, 1, 25).getContent().get(1));
         MvcResult MvcResult = mockMvc.perform(post(BabyController.BASE_URL)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +72,7 @@ class BabyControllerTest {
 
     @Test
     void testUpdateBabyBlankName() throws Exception {
-        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null).get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null, 1, 25).getContent().get(0);
         testBabyDTO.setName("");
         given(babyService.updateBabyById(any(UUID.class), any(BabyDTO.class))).willReturn(Optional.of(testBabyDTO));
         MvcResult MvcResult = mockMvc.perform(put(BabyController.BASE_URL_ID, testBabyDTO.getId())
@@ -86,7 +87,7 @@ class BabyControllerTest {
 
     @Test
     void testPatchBaby() throws Exception {
-        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null).get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null, 1, 25).getContent().get(0);
         Map<String, Object> babyMap = new HashMap<>();
         babyMap.put("name", "New BabyDTO Name");
         mockMvc.perform(patch("/api/v1/babys/" + testBabyDTO.getId())
@@ -101,7 +102,7 @@ class BabyControllerTest {
 
     @Test
     void testDeleteBaby() throws Exception {
-        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null).get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null, 1, 25).getContent().get(0);
         given(babyService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -113,7 +114,7 @@ class BabyControllerTest {
 
     @Test
     void testUpdateBaby() throws Exception {
-        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null).get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null, 1, 25).getContent().get(0);
         given(babyService.updateBabyById(any(UUID.class), any(BabyDTO.class))).willReturn(Optional.of(testBabyDTO));
         mockMvc.perform(put("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -125,10 +126,10 @@ class BabyControllerTest {
 
     @Test
     void testCreateNewBaby() throws Exception {
-        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null).get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null, 1, 25).getContent().get(0);
         testBabyDTO.setId(null);
         testBabyDTO.setVersion(null);
-        given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabys(null).get(1));
+        given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabys(null, 1, 25).getContent().get(1));
         mockMvc.perform(post("/api/v1/babys")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,17 +140,17 @@ class BabyControllerTest {
 
     @Test
     void testListBabys() throws Exception {
-        given(babyService.listBabys(null)).willReturn(babyServiceImpl.listBabys(null));
+        given(babyService.listBabys(any(), any(), any())).willReturn(babyServiceImpl.listBabys(null, null, null));
         mockMvc.perform(get("/api/v1/babys")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(3)));
+                .andExpect(jsonPath("$.content.length()", Is.is(3)));
     }
 
     @Test
     void getBabyById() throws Exception {
-        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null).get(0);
+        BabyDTO testBabyDTO = babyServiceImpl.listBabys(null, 1, 25).getContent().get(0);
         given(babyService.getBabyById(testBabyDTO.getId())).willReturn(Optional.of(testBabyDTO));
         mockMvc.perform(get("/api/v1/babys/" + testBabyDTO.getId())
                         .accept(MediaType.APPLICATION_JSON))

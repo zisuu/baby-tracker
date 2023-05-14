@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,8 +36,8 @@ class BabyRepositoryTest {
 
     @Test
     void testGetBabyByName() {
-        List<Baby> list = babyRepository.findAllByNameIsLikeIgnoreCase("%Corynne%");
-        assertThat(list.size()).isEqualTo(1);
+        Page<Baby> list = babyRepository.findAllByNameIsLikeIgnoreCase("%Corynne%", null);
+        assertThat(list.getContent().size()).isEqualTo(1);
     }
 
     @Test

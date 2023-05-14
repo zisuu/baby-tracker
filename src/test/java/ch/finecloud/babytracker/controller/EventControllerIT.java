@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
@@ -57,7 +58,7 @@ public class EventControllerIT {
     void testListEventByEventType() throws Exception {
         mockMvc.perform(get(EventController.BASE_URL).queryParam("eventType", EventType.CRYING.name()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", CoreMatchers.is(1)));
+                .andExpect(jsonPath("$.content.length()", CoreMatchers.is(1)));
     }
 
     @Test
@@ -125,8 +126,8 @@ public class EventControllerIT {
 
     @Test
     void testListEvents() {
-        List<EventDTO> eventDTOList = eventController.listEvents(null);
-        assertThat(eventDTOList.size()).isEqualTo(7);
+        Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
+        assertThat(eventDTOList.getContent().size()).isEqualTo(7);
     }
 
     @Rollback
@@ -134,8 +135,8 @@ public class EventControllerIT {
     @Test
     void testEmptyList() {
         eventRepository.deleteAll();
-        List<EventDTO> eventDTOList = eventController.listEvents(null);
-        assertThat(eventDTOList.size()).isEqualTo(0);
+        Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
+        assertThat(eventDTOList.getContent().size()).isEqualTo(0);
     }
 }
 

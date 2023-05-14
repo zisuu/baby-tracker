@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -36,8 +37,8 @@ class EventRepositoryTest {
 
     @Test
     void testGetEventByType() {
-        List<Event> list = eventRepository.findAllByEventType(EventType.DIAPER);
-        assertThat(list.size()).isEqualTo(1);
+        Page<Event> list = eventRepository.findAllByEventType(EventType.DIAPER, null);
+        assertThat(list.getContent().size()).isEqualTo(1);
     }
 
     @Test

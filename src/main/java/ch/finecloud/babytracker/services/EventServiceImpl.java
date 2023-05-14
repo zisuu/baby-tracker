@@ -4,6 +4,8 @@ package ch.finecloud.babytracker.services;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -42,8 +44,8 @@ public class EventServiceImpl implements EventService {
     }
     
     @Override
-    public List<EventDTO> listEvents(EventType eventType) {
-        return new ArrayList<>(eventMap.values());
+    public Page<EventDTO> listEvents(EventType eventType, Integer pageNumber, Integer pageSize) {
+        return new PageImpl<>(new ArrayList<>(eventMap.values()));
     }
 
     @Override

@@ -7,6 +7,9 @@ import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,22 +27,43 @@ public class EventServiceJPA implements EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
 
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public List<EventDTO> listEvents(EventType eventType) {
-        List<Event> eventList;
+    public Page<EventDTO> listEvents(EventType eventType, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+        Page<Event> eventPage;
         if (eventType != null) {
-            eventList = listEventByType(eventType);
+            eventPage = listEventByType(eventType, pageRequest);
         } else {
-            eventList = eventRepository.findAll();
+            eventPage = eventRepository.findAll(pageRequest);
         }
-        return eventList.stream()
-                .map(eventMapper::eventToEventDto)
-                .collect(Collectors.toList());
+        return eventPage.map(eventMapper::eventToEventDto);
     }
 
-    public List<Event> listEventByType(EventType eventType) {
-        return eventRepository.findAllByEventType(eventType);
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+        int queryPageNumber;
+        int queryPageSize;
+        if (pageNumber != null && pageNumber > 0) {
+            queryPageNumber = pageNumber - 1;
+        } else {
+            queryPageNumber = DEFAULT_PAGE;
+        }
+        if (pageSize == null) {
+            queryPageSize = DEFAULT_PAGE_SIZE;
+        } else {
+            if (pageSize > 1000) {
+                queryPageSize = 1000;
+            } else {
+                queryPageSize = pageSize;
+            }
+        }
+        return PageRequest.of(queryPageNumber, queryPageSize);
+    }
+
+    public Page<Event> listEventByType(EventType eventType, Pageable pageable) {
+        return eventRepository.findAllByEventType(eventType, pageable);
     }
 
     @Override
