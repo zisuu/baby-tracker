@@ -1,17 +1,23 @@
 package ch.finecloud.babytracker.repositories;
 
+import ch.finecloud.babytracker.bootstrap.BootstrapData;
 import ch.finecloud.babytracker.entities.Baby;
+import ch.finecloud.babytracker.services.BabyCsvServiceImpl;
+import ch.finecloud.babytracker.services.EventCsvServiceImpl;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@Import({BootstrapData.class, BabyCsvServiceImpl.class, EventCsvServiceImpl.class})
 class BabyRepositoryTest {
 
     @Autowired
@@ -25,6 +31,12 @@ class BabyRepositoryTest {
 
             babyRepository.flush();
         });
+    }
+
+    @Test
+    void testGetBabyByName() {
+        List<Baby> list = babyRepository.findAllByNameIsLikeIgnoreCase("%Corynne%");
+        assertThat(list.size()).isEqualTo(1);
     }
 
     @Test

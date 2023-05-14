@@ -59,7 +59,7 @@ class EventControllerTest {
     @Test
     void testCreateEventNullEventName() throws Exception {
         EventDTO eventDTO = EventDTO.builder().build();
-        given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents().get(1));
+        given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents(null).get(1));
         MvcResult MvcResult = mockMvc.perform(post(EventController.BASE_URL)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ class EventControllerTest {
 
     @Test
     void testUpdateEventBlankType() throws Exception {
-        EventDTO eventDTO = eventServiceImpl.listEvents().get(0);
+        EventDTO eventDTO = eventServiceImpl.listEvents(null).get(0);
         eventDTO.setEventType(null);
         eventDTO.setNotes("New EventDTO Notes");
         given(eventService.updateEventById(any(UUID.class), any(EventDTO.class))).willReturn(Optional.of(eventDTO));
@@ -88,7 +88,7 @@ class EventControllerTest {
 
     @Test
     void testPatchEvent() throws Exception {
-        EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        EventDTO testEventDTO = eventServiceImpl.listEvents(null).get(0);
         Map<String, Object> eventMap = new HashMap<>();
         eventMap.put("notes", "New EventDTO Notes");
         mockMvc.perform(patch("/api/v1/events/" + testEventDTO.getId())
@@ -103,7 +103,7 @@ class EventControllerTest {
 
     @Test
     void testDeleteCustomer() throws Exception {
-        EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        EventDTO testEventDTO = eventServiceImpl.listEvents(null).get(0);
         given(eventService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/events/" + testEventDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -116,7 +116,7 @@ class EventControllerTest {
 
     @Test
     void testUpdateCustomer() throws Exception {
-        EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        EventDTO testEventDTO = eventServiceImpl.listEvents(null).get(0);
         given(eventService.updateEventById(any(UUID.class), any(EventDTO.class))).willReturn(Optional.of(testEventDTO));
         mockMvc.perform(put("/api/v1/events/" + testEventDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -128,10 +128,10 @@ class EventControllerTest {
 
     @Test
     void testCreateNewCustomer() throws Exception {
-        EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        EventDTO testEventDTO = eventServiceImpl.listEvents(null).get(0);
         testEventDTO.setId(null);
         testEventDTO.setVersion(null);
-        given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents().get(1));
+        given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents(null).get(1));
         mockMvc.perform(post("/api/v1/events")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -142,7 +142,7 @@ class EventControllerTest {
 
     @Test
     void getEventById() throws Exception {
-        EventDTO testEventDTO = eventServiceImpl.listEvents().get(0);
+        EventDTO testEventDTO = eventServiceImpl.listEvents(null).get(0);
         given(eventService.getEventById(testEventDTO.getId())).willReturn(Optional.of(testEventDTO));
         mockMvc.perform(get("/api/v1/events/" + testEventDTO.getId())
                         .accept(MediaType.APPLICATION_JSON))

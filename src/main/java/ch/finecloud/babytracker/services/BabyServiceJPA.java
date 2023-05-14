@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.services;
 
+import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.mappers.BabyMapper;
 import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.repositories.BabyRepository;
@@ -26,10 +27,20 @@ public class BabyServiceJPA implements BabyService {
 
 
     @Override
-    public List<BabyDTO> listBabys() {
-        return babyRepository.findAll().stream()
+    public List<BabyDTO> listBabys(String name) {
+        List<Baby> babyList;
+        if (StringUtils.hasText(name)) {
+            babyList = listBabyByName(name);
+        } else {
+            babyList = babyRepository.findAll();
+        }
+        return babyList.stream()
                 .map(babyMapper::babyToBabyDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<Baby> listBabyByName(String name) {
+        return babyRepository.findAllByNameIsLikeIgnoreCase("%" + name + "%");
     }
 
     @Override

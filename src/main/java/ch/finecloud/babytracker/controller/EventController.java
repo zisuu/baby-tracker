@@ -1,6 +1,7 @@
 package ch.finecloud.babytracker.controller;
 
 import ch.finecloud.babytracker.model.EventDTO;
+import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.services.EventService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -53,9 +54,9 @@ public class EventController {
     }
 
     @GetMapping(BASE_URL)
-    public List<EventDTO> listEvents() {
+    public List<EventDTO> listEvents(@RequestParam(required = false) EventType eventType) {
         log.debug("listEvents was called, in Controller");
-        return eventService.listEvents();
+        return eventService.listEvents(eventType);
     }
 
     @GetMapping(BASE_URL_ID)

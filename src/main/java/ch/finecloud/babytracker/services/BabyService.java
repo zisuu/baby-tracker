@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BabyService {
-    List<BabyDTO> listBabys();
+    List<BabyDTO> listBabys(String name);
 
     Optional<BabyDTO> getBabyById(UUID id);
 

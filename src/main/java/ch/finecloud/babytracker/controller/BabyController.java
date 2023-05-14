@@ -53,9 +53,9 @@ public class BabyController {
     }
 
     @GetMapping(BASE_URL)
-    public List<BabyDTO> listBabys() {
-        log.debug("listCustomers was called, in Controller");
-        return babyService.listBabys();
+    public List<BabyDTO> listBabys(@RequestParam(required = false) String name) {
+        log.debug("listBabys was called, in Controller");
+        return babyService.listBabys(name);
     }
 
     @GetMapping(BASE_URL_ID)

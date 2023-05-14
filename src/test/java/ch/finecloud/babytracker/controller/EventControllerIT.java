@@ -3,20 +3,30 @@ package ch.finecloud.babytracker.controller;
 import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
+import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.EventRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class EventControllerIT {
@@ -29,6 +39,26 @@ public class EventControllerIT {
 
     @Autowired
     EventMapper eventMapper;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    WebApplicationContext webApplicationContext;
+
+    MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Test
+    void testListEventByEventType() throws Exception {
+        mockMvc.perform(get(EventController.BASE_URL).queryParam("eventType", EventType.CRYING.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", CoreMatchers.is(1)));
+    }
 
     @Test
     void testDeleteByIdNotFound() {
@@ -95,7 +125,7 @@ public class EventControllerIT {
 
     @Test
     void testListEvents() {
-        List<EventDTO> eventDTOList = eventController.listEvents();
+        List<EventDTO> eventDTOList = eventController.listEvents(null);
         assertThat(eventDTOList.size()).isEqualTo(7);
     }
 
@@ -104,7 +134,7 @@ public class EventControllerIT {
     @Test
     void testEmptyList() {
         eventRepository.deleteAll();
-        List<EventDTO> eventDTOList = eventController.listEvents();
+        List<EventDTO> eventDTOList = eventController.listEvents(null);
         assertThat(eventDTOList.size()).isEqualTo(0);
     }
 }

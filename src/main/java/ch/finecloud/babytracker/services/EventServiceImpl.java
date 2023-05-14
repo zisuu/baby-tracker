@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService {
     }
     
     @Override
-    public List<EventDTO> listEvents() {
+    public List<EventDTO> listEvents(EventType eventType) {
         return new ArrayList<>(eventMap.values());
     }
 

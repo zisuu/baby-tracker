@@ -3,10 +3,12 @@ package ch.finecloud.babytracker.bootstrap;
 
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.model.BabyCSVRecord;
 import ch.finecloud.babytracker.model.EventCSVRecord;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
+import ch.finecloud.babytracker.services.BabyCsvService;
 import ch.finecloud.babytracker.services.EventCsvService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class BootstrapData implements CommandLineRunner {
     private final BabyRepository babyRepository;
     private final EventRepository eventRepository;
     private final EventCsvService eventCsvService;
+    private final BabyCsvService babyCsvService;
 
     @Transactional
     @Override
@@ -48,6 +51,19 @@ public class BootstrapData implements CommandLineRunner {
 
                 eventRepository.save(Event.builder()
                         .eventType(eventType)
+                        .build());
+            });
+        }
+        if (babyRepository.count() < 10) {
+            File file = ResourceUtils.getFile("classpath:csvdata/babys.csv");
+
+            List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
+
+            babyCSVRecords.forEach(babyCSVRecord -> {
+                String name = babyCSVRecord.getName();
+
+                babyRepository.save(Baby.builder()
+                        .name(name)
                         .build());
             });
         }

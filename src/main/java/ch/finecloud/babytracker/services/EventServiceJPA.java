@@ -1,7 +1,9 @@
 package ch.finecloud.babytracker.services;
 
+import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
+import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -24,10 +26,20 @@ public class EventServiceJPA implements EventService {
 
 
     @Override
-    public List<EventDTO> listEvents() {
-        return eventRepository.findAll().stream()
+    public List<EventDTO> listEvents(EventType eventType) {
+        List<Event> eventList;
+        if (eventType != null) {
+            eventList = listEventByType(eventType);
+        } else {
+            eventList = eventRepository.findAll();
+        }
+        return eventList.stream()
                 .map(eventMapper::eventToEventDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<Event> listEventByType(EventType eventType) {
+        return eventRepository.findAllByEventType(eventType);
     }
 
     @Override

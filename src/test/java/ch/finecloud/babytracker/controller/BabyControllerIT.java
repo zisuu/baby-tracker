@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,6 +55,13 @@ public class BabyControllerIT {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Test
+    void testListBabyByName() throws Exception {
+        mockMvc.perform(get(BabyController.BASE_URL).queryParam("name", "Hans Fischer"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", CoreMatchers.is(1)));
     }
 
     @Test
@@ -136,8 +144,8 @@ public class BabyControllerIT {
 
     @Test
     void testListBabys() {
-        List<BabyDTO> babyDTOList = babyController.listBabys();
-        assertThat(babyDTOList.size()).isEqualTo(3);
+        List<BabyDTO> babyDTOList = babyController.listBabys(null);
+        assertThat(babyDTOList.size()).isEqualTo(13);
     }
 
     @Rollback
@@ -145,7 +153,7 @@ public class BabyControllerIT {
     @Test
     void testEmptyList() {
         babyRepository.deleteAll();
-        List<BabyDTO> babyDTOList = babyController.listBabys();
+        List<BabyDTO> babyDTOList = babyController.listBabys(null);
         assertThat(babyDTOList.size()).isEqualTo(0);
     }
 }
