@@ -60,7 +60,7 @@ public class BabyControllerIT {
 
     @Test
     void testListBabyByName() throws Exception {
-        mockMvc.perform(get(BabyController.BASE_URL).queryParam("name", "Hans Fischer"))
+        mockMvc.perform(get(BabyController.BASE_URL).queryParam("name", "Nada"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", CoreMatchers.is(1)));
     }
@@ -146,7 +146,7 @@ public class BabyControllerIT {
     @Test
     void testListBabies() {
         Page<BabyDTO> babyDTOList = babyController.listBabies(null, 1, 25);
-        assertThat(babyDTOList.getContent().size()).isEqualTo(13);
+        assertThat(babyDTOList.getContent().size()).isEqualTo(10);
     }
 
     @Rollback

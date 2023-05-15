@@ -39,6 +39,8 @@ public class Baby {
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
+//    @ManyToOne
+//    private UserAccount user;
 //    @OneToMany(mappedBy = "baby")
 //    private Set<Event> events;
 }

@@ -6,6 +6,7 @@ import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.services.BabyCsvServiceImpl;
 import ch.finecloud.babytracker.services.EventCsvServiceImpl;
+import ch.finecloud.babytracker.services.UserCsvServiceImpl;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BootstrapData.class, EventCsvServiceImpl.class, BabyCsvServiceImpl.class})
+@Import({BootstrapData.class, EventCsvServiceImpl.class, BabyCsvServiceImpl.class, UserCsvServiceImpl.class})
 class EventRepositoryTest {
 
     @Autowired

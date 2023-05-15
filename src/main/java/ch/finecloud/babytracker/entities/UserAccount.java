@@ -1,6 +1,5 @@
 package ch.finecloud.babytracker.entities;
 
-import ch.finecloud.babytracker.model.EventType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,26 +20,30 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class UserAccount {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
+    @NotNull
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50)
+    private String username;
+    @NotNull
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50)
+    private String password;
+    private String email;
     @Version
     private Integer version;
-    @NotNull
-    private EventType eventType;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
-    @Size(max = 255)
-    @Column(length = 255)
-    private String notes;
-//    @ManyToOne
-//    private Baby baby;
+//    @OneToMany(mappedBy = "user")
+//    private Set<Baby> babies;
 }
