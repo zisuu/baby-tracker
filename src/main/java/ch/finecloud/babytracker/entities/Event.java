@@ -41,6 +41,6 @@ public class Event {
     @Size(max = 255)
     @Column(length = 255)
     private String notes;
-//    @ManyToOne
-//    private Baby baby;
+    @ManyToOne
+    private Baby baby;
 }

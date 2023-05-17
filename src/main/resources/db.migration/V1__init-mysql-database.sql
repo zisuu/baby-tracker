@@ -1,6 +1,16 @@
+alter table baby
+    drop
+        foreign key FKd2pr45e345wjhv4h6fg6r054i;
+
+alter table event
+    drop
+        foreign key FKfso3pt1na1qo4mtdov8331e7r;
+
 drop table if exists baby;
+
 drop table if exists event;
-drop table if exists userAccount;
+
+drop table if exists user_account;
 
 create table baby
 (
@@ -9,8 +19,9 @@ create table baby
     last_modified_date datetime(6),
     name               varchar(50) not null,
     version            integer,
+    user_account_id    varchar(36),
     primary key (id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create table event
 (
@@ -22,10 +33,11 @@ create table event
     notes              varchar(255),
     start_date         datetime(6),
     version            integer,
+    baby_id            varchar(36),
     primary key (id)
-) engine=InnoDB;
+) engine = InnoDB;
 
-create table userAccount
+create table user_account
 (
     id                 varchar(36) not null,
     created_date       datetime(6),
@@ -35,4 +47,14 @@ create table userAccount
     username           varchar(50) not null,
     version            integer,
     primary key (id)
-) engine=InnoDB;
+) engine = InnoDB;
+
+alter table baby
+    add constraint FKd2pr45e345wjhv4h6fg6r054i
+        foreign key (user_account_id)
+            references user_account (id);
+
+alter table event
+    add constraint FKfso3pt1na1qo4mtdov8331e7r
+        foreign key (baby_id)
+            references baby (id);

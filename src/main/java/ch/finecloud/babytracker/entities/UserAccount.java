@@ -12,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -44,6 +46,7 @@ public class UserAccount {
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
-//    @OneToMany(mappedBy = "user")
-//    private Set<Baby> babies;
+    @Builder.Default
+    @OneToMany(mappedBy = "userAccount")
+    private Set<Baby> babies = new HashSet<>();
 }

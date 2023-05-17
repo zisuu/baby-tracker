@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,9 +20,20 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class Baby {
+
+    public Baby(UUID id, String name, Integer version, LocalDateTime createdDate, LocalDateTime lastModifiedDate, UserAccount userAccount, Set<Event> events) {
+        this.id = id;
+        this.name = name;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.setUserAccount(userAccount);
+        this.events = events;
+    }
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -39,8 +51,14 @@ public class Baby {
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
-//    @ManyToOne
-//    private UserAccount user;
-//    @OneToMany(mappedBy = "baby")
-//    private Set<Event> events;
+    @ManyToOne
+    private UserAccount userAccount;
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+//        userAccount.getBabies().add(this);
+    }
+
+    @OneToMany(mappedBy = "baby")
+    private Set<Event> events = new HashSet<>();
 }
