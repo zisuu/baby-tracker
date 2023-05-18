@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DataJpaTest
-@Import({EventCsvServiceImpl.class, BabyCsvServiceImpl.class, UserCsvServiceImpl.class})
+@Import(UserCsvServiceImpl.class)
 class BootstrapDataTest {
 
     @Autowired
@@ -26,11 +26,11 @@ class BootstrapDataTest {
     @Autowired
     UserAccountRepository userAccountRepository;
 
-    @Autowired
-    EventCsvService eventCsvService;
-
-    @Autowired
-    BabyCsvService babyCsvService;
+//    @Autowired
+//    EventCsvService eventCsvService;
+//
+//    @Autowired
+//    BabyCsvService babyCsvService;
 
     @Autowired
     UserCsvService userCsvService;
@@ -39,14 +39,15 @@ class BootstrapDataTest {
 
     @BeforeEach
     void setUp() {
-        bootstrapData = new BootstrapData(userAccountRepository, babyRepository, eventRepository, userCsvService, eventCsvService, babyCsvService);
+//        bootstrapData = new BootstrapData(userAccountRepository, babyRepository, eventRepository, userCsvService, eventCsvService, babyCsvService);
+        bootstrapData = new BootstrapData(userAccountRepository, babyRepository, eventRepository, userCsvService);
     }
 
     @Test
     void Testrun() throws Exception {
         bootstrapData.run(null);
-        assertThat(babyRepository.count()).isEqualTo(10);
-        assertThat(eventRepository.count()).isEqualTo(7);
-        assertThat(userAccountRepository.count()).isEqualTo(100);
+        assertThat(userAccountRepository.count()).isEqualTo(103);
+        assertThat(babyRepository.count()).isEqualTo(3);
+        assertThat(eventRepository.count()).isEqualTo(3);
     }
 }

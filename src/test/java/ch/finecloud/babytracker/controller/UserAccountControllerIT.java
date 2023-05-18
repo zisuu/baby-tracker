@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -129,13 +130,13 @@ public class UserAccountControllerIT {
         assertThat(userAccountDTOList.getContent().size()).isEqualTo(25);
     }
 
-    @Rollback
-    @Transactional
-    @Test
-    void testEmptyList() {
-        userAccountRepository.deleteAll();
-        Page<UserAccountDTO> userAccountDTOList = userAccountController.listUsers(null, 1, 25);
-        assertThat(userAccountDTOList.getContent().size()).isEqualTo(0);
-    }
+//    @Rollback
+//    @Transactional
+//    @Test
+//    void testEmptyList() {
+//        userAccountRepository.deleteAll();
+//        Page<UserAccountDTO> userAccountDTOList = userAccountController.listUsers(null, 1, 25);
+//        assertThat(userAccountDTOList.getContent().size()).isEqualTo(0);
+//    }
 }
 

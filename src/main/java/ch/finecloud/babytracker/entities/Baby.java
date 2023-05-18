@@ -20,7 +20,6 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-//@AllArgsConstructor
 @NoArgsConstructor
 public class Baby {
 
@@ -48,6 +47,7 @@ public class Baby {
     @Version
     private Integer version;
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
@@ -56,9 +56,10 @@ public class Baby {
 
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
-//        userAccount.getBabies().add(this);
+        userAccount.getBabies().add(this);
     }
 
+    @Builder.Default
     @OneToMany(mappedBy = "baby")
     private Set<Event> events = new HashSet<>();
 }

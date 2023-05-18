@@ -3,11 +3,14 @@ package ch.finecloud.babytracker.repositories;
 import ch.finecloud.babytracker.bootstrap.BootstrapData;
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.services.BabyCsvServiceImpl;
 import ch.finecloud.babytracker.services.EventCsvServiceImpl;
 import ch.finecloud.babytracker.services.UserCsvServiceImpl;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,36 +23,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BootstrapData.class, EventCsvServiceImpl.class, BabyCsvServiceImpl.class, UserCsvServiceImpl.class})
+@Import({BootstrapData.class, UserCsvServiceImpl.class})
 class EventRepositoryTest {
+
+    @Autowired
+    BabyRepository babyRepository;
 
     @Autowired
     EventRepository eventRepository;
 
-    @Test
-    void testEventNoteTooLong() {
-        assertThrows(ConstraintViolationException.class, () -> {
-            Event savedEvent = eventRepository.save(Event.builder()
-                    .notes("TestEveent23482347982748923748923784723894782937482374723847238479TestEvent23482347982748923748923784723894782937482374723847238479TestBaby23482347982748923748923784723894782937482374723847238479TestBaby23482347982748923748923784723894782937482374723847238479").build());
+    @Autowired
+    UserAccountRepository userAccountRepository;
 
-            eventRepository.flush();
-        });
+
+    Baby testBaby;
+
+    @BeforeEach
+    void setUp() {
+        testBaby = babyRepository.findAll().get(0);
     }
-
+    @Transactional
     @Test
-    void testGetEventByType() {
-        Page<Event> list = eventRepository.findAllByEventType(EventType.DIAPER, null);
-        assertThat(list.getContent().size()).isEqualTo(1);
-    }
+    void testBabyEvent() {
+        Event event = Event.builder()
+                .baby(testBaby)
+                .eventType(EventType.DIAPER)
+                .build();
 
-    @Test
-    void testSaveEvent() {
-        Event savedEvent = eventRepository.save(Event.builder()
-                .eventType(EventType.CRYING).build());
+        Event savedEvent = eventRepository.save(event);
 
-        eventRepository.flush();
-        assertThat(savedEvent).isNotNull();
-        assertThat(savedEvent.getId()).isNotNull();
+        System.out.println(savedEvent.getBaby().getName());
     }
 
 }

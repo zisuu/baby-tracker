@@ -33,15 +33,15 @@ public class BootstrapData implements CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final BabyRepository babyRepository;
     private final EventRepository eventRepository;
+//    private final BabyCsvService babyCsvService;
     private final UserCsvService userCsvService;
-    private final EventCsvService eventCsvService;
-    private final BabyCsvService babyCsvService;
+//    private final EventCsvService eventCsvService;
 
     @Transactional
     @Override
     public void run(String... args) throws Exception {
-        loadCsvData();
         loadUserAccountData();
+        loadCsvData();
         loadBabyData();
         loadEventData();
     }
@@ -64,33 +64,33 @@ public class BootstrapData implements CommandLineRunner {
                         .build());
             });
         }
-
-        if (eventRepository.count() < 10) {
-            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
-
-            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
-
-            eventCSVRecords.forEach(eventCSVRecord -> {
-                EventType eventType = eventCSVRecord.getEventType();
-
-                eventRepository.save(Event.builder()
-                        .eventType(eventType)
-                        .build());
-            });
-        }
-        if (babyRepository.count() < 10) {
-            File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
-
-            List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
-
-            babyCSVRecords.forEach(babyCSVRecord -> {
-                String name = babyCSVRecord.getName();
-
-                babyRepository.save(Baby.builder()
-                        .name(name)
-                        .build());
-            });
-        }
+//
+//        if (eventRepository.count() < 10) {
+//            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
+//
+//            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
+//
+//            eventCSVRecords.forEach(eventCSVRecord -> {
+//                EventType eventType = eventCSVRecord.getEventType();
+//
+//                eventRepository.save(Event.builder()
+//                        .eventType(eventType)
+//                        .build());
+//            });
+//        }
+//        if (babyRepository.count() < 10) {
+//            File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
+//
+//            List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
+//
+//            babyCSVRecords.forEach(babyCSVRecord -> {
+//                String name = babyCSVRecord.getName();
+//
+//                babyRepository.save(Baby.builder()
+//                        .name(name)
+//                        .build());
+//            });
+//        }
     }
 
     private void loadUserAccountData() {
@@ -133,7 +133,8 @@ public class BootstrapData implements CommandLineRunner {
             Baby baby1 = Baby.builder()
                     .id(UUID.randomUUID())
                     .version(1)
-                    .name("Hans Fischer")
+                    .name("Max")
+                    .userAccount(userAccountRepository.findAll().get(0))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
@@ -141,7 +142,8 @@ public class BootstrapData implements CommandLineRunner {
             Baby baby2 = Baby.builder()
                     .id(UUID.randomUUID())
                     .version(2)
-                    .name("Peter Muster")
+                    .name("Miriam")
+                    .userAccount(userAccountRepository.findAll().get(1))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
@@ -149,7 +151,8 @@ public class BootstrapData implements CommandLineRunner {
             Baby baby3 = Baby.builder()
                     .id(UUID.randomUUID())
                     .version(3)
-                    .name("Max Müller")
+                    .name("Paul")
+                    .userAccount(userAccountRepository.findAll().get(2))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
@@ -160,24 +163,28 @@ public class BootstrapData implements CommandLineRunner {
         }
     }
 
+
     private void loadEventData() {
         if (eventRepository.count() == 0) {
             Event event1 = Event.builder()
                     .id(UUID.randomUUID())
                     .version(1)
                     .eventType(EventType.SLEEPING)
+                    .baby(babyRepository.findAll().get(0))
                     .build();
 
             Event event2 = Event.builder()
                     .id(UUID.randomUUID())
                     .version(1)
                     .eventType(EventType.DIAPER)
+                    .baby(babyRepository.findAll().get(1))
                     .build();
 
             Event event3 = Event.builder()
                     .id(UUID.randomUUID())
                     .version(1)
                     .eventType(EventType.FEEDING)
+                    .baby(babyRepository.findAll().get(2))
                     .build();
 
             eventRepository.save(event1);

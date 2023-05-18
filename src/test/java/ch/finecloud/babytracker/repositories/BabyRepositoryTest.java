@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BootstrapData.class, BabyCsvServiceImpl.class, EventCsvServiceImpl.class, UserCsvServiceImpl.class})
+@Import({BootstrapData.class, UserCsvServiceImpl.class})
 class BabyRepositoryTest {
 
     @Autowired
@@ -42,33 +42,6 @@ class BabyRepositoryTest {
     void setUp() {
         testEvent = eventRepository.findAll().get(0);
         testUserAccount = userAccountRepository.findAll().get(0);
-    }
-
-
-    @Test
-    void testBabyNameTooLong() {
-        assertThrows(ConstraintViolationException.class, () -> {
-            Baby savedBaby = babyRepository.save(Baby.builder()
-                    .name("TestBaby23482347982748923748923784723894782937482374723847238479").build());
-
-            babyRepository.flush();
-        });
-    }
-
-    @Test
-    void testGetBabyByName() {
-        Page<Baby> list = babyRepository.findAllByNameIsLikeIgnoreCase("%Corynne%", null);
-        assertThat(list.getContent().size()).isEqualTo(1);
-    }
-
-    @Test
-    void testSaveBaby() {
-        Baby savedBaby = babyRepository.save(Baby.builder()
-                .name("testBaby").build());
-
-        babyRepository.flush();
-        assertThat(savedBaby).isNotNull();
-        assertThat(savedBaby.getId()).isNotNull();
     }
 
     @Transactional

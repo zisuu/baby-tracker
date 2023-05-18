@@ -19,9 +19,20 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class Event {
+    public Event(UUID id, Integer version, EventType eventType, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime createdDate, LocalDateTime lastModifiedDate, String notes, Baby baby) {
+        this.id = id;
+        this.version = version;
+        this.eventType = eventType;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.notes = notes;
+        this.setBaby(baby);
+    }
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -41,6 +52,13 @@ public class Event {
     @Size(max = 255)
     @Column(length = 255)
     private String notes;
+
+    public void setBaby(Baby baby) {
+        this.baby = baby;
+        baby.getEvents().add(this);
+    }
+
     @ManyToOne
     private Baby baby;
+
 }
