@@ -20,4 +20,6 @@ public interface EventService {
     Boolean deleteById(UUID eventId);
 
     Optional<EventDTO> patchEventById(UUID eventId, EventDTO eventDTO);
+
+    void createAssociation(UUID eventId, UUID babyId);
 }

@@ -46,15 +46,21 @@ class BabyRepositoryTest {
 
     @Transactional
     @Test
-    void testBabyEvent() {
+    void testBabyAccount() {
         Baby baby = Baby.builder()
                 .name("testBaby")
-                .userAccount(testUserAccount)
                 .build();
-
+        baby.setUserAccount(testUserAccount);
         Baby savedBaby = babyRepository.save(baby);
 
-        System.out.println(savedBaby.getUserAccount().getUsername());
+        assertNotNull(savedBaby);
+        assertNotNull(savedBaby.getId());
+
+        Baby fetchedBaby = babyRepository.getById(savedBaby.getId());
+
+        assertNotNull(fetchedBaby);
+        assertNotNull(fetchedBaby.getId());
+        assertNotNull(fetchedBaby.getUserAccount());
     }
 
 }

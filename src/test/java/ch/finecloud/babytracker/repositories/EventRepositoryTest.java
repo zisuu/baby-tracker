@@ -42,17 +42,24 @@ class EventRepositoryTest {
     void setUp() {
         testBaby = babyRepository.findAll().get(0);
     }
+
     @Transactional
     @Test
     void testBabyEvent() {
         Event event = Event.builder()
-                .baby(testBaby)
-                .eventType(EventType.DIAPER)
+                .eventType(EventType.SLEEPING)
                 .build();
-
+        event.setBaby(testBaby);
         Event savedEvent = eventRepository.save(event);
 
-        System.out.println(savedEvent.getBaby().getName());
+        assertNotNull(savedEvent);
+        assertNotNull(savedEvent.getId());
+
+        Event fetchedEvent = eventRepository.getById(savedEvent.getId());
+
+        assertNotNull(fetchedEvent);
+        assertNotNull(fetchedEvent.getId());
+        assertNotNull(fetchedEvent.getBaby());
     }
 
 }

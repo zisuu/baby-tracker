@@ -1,9 +1,11 @@
 package ch.finecloud.babytracker.services;
 
 import ch.finecloud.babytracker.entities.Baby;
+import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.mappers.BabyMapper;
 import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.repositories.BabyRepository;
+import ch.finecloud.babytracker.repositories.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class BabyServiceJPA implements BabyService {
 
     private final BabyRepository babyRepository;
+    private final UserAccountRepository userAccountRepository;
     private final BabyMapper babyMapper;
 
     private static final int DEFAULT_PAGE = 0;
@@ -115,5 +118,14 @@ public class BabyServiceJPA implements BabyService {
         });
 
         return atomicReference.get();
+    }
+
+
+    @Override
+    public void createAssociation(UUID babyId, UUID userId) {
+        Baby baby = babyRepository.findById(babyId).get();
+        UserAccount user = userAccountRepository.findById(userId).get();
+        baby.setUserAccount(user);
+        babyRepository.save(baby);
     }
 }

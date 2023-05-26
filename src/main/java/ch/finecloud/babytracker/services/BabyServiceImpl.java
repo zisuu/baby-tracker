@@ -99,4 +99,8 @@ public class BabyServiceImpl implements BabyService {
         return Optional.of(existing);
     }
 
+    @Override
+    public void createAssociation(UUID babyId, UUID userId) {
+        // todo: implement
+    }
 }

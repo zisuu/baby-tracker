@@ -45,6 +45,12 @@ public class BabyController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping(BASE_URL_ID + "/user/{userId}")
+    public ResponseEntity createAssociation(@PathVariable("babyId") UUID babyId, @PathVariable("userId") UUID userId) {
+        babyService.createAssociation(babyId, userId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping(BASE_URL)
     public ResponseEntity handlePost(@Validated @RequestBody BabyDTO babyDTO) {
         BabyDTO savedBabyDTO = babyService.saveNewBaby(babyDTO);

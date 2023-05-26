@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService {
         eventMap.put(eventDTO2.getId(), eventDTO2);
         eventMap.put(eventDTO3.getId(), eventDTO3);
     }
-    
+
     @Override
     public Page<EventDTO> listEvents(EventType eventType, Integer pageNumber, Integer pageSize) {
         return new PageImpl<>(new ArrayList<>(eventMap.values()));
@@ -99,5 +99,10 @@ public class EventServiceImpl implements EventService {
             existingEvent.setEventType(eventDTO.getEventType());
         }
         return Optional.of(existingEvent);
+    }
+
+    @Override
+    public void createAssociation(UUID eventId, UUID babyId) {
+        // todo: implement
     }
 }

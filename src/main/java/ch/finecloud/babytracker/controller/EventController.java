@@ -46,6 +46,12 @@ public class EventController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping(BASE_URL_ID + "/baby/{babyId}")
+    public ResponseEntity createAssociation(@PathVariable("eventId") UUID eventId, @PathVariable("babyId") UUID babyId) {
+        eventService.createAssociation(eventId, babyId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping(BASE_URL)
     public ResponseEntity handlePost(@Validated @RequestBody EventDTO eventDTO) {
         EventDTO savedEventDTO = eventService.saveNewEvent(eventDTO);

@@ -1,9 +1,12 @@
 package ch.finecloud.babytracker.services;
 
+import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
+import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class EventServiceJPA implements EventService {
 
     private final EventRepository eventRepository;
+    private final BabyRepository babyRepository;
     private final EventMapper eventMapper;
 
     private static final int DEFAULT_PAGE = 0;
@@ -113,5 +117,13 @@ public class EventServiceJPA implements EventService {
             atomicReference.set(Optional.empty());
         });
         return atomicReference.get();
+    }
+
+    @Override
+    public void createAssociation(UUID eventId, UUID babyId) {
+        Event event = eventRepository.findById(eventId).get();
+        Baby baby = babyRepository.findById(babyId).get();
+        event.setBaby(baby);
+        eventRepository.save(event);
     }
 }

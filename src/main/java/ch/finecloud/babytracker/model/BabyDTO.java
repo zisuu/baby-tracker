@@ -1,9 +1,13 @@
 package ch.finecloud.babytracker.model;
 
+import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.entities.UserAccount;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -16,4 +20,7 @@ public class BabyDTO {
     private Integer version;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
+    private UserAccount userAccount;
+    @Builder.Default
+    private Set<Event> events = new HashSet<>();
 }

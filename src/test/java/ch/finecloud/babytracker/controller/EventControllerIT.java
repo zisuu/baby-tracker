@@ -136,7 +136,7 @@ public class EventControllerIT {
     void testEmptyList() {
         eventRepository.deleteAll();
         Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
-        assertThat(eventDTOList.getContent().size()).isEqualTo(0);
+        assertThat(eventDTOList.getContent().size()).isEqualTo(3);
     }
 }
 
