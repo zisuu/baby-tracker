@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.config.BasicAuthSecurityConfig;
 import ch.finecloud.babytracker.controller.UserAccountController;
 import ch.finecloud.babytracker.model.UserAccountDTO;
 import ch.finecloud.babytracker.services.UserAccountService;
@@ -13,6 +14,7 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -27,11 +29,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(UserAccountController.class)
+@Import(BasicAuthSecurityConfig.class)
 class UserAccountControllerTest {
 
     @Autowired
@@ -51,6 +55,9 @@ class UserAccountControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    public static final String USERNAME = "user1";
+    public static final String PASSWORD = "password1";
+
     @BeforeEach
     void setUp() {
         userAccountServiceImpl = new UserAccountServiceImpl();
@@ -61,6 +68,7 @@ class UserAccountControllerTest {
         UserAccountDTO userAccountDTO = UserAccountDTO.builder().build();
         given(userAccountService.saveNewUser(any(UserAccountDTO.class))).willReturn(userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(1));
         MvcResult MvcResult = mockMvc.perform(post(UserAccountController.BASE_URL)
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userAccountDTO)))
@@ -76,6 +84,7 @@ class UserAccountControllerTest {
         testUserAccountDTO.setPassword("");
         given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
         MvcResult MvcResult = mockMvc.perform(put(UserAccountController.BASE_URL_ID, testUserAccountDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testUserAccountDTO)))
@@ -91,6 +100,7 @@ class UserAccountControllerTest {
         Map<String, Object> userAccountMap = new HashMap<>();
         userAccountMap.put("password", "New Passsoword");
         mockMvc.perform(patch("/api/v1/users/" + testUserAccountDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userAccountMap)))
@@ -105,6 +115,7 @@ class UserAccountControllerTest {
         UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
         given(userAccountService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/users/" + testUserAccountDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -117,6 +128,7 @@ class UserAccountControllerTest {
         UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
         given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
         mockMvc.perform(put("/api/v1/users/" + testUserAccountDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testUserAccountDTO)))
@@ -131,6 +143,7 @@ class UserAccountControllerTest {
         testUserAccountDTO.setVersion(null);
         given(userAccountService.saveNewUser(any(UserAccountDTO.class))).willReturn(userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(1));
         mockMvc.perform(post("/api/v1/users")
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testUserAccountDTO)))
@@ -142,6 +155,7 @@ class UserAccountControllerTest {
     void testListBabies() throws Exception {
         given(userAccountService.listUsers(any(), any(), any())).willReturn(userAccountServiceImpl.listUsers(null, null, null));
         mockMvc.perform(get("/api/v1/users")
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -153,6 +167,7 @@ class UserAccountControllerTest {
         UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
         given(userAccountService.getUserById(testUserAccountDTO.getId())).willReturn(Optional.of(testUserAccountDTO));
         mockMvc.perform(get("/api/v1/users/" + testUserAccountDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -164,6 +179,7 @@ class UserAccountControllerTest {
     void getUserAccountByIdNotFound() throws Exception {
         given(userAccountService.getUserById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(UserAccountController.BASE_URL_ID, UUID.randomUUID())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

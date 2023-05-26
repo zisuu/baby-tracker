@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.config.BasicAuthSecurityConfig;
 import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.services.BabyService;
 import ch.finecloud.babytracker.services.BabyServiceImpl;
@@ -12,6 +13,7 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,12 +28,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
 @WebMvcTest(BabyController.class)
+@Import(BasicAuthSecurityConfig.class)
 class BabyControllerTest {
 
     @Autowired
@@ -51,6 +55,9 @@ class BabyControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    public static final String USERNAME = "user1";
+    public static final String PASSWORD = "password1";
+
     @BeforeEach
     void setUp() {
         babyServiceImpl = new BabyServiceImpl();
@@ -61,6 +68,7 @@ class BabyControllerTest {
         BabyDTO babyDTO = BabyDTO.builder().build();
         given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabies(null, 1, 25).getContent().get(1));
         MvcResult MvcResult = mockMvc.perform(post(BabyController.BASE_URL)
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(babyDTO)))
@@ -76,6 +84,7 @@ class BabyControllerTest {
         testBabyDTO.setName("");
         given(babyService.updateBabyById(any(UUID.class), any(BabyDTO.class))).willReturn(Optional.of(testBabyDTO));
         MvcResult MvcResult = mockMvc.perform(put(BabyController.BASE_URL_ID, testBabyDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testBabyDTO)))
@@ -91,6 +100,7 @@ class BabyControllerTest {
         Map<String, Object> babyMap = new HashMap<>();
         babyMap.put("name", "New BabyDTO Name");
         mockMvc.perform(patch("/api/v1/babies/" + testBabyDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(babyMap)))
@@ -105,6 +115,7 @@ class BabyControllerTest {
         BabyDTO testBabyDTO = babyServiceImpl.listBabies(null, 1, 25).getContent().get(0);
         given(babyService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/babies/" + testBabyDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -117,6 +128,7 @@ class BabyControllerTest {
         BabyDTO testBabyDTO = babyServiceImpl.listBabies(null, 1, 25).getContent().get(0);
         given(babyService.updateBabyById(any(UUID.class), any(BabyDTO.class))).willReturn(Optional.of(testBabyDTO));
         mockMvc.perform(put("/api/v1/babies/" + testBabyDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testBabyDTO)))
@@ -131,6 +143,7 @@ class BabyControllerTest {
         testBabyDTO.setVersion(null);
         given(babyService.saveNewBaby(any(BabyDTO.class))).willReturn(babyServiceImpl.listBabies(null, 1, 25).getContent().get(1));
         mockMvc.perform(post("/api/v1/babies")
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testBabyDTO)))
@@ -142,6 +155,7 @@ class BabyControllerTest {
     void testListBabies() throws Exception {
         given(babyService.listBabies(any(), any(), any())).willReturn(babyServiceImpl.listBabies(null, null, null));
         mockMvc.perform(get("/api/v1/babies")
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -153,6 +167,7 @@ class BabyControllerTest {
         BabyDTO testBabyDTO = babyServiceImpl.listBabies(null, 1, 25).getContent().get(0);
         given(babyService.getBabyById(testBabyDTO.getId())).willReturn(Optional.of(testBabyDTO));
         mockMvc.perform(get("/api/v1/babies/" + testBabyDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -164,6 +179,7 @@ class BabyControllerTest {
     void getBabyByIdNotFound() throws Exception {
         given(babyService.getBabyById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(EventController.BASE_URL_ID, UUID.randomUUID())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

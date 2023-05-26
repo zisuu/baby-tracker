@@ -4,7 +4,8 @@ import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
-import ch.finecloud.babytracker.repositories.BabyRepository;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -52,12 +53,16 @@ public class EventControllerIT {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
     }
 
     @Test
     void testListEventByEventType() throws Exception {
-        mockMvc.perform(get(EventController.BASE_URL).queryParam("eventType", EventType.FEEDING.name()))
+        mockMvc.perform(get(EventController.BASE_URL)
+                        .queryParam("eventType", EventType.FEEDING.name())
+                .with(httpBasic(EventControllerTest.USERNAME, EventControllerTest.PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", CoreMatchers.is(1)));
     }

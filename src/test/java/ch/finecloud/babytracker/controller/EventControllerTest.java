@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.config.BasicAuthSecurityConfig;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.services.EventService;
 import ch.finecloud.babytracker.services.EventServiceImpl;
@@ -12,6 +13,7 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,11 +28,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(EventController.class)
+@Import(BasicAuthSecurityConfig.class)
 class EventControllerTest {
 
     @Autowired
@@ -50,6 +54,8 @@ class EventControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    public static final String USERNAME = "user1";
+    public static final String PASSWORD = "password1";
 
     @BeforeEach
     void setUp() {
@@ -62,6 +68,7 @@ class EventControllerTest {
         EventDTO eventDTO = EventDTO.builder().build();
         given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents(null, 1, 25).getContent().get(1));
         MvcResult MvcResult = mockMvc.perform(post(EventController.BASE_URL)
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventDTO)))
@@ -78,6 +85,7 @@ class EventControllerTest {
         eventDTO.setNotes("New EventDTO Notes");
         given(eventService.updateEventById(any(UUID.class), any(EventDTO.class))).willReturn(Optional.of(eventDTO));
         MvcResult MvcResult = mockMvc.perform(put(EventController.BASE_URL_ID, eventDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventDTO)))
@@ -93,6 +101,7 @@ class EventControllerTest {
         Map<String, Object> eventMap = new HashMap<>();
         eventMap.put("notes", "New EventDTO Notes");
         mockMvc.perform(patch("/api/v1/events/" + testEventDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventMap)))
@@ -107,6 +116,7 @@ class EventControllerTest {
         EventDTO testEventDTO = eventServiceImpl.listEvents(null, 1, 25).getContent().get(0);
         given(eventService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete("/api/v1/events/" + testEventDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -120,6 +130,7 @@ class EventControllerTest {
         EventDTO testEventDTO = eventServiceImpl.listEvents(null, 1, 25).getContent().get(0);
         given(eventService.updateEventById(any(UUID.class), any(EventDTO.class))).willReturn(Optional.of(testEventDTO));
         mockMvc.perform(put("/api/v1/events/" + testEventDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testEventDTO)))
@@ -134,6 +145,7 @@ class EventControllerTest {
         testEventDTO.setVersion(null);
         given(eventService.saveNewEvent(any(EventDTO.class))).willReturn(eventServiceImpl.listEvents(null, 1, 25).getContent().get(1));
         mockMvc.perform(post("/api/v1/events")
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testEventDTO)))
@@ -145,6 +157,7 @@ class EventControllerTest {
     void testListEvents() throws Exception {
         given(eventService.listEvents(any(), any(), any())).willReturn(eventServiceImpl.listEvents(null, null, null));
         mockMvc.perform(get("/api/v1/events")
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -156,6 +169,7 @@ class EventControllerTest {
         EventDTO testEventDTO = eventServiceImpl.listEvents(null, 1, 25).getContent().get(0);
         given(eventService.getEventById(testEventDTO.getId())).willReturn(Optional.of(testEventDTO));
         mockMvc.perform(get("/api/v1/events/" + testEventDTO.getId())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -167,6 +181,7 @@ class EventControllerTest {
     void getEventByIdNotFound() throws Exception {
         given(eventService.getEventById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(EventController.BASE_URL_ID, UUID.randomUUID())
+                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

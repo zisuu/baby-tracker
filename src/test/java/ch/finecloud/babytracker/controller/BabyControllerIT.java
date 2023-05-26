@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +28,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,12 +57,17 @@ public class BabyControllerIT {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
     }
 
     @Test
     void testListBabyByName() throws Exception {
-        mockMvc.perform(get(BabyController.BASE_URL).queryParam("name", "Miriam"))
+        mockMvc.perform(get(BabyController.BASE_URL)
+                        .queryParam("name", "Miriam")
+                        .with(httpBasic(BabyControllerTest.USERNAME, BabyControllerTest.PASSWORD))
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", CoreMatchers.is(1)));
     }
@@ -74,7 +80,8 @@ public class BabyControllerIT {
         MvcResult mvcResult = mockMvc.perform(patch(BabyController.BASE_URL_ID, testBaby.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(babyMap)))
+                        .content(objectMapper.writeValueAsString(babyMap))
+                .with(httpBasic(BabyControllerTest.USERNAME, BabyControllerTest.PASSWORD)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.length()", CoreMatchers.is(1)))
                 .andReturn();

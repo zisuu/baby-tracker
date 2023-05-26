@@ -10,6 +10,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -53,7 +55,9 @@ public class UserAccountControllerIT {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
     }
 
     @Disabled // just for demo
@@ -66,6 +70,7 @@ public class UserAccountControllerIT {
         userAccountDTO.setPassword("Updated Password1");
 
         MvcResult result = mockMvc.perform(put(UserAccountController.BASE_URL_ID, userAccount.getId())
+                        .with(httpBasic(EventControllerTest.USERNAME, EventControllerTest.PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userAccountDTO)))
@@ -77,6 +82,7 @@ public class UserAccountControllerIT {
         userAccountDTO.setPassword("Updated Password2");
 
         MvcResult result2 = mockMvc.perform(put(UserAccountController.BASE_URL_ID, userAccount.getId())
+                        .with(httpBasic(EventControllerTest.USERNAME, EventControllerTest.PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userAccountDTO)))
@@ -90,7 +96,8 @@ public class UserAccountControllerIT {
 
     @Test
     void testListUserAccountByUsername() throws Exception {
-        mockMvc.perform(get(UserAccountController.BASE_URL).queryParam("username", "univ"))
+        mockMvc.perform(get(UserAccountController.BASE_URL).queryParam("username", "univ")
+                .with(httpBasic(EventControllerTest.USERNAME, EventControllerTest.PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", CoreMatchers.is(1)));
     }
