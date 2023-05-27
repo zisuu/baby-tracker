@@ -1,6 +1,5 @@
 package ch.finecloud.babytracker.controller;
 
-import ch.finecloud.babytracker.config.BasicAuthSecurityConfig;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.services.EventService;
 import ch.finecloud.babytracker.services.EventServiceImpl;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(EventController.class)
-@Import(BasicAuthSecurityConfig.class)
+//@Import(BasicAuthSecurityConfig.class)
 class EventControllerTest {
 
     @Autowired
