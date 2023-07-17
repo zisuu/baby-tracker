@@ -37,7 +37,7 @@ function processLogin(view) {
 		.catch(error => {
 			let msg = error.status === 401
 				? "Wrong username or password. Please try again."
-				: "Retrieving todos failed!";
+				: "Retrieving myUserAccountInfos failed!";
 			util.updateViewField('error', msg);
 		});
 }

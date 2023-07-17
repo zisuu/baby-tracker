@@ -65,7 +65,7 @@ public class SecurityConfig {
         // Set permissions on endpoints
         return http.authorizeHttpRequests()
             // public endpoints
-            .requestMatchers("/index.html", "/templates/*", "css/*","js/**", "", "/api/v1/token").permitAll()
+            .requestMatchers("/index.html", "/templates/*", "css/*","js/**", "/api/v1/token").permitAll()
             .and()
             .authorizeHttpRequests()
             .requestMatchers( HttpMethod.POST, "/api/v1/users").permitAll()
@@ -75,7 +75,7 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests().requestMatchers("/api/v1/babies/**").authenticated()
             .and()
-            .authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/api/v1/events/**").authenticated()
+            .authorizeHttpRequests().requestMatchers("/api/v1/events/**").authenticated()
             .and()
             .authorizeHttpRequests().requestMatchers(HttpMethod.PUT,"/api/v1/events/**").authenticated()
             .and()

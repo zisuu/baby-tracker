@@ -36,11 +36,12 @@ public class EventServiceJPA implements EventService {
     private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public Page<EventDTO> listEvents(EventType eventType, Integer pageNumber, Integer pageSize) {
+    public Page<EventDTO> listEvents(UUID babyId, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
         Page<Event> eventPage;
-        if (eventType != null) {
-            eventPage = listEventByType(eventType, pageRequest);
+        if (babyId != null) {
+            eventPage = listEventByBabyUuid(babyId, pageRequest);
+//            eventPage = listEventByType(eventType, pageRequest);
         } else {
             eventPage = eventRepository.findAll(pageRequest);
         }
@@ -68,8 +69,12 @@ public class EventServiceJPA implements EventService {
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
-    public Page<Event> listEventByType(EventType eventType, Pageable pageable) {
-        return eventRepository.findAllByEventType(eventType, pageable);
+//    public Page<Event> listEventByType(EventType eventType, Pageable pageable) {
+//        return eventRepository.findAllByEventType(eventType, pageable);
+//    }
+
+    public Page<Event> listEventByBabyUuid(UUID babyUuid, Pageable pageable) {
+        return eventRepository.findAllByBabyId(babyUuid, pageable);
     }
 
     @Override

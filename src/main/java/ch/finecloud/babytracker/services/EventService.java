@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface EventService {
 
-    Page<EventDTO> listEvents(EventType eventType, Integer pageNumber, Integer pageSize);
+    Page<EventDTO> listEvents(UUID babyId, Integer pageNumber, Integer pageSize);
 
     Optional<EventDTO> getEventById(UUID id);
     EventDTO saveNewEvent(EventDTO eventDTO);

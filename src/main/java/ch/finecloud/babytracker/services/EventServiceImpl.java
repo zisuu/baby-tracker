@@ -44,7 +44,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Page<EventDTO> listEvents(EventType eventType, Integer pageNumber, Integer pageSize) {
+    public Page<EventDTO> listEvents(UUID babyId, Integer pageNumber, Integer pageSize) {
         return new PageImpl<>(new ArrayList<>(eventMap.values()));
     }
 

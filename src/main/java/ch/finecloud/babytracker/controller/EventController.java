@@ -63,11 +63,12 @@ public class EventController {
     }
 
     @GetMapping(BASE_URL)
-    public Page<EventDTO> listEvents(@RequestParam(required = false) EventType eventType,
+//    public Page<EventDTO> listEvents(@RequestParam(required = false) EventType eventType,
+    public Page<EventDTO> listEvents(@RequestParam(required = false) UUID babyId,
                                      @RequestParam(required = false) Integer pageNumber,
                                      @RequestParam(required = false) Integer pageSize) {
         log.debug("listEvents was called, in Controller");
-        return eventService.listEvents(eventType, pageNumber, pageSize);
+        return eventService.listEvents(babyId, pageNumber, pageSize);
     }
 
     @GetMapping(BASE_URL_ID)

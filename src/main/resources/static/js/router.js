@@ -33,7 +33,7 @@ function render() {
 		.then(template => {
 			view.innerHTML = template;
 			component.init(view, param);
-			document.title = 'Todo App' + (component.title ? ' - ' + component.title : '');
+			document.title = 'Baby Tracker' + (component.title ? ' - ' + component.title : '');
 		})
 		.catch(errorTemplate => {
 			view.innerHTML = errorTemplate;
