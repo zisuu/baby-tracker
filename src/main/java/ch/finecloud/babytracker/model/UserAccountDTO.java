@@ -22,6 +22,7 @@ public class UserAccountDTO {
     @NotBlank
     private String password;
     private String email;
+    private String roles;
     private Integer version;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;

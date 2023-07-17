@@ -4,10 +4,14 @@ import ch.finecloud.babytracker.model.UserAccountDTO;
 import ch.finecloud.babytracker.services.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,9 @@ public class UserAccountController {
     private final UserAccountService userAccountService;
     public static final String BASE_URL = "/api/v1/users";
     public static final String BASE_URL_ID = BASE_URL + "/{userId}";
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PatchMapping(BASE_URL_ID)
     public ResponseEntity updateUserPatchById(@PathVariable("userId") UUID userId, @RequestBody UserAccountDTO userAccountDTO) {
@@ -45,6 +52,7 @@ public class UserAccountController {
 
     @PostMapping(BASE_URL)
     public ResponseEntity handlePost(@Validated @RequestBody UserAccountDTO userAccountDTO) {
+        userAccountDTO.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
         UserAccountDTO savedUserAccountDTO = userAccountService.saveNewUser(userAccountDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/users/" + savedUserAccountDTO.getId().toString());
@@ -52,6 +60,7 @@ public class UserAccountController {
     }
 
     @GetMapping(BASE_URL)
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
     public Page<UserAccountDTO> listUsers(@RequestParam(required = false) String username,
                                           @RequestParam(required = false) Integer pageNumber,
                                           @RequestParam(required = false) Integer pageSize) {
@@ -60,6 +69,7 @@ public class UserAccountController {
     }
 
     @GetMapping(BASE_URL_ID)
+    @PreAuthorize("#userId == authentication.principal.id")
     public UserAccountDTO getUserById(@PathVariable("userId") UUID userId) {
         log.debug("getUserById was called with id: " + userId + ", in Controller");
         return userAccountService.getUserById(userId).orElseThrow(NotFoundException::new);

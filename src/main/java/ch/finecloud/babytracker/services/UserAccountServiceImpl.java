@@ -63,6 +63,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public Optional<UserAccountDTO> getUserByUsername(String username) {
+        log.debug("getUserByUsername was called with username: " + username + ", in Service");
+        return Optional.of(userMap.get(username));
+    }
+
+    @Override
     public UserAccountDTO saveNewUser(UserAccountDTO userAccountDTO) {
         UserAccountDTO savedUserAccountDTO = UserAccountDTO.builder()
                 .id(UUID.randomUUID())
@@ -105,4 +111,5 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         return Optional.of(existingUser);
     }
+
 }

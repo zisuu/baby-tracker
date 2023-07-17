@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,7 @@ public class BabyController {
     }
 
     @PutMapping(BASE_URL_ID + "/user/{userId}")
+    @PreAuthorize("#userId == authentication.principal.id")
     public ResponseEntity createAssociation(@PathVariable("babyId") UUID babyId, @PathVariable("userId") UUID userId) {
         babyService.createAssociation(babyId, userId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

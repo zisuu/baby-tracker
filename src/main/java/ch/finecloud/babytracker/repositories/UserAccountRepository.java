@@ -11,7 +11,5 @@ import java.util.UUID;
 public interface UserAccountRepository extends JpaRepository<UserAccount, UUID> {
     Page<UserAccount> findAllByUsernameIsLikeIgnoreCase(String username, Pageable pageable);
 
-    Optional<UserAccount> findUserAccountByUsernameAndPassword(String username, String password);
-
     Optional<UserAccount> findUserAccountByUsername(String username);
 }

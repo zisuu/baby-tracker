@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -68,6 +70,11 @@ public class UserAccountServiceJPA implements UserAccountService {
     @Override
     public Optional<UserAccountDTO> getUserById(UUID id) {
         return Optional.ofNullable(userAccountMapper.userToUserDto(userAccountRepository.findById(id).orElse(null)));
+    }
+
+    @Override
+    public Optional<UserAccountDTO> getUserByUsername(String username) {
+        return Optional.ofNullable(userAccountMapper.userToUserDto(userAccountRepository.findUserAccountByUsername(username).orElse(null)));
     }
 
     @Override

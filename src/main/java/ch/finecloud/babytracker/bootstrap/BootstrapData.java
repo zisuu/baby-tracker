@@ -16,7 +16,9 @@ import ch.finecloud.babytracker.services.EventCsvService;
 import ch.finecloud.babytracker.services.UserCsvService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -36,6 +38,8 @@ public class BootstrapData implements CommandLineRunner {
 //    private final BabyCsvService babyCsvService;
     private final UserCsvService userCsvService;
 //    private final EventCsvService eventCsvService;
+@Autowired
+private PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -59,7 +63,7 @@ public class BootstrapData implements CommandLineRunner {
 
                 userAccountRepository.save(UserAccount.builder()
                         .username(username)
-                        .password(password)
+                        .password(passwordEncoder.encode(password))
                         .email(email)
                         .build());
             });
@@ -94,12 +98,13 @@ public class BootstrapData implements CommandLineRunner {
     }
 
     private void loadUserAccountData() {
+        // TODO: add roles to those users and those in the CSV file
         if (userAccountRepository.count() == 0) {
             UserAccount userAccount1 = UserAccount.builder()
                     .id(UUID.randomUUID())
                     .version(1)
                     .username("userAccount1")
-                    .password("password1")
+                    .password(passwordEncoder.encode("password1"))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
@@ -108,7 +113,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(2)
                     .username("userAccount2")
-                    .password("password2")
+                    .password(passwordEncoder.encode("password2"))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
@@ -117,7 +122,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(3)
                     .username("userAccount3")
-                    .password("password3")
+                    .password(passwordEncoder.encode("password3"))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
