@@ -5,8 +5,6 @@ import util from '../util.js';
 
 export default {
 	templatePath: 'register.html',
-	requiresAuth: false,
-	css: 'sign-in.css',
 	init: function(view) {
 		view.querySelector('[data-action=register]').addEventListener('click', e => {
 			e.preventDefault();
@@ -14,12 +12,13 @@ export default {
 		});
 	}
 };
+
 function processRegister(view) {
 	const form = view.querySelector('form');
 	if (!form.reportValidity()) return;
 	const user = getFormData(form);
 	service.postUser(user)
-		.then(() => initAfterRegister())
+		.then(() => initAfterRegister(user, []))
 		.catch(error => {
 			let msg;
 			switch(error.status) {
@@ -31,15 +30,16 @@ function processRegister(view) {
 		});
 }
 
-function initAfterRegister() {
-	router.navigate('/login');
+function initAfterRegister(user, todos) {
+	router.navigate('/');
 }
 
 
 function getFormData(form) {
 	return {
-		name: form.username.value,
-		password: form.password.value
+		username: form.username.value,
+		password: form.password.value,
+		email: form.email.value,
+		roles: "ROLE_USER"
 	};
 }
-

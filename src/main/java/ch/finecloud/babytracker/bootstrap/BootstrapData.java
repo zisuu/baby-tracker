@@ -35,11 +35,11 @@ public class BootstrapData implements CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final BabyRepository babyRepository;
     private final EventRepository eventRepository;
-//    private final BabyCsvService babyCsvService;
+    //    private final BabyCsvService babyCsvService;
     private final UserCsvService userCsvService;
-//    private final EventCsvService eventCsvService;
-@Autowired
-private PasswordEncoder passwordEncoder;
+    //    private final EventCsvService eventCsvService;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -105,8 +105,10 @@ private PasswordEncoder passwordEncoder;
                     .version(1)
                     .username("userAccount1")
                     .password(passwordEncoder.encode("password1"))
+                    .email("dummy@example.com")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
+                    .roles("ROLE_USER")
                     .build();
 
             UserAccount userAccount2 = UserAccount.builder()
@@ -114,8 +116,10 @@ private PasswordEncoder passwordEncoder;
                     .version(2)
                     .username("userAccount2")
                     .password(passwordEncoder.encode("password2"))
+                    .email("dummy@example.com")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
+                    .roles("ROLE_USER")
                     .build();
 
             UserAccount userAccount3 = UserAccount.builder()
@@ -123,8 +127,10 @@ private PasswordEncoder passwordEncoder;
                     .version(3)
                     .username("userAccount3")
                     .password(passwordEncoder.encode("password3"))
+                    .email("dummy@example.com")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
+                    .roles("ROLE_USER")
                     .build();
 
             userAccountRepository.save(userAccount1);
@@ -162,9 +168,19 @@ private PasswordEncoder passwordEncoder;
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
+            Baby baby4 = Baby.builder()
+                    .id(UUID.randomUUID())
+                    .version(4)
+                    .name("Billy")
+                    .userAccount(userAccountRepository.findUserAccountByUsername("userAccount2").get())
+                    .createdDate(LocalDateTime.now())
+                    .lastModifiedDate(LocalDateTime.now())
+                    .build();
+
             babyRepository.save(baby1);
             babyRepository.save(baby2);
             babyRepository.save(baby3);
+            babyRepository.save(baby4);
         }
     }
 

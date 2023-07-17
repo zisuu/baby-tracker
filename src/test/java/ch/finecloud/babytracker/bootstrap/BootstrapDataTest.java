@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.bootstrap;
 
+import ch.finecloud.babytracker.config.TestConfig;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import ch.finecloud.babytracker.repositories.UserAccountRepository;
@@ -9,12 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DataJpaTest
-@Import(UserCsvServiceImpl.class)
+@Import({UserCsvServiceImpl.class, TestConfig.class})
 class BootstrapDataTest {
 
     @Autowired
@@ -33,6 +35,9 @@ class BootstrapDataTest {
 //    BabyCsvService babyCsvService;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     UserCsvService userCsvService;
 
     BootstrapData bootstrapData;
@@ -40,14 +45,16 @@ class BootstrapDataTest {
     @BeforeEach
     void setUp() {
 //        bootstrapData = new BootstrapData(userAccountRepository, babyRepository, eventRepository, userCsvService, eventCsvService, babyCsvService);
-        bootstrapData = new BootstrapData(userAccountRepository, babyRepository, eventRepository, userCsvService);
+        bootstrapData = new BootstrapData(userAccountRepository, babyRepository, eventRepository, userCsvService, passwordEncoder);
     }
 
     @Test
     void Testrun() throws Exception {
         bootstrapData.run(null);
         assertThat(userAccountRepository.count()).isEqualTo(103);
-        assertThat(babyRepository.count()).isEqualTo(3);
+        assertThat(babyRepository.count()).isEqualTo(4);
         assertThat(eventRepository.count()).isEqualTo(3);
     }
+
+
 }

@@ -71,7 +71,7 @@ public class BabyController {
 
     @GetMapping(BASE_URL_ID)
     public BabyDTO getBabyById(@PathVariable("babyId") UUID babyId) {
-        log.debug("getCustomerById was called with id: " + babyId + ", in Controller");
+        log.debug("getBabyById was called with id: " + babyId + ", in Controller");
         return babyService.getBabyById(babyId).orElseThrow(NotFoundException::new);
     }
 

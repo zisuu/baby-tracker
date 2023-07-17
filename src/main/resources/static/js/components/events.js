@@ -2,15 +2,15 @@ import service from "../service.js";
 import store from '../store.js'
 
 export default {
-	title: 'Home',
-	templatePath: 'home.html',
+	title: 'Events',
+	templatePath: 'events.html',
 	requiresAuth: true,
 	init: function(view) {
-		store.getUserAccountInfos().babies.forEach(baby => {
+		store.getEvents().forEach(event => {
 			const li = document.createElement('li');
 			li.innerHTML = `
-				<b>${baby.name}</b>
-				<span class="right"><a href="#/events/${baby.id}">Events</a> | <a id="delete">Delete</a></span>
+				<b>${event.eventType}</b>
+				<b>${event.notes}</b>
 			`;
 			view.querySelector('ul').append(li);
 		})

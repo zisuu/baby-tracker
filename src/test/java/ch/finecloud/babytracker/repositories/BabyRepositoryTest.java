@@ -1,6 +1,7 @@
 package ch.finecloud.babytracker.repositories;
 
 import ch.finecloud.babytracker.bootstrap.BootstrapData;
+import ch.finecloud.babytracker.config.TestConfig;
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.entities.UserAccount;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BootstrapData.class, UserCsvServiceImpl.class})
+@Import({BootstrapData.class, UserCsvServiceImpl.class, TestConfig.class})
 class BabyRepositoryTest {
 
     @Autowired

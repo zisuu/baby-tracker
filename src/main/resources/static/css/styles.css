@@ -1,0 +1,195 @@
+/* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */  html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,  figure, figcaption, footer, header, hgroup,  menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; } /* HTML5 display-role reset for older browsers */ article, aside, details, figcaption, figure,  footer, header, hgroup, menu, nav, section { display: block; } body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } table { border-collapse: collapse; border-spacing: 0; }
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font: 14px sans-serif;
+    margin: auto;
+    max-width: 480px;
+    padding: 10px;
+}
+
+h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0 20px 0;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: normal;
+    margin: 10px 0 20px 0;
+}
+
+p {
+    padding: 5px 0 10px 0;
+}
+
+a {
+    text-decoration: none;
+    outline: 0;
+    color: inherit;
+}
+
+a:hover {
+    opacity: 0.5;
+}
+
+b {
+    font-weight: bold;
+}
+
+header {
+    height: 90px;
+    overflow: hidden;
+}
+
+header nav {
+    text-align: right;
+    padding: 0 0 20px 0;
+}
+
+footer p {
+    text-align: center;
+    margin-top: 40px;
+}
+
+[data-auth=true] {
+    display: none;
+}
+
+input, select {
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #d3d3d3;
+    color: #696969;
+    font: inherit;
+    height: 38px;
+    margin: 5px 0 20px 0;
+    padding: 0 10px 0 10px;
+}
+
+input {
+    display: block;
+    width: 100%;
+}
+
+input:focus, select:focus {
+    box-shadow: 0 0 5px #4169e1;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    background-color: #bbb;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: #000;
+    font: inherit;
+    padding: 10px;
+    min-width: 100px;
+}
+
+button.primary {
+    background-color: #4169e1;
+    color: #fff;
+}
+
+button.secondary {
+      background-color: #333;
+      color: #fff;
+}
+
+button:focus {
+    outline: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 5px 0 20px 0;
+    width: 100%;
+}
+
+tr {
+    border: solid #d3d3d3;
+    border-width: 1px 0 1px 0;
+}
+
+td {
+    padding: 10px 0 10px 0;
+}
+
+td.left {
+    text-align: left;
+}
+
+td.right {
+    text-align: right;
+}
+
+ul {
+    padding-bottom: 20px;
+}
+li {
+    list-style: none;
+    padding: 15px 5px 10px 5px;
+    border-bottom: 1px solid #aaa;
+    position: relative;
+}
+li .todo-title {
+    display: inline-block;
+    padding: 0 10px;
+}
+li .actions {
+    position: absolute;
+    right: 0;
+    top: 15px;
+    padding: 0 5px;
+}
+li .actions a {
+    display: inline-block;
+    margin-left: 10px;
+}
+li [data-action=toggle-important]:after {
+    content: '☆';
+}
+li.important [data-action=toggle-important]:after {
+    content: '★';
+}
+.hidden {
+    display: none;
+}
+
+.message {
+    display: block;
+    margin: 20px 0 20px 0;
+    width: 100%;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.info {
+    color: #4169e1;
+}
+
+.success {
+    color: #008b00;
+}
+
+.danger {
+    color: #8b0000;
+}
+
+.completed .todo-title {
+    text-decoration: line-through;
+}
+
+.overDue {
+    color: #8b0000;
+}
+.right {
+    float: right;
+}

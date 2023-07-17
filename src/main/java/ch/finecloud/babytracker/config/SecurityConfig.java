@@ -73,11 +73,9 @@ public class SecurityConfig {
             // private endpoints
             .authorizeHttpRequests().requestMatchers(HttpMethod.GET,"/api/v1/users/**").authenticated()
             .and()
-            .authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/api/v1/babies/**").authenticated()
+            .authorizeHttpRequests().requestMatchers("/api/v1/babies/**").authenticated()
             .and()
             .authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/api/v1/events/**").authenticated()
-            .and()
-            .authorizeHttpRequests().requestMatchers(HttpMethod.PUT,"/api/v1/babies/**").authenticated()
             .and()
             .authorizeHttpRequests().requestMatchers(HttpMethod.PUT,"/api/v1/events/**").authenticated()
             .and()
@@ -113,7 +111,7 @@ public class SecurityConfig {
                 new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);

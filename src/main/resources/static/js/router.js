@@ -18,9 +18,8 @@ export default {
 window.addEventListener('hashchange', render);
 
 function render() {
-	const view = document.createElement('body');
-	document.querySelector('body').remove();
-	document.querySelector('html').append(view);
+	const view = document.createElement('div');
+	document.querySelector('main').replaceChildren(view);
 
 	const [path, param] = location.hash.split('/').splice(1);
 	const component = routes['/' + path];
@@ -30,23 +29,15 @@ function render() {
 	if (component.requiresAuth && !store.getUser()) {
 		return view.innerHTML = `<h2>401 Unauthorized</h2><p>Please login!</p>`;
 	}
-
-	setCSS(component)
-
 	getTemplate(component)
 		.then(template => {
 			view.innerHTML = template;
 			component.init(view, param);
-			document.title = 'baby-tracker app' + (component.title ? ' - ' + component.title : '');
+			document.title = 'Todo App' + (component.title ? ' - ' + component.title : '');
 		})
 		.catch(errorTemplate => {
 			view.innerHTML = errorTemplate;
 		});
-}
-
-function setCSS(component) {
-	const customCSS = document.querySelector('[data-field=custom-css]');
-	customCSS.href = `css/${component.css}`
 }
 
 function getTemplate(component) {
@@ -54,3 +45,4 @@ function getTemplate(component) {
 		.then(response => response.ok ? response.text() : Promise.reject(response))
 		.catch(e => Promise.reject(`<p class="danger">Loading template failed!</p>`));
 }
+

@@ -5,8 +5,6 @@ import util from '../util.js';
 
 export default {
 	templatePath: 'login.html',
-	requiresAuth: false,
-	css: 'sign-in.css',
 	init: function(view) {
 		view.querySelector('[data-action=login]').addEventListener('click', e => {
 			e.preventDefault();
@@ -24,34 +22,38 @@ function processLogin(view) {
 			user.token = token;
 			delete user.password;
 			store.setUser(user);
-			return service.getMyUserInfos(user.name)
+			return service.getUserAccountInfos(user);
 		})
-		.then(myUserInfos => {
-			if (myUserInfos.length === 0) {
-				return service.getMyUserInfos(user.name);
+		.then(myUserAccountInfos => {
+			if (myUserAccountInfos.length === 0) {
+				return service.getUserAccountInfos(user)
 			}
-			return myUserInfos;
+			return myUserAccountInfos;
 		})
-		.then(myUserInfos => {
-			store.setMyUserInfos(myUserInfos);
-			router.navigate('/home');
+		.then(data => data.content[0])
+		.then(myUserAccountInfos => {
+			initAfterLogin(user, myUserAccountInfos)
 		})
 		.catch(error => {
 			let msg = error.status === 401
 				? "Wrong username or password. Please try again."
-				: "Retrieving baby-tracker data failed!";
+				: "Retrieving todos failed!";
 			util.updateViewField('error', msg);
-			util.updateViewField('info', '');
 		});
-	util.updateViewField('error', '');
-	util.updateViewField('info', 'Login in please wait.');
+}
+
+function initAfterLogin(user, myUserAccountInfos) {
+	store.setUserAccountInfos(myUserAccountInfos);
+	store.setBabies(myUserAccountInfos.babies);
+	util.showAuthContent(true);
+	util.updateViewField('user.name', user.name);
+	router.navigate('/home');
 }
 
 
 function getFormData(form) {
 	return {
-		name: form.username.value,
+		name: form.name.value,
 		password: form.password.value
 	};
 }
-
