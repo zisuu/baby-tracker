@@ -48,7 +48,7 @@ public class EventController {
     }
 
     @PutMapping(BASE_URL_ID + "/baby/{babyId}")
-    @PreAuthorize("#userId == authentication.principal.id")
+//    @PreAuthorize("#userId == authentication.principal.id")
     public ResponseEntity createAssociation(@PathVariable("eventId") UUID eventId, @PathVariable("babyId") UUID babyId) {
         eventService.createAssociation(eventId, babyId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

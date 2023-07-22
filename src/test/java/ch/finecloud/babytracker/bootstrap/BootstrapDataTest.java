@@ -53,7 +53,7 @@ class BootstrapDataTest {
         bootstrapData.run(null);
         assertThat(userAccountRepository.count()).isEqualTo(103);
         assertThat(babyRepository.count()).isEqualTo(4);
-        assertThat(eventRepository.count()).isEqualTo(3);
+        assertThat(eventRepository.count()).isEqualTo(5);
     }
 
 

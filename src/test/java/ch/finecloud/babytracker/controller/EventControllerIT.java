@@ -133,7 +133,7 @@ public class EventControllerIT {
     @Test
     void testListEvents() {
         Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
-        assertThat(eventDTOList.getContent().size()).isEqualTo(3);
+        assertThat(eventDTOList.getContent().size()).isEqualTo(5);
     }
     @Rollback
     @Transactional
@@ -141,7 +141,7 @@ public class EventControllerIT {
     void testEmptyList() {
         eventRepository.deleteAll();
         Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
-        assertThat(eventDTOList.getContent().size()).isEqualTo(3);
+        assertThat(eventDTOList.getContent().size()).isEqualTo(5);
     }
 }
 

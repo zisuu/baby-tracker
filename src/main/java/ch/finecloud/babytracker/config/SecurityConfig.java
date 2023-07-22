@@ -77,8 +77,6 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests().requestMatchers("/api/v1/events/**").authenticated()
             .and()
-            .authorizeHttpRequests().requestMatchers(HttpMethod.PUT,"/api/v1/events/**").authenticated()
-            .and()
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

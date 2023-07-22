@@ -154,7 +154,7 @@ public class BabyControllerIT {
     @Test
     void testListBabies() {
         Page<BabyDTO> babyDTOList = babyController.listBabies(null, 1, 25);
-        assertThat(babyDTOList.getContent().size()).isEqualTo(3);
+        assertThat(babyDTOList.getContent().size()).isEqualTo(4);
     }
 
 //    @Rollback

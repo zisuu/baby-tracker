@@ -19,6 +19,7 @@ export default {
             if (!form.reportValidity()) return;
             const event = getFormData(form);
             let eventId = "";
+            let babyId = "";
             service.postEvent(event)
                 .then(response => {
                     eventId = response.headers.get('Location').split('/').pop();
@@ -27,10 +28,13 @@ export default {
                 .then(event => {
                     store.addEvent(event);
                     router.navigate('/home');
-                    return service.putEventToBaby(eventId, store.getBabies()[0].id);
+                    // todo: this must be dynamic
+                    babyId = store.getBabies()[0].id;
+                    return service.putEventToBaby(eventId, babyId);
                 })
+                .then(() => router.navigate("#/events/"+babyId))
                 .catch(error => view.querySelector('[data-field=error]').innerHTML = "Adding event failed! msg: " + error);
-            router.navigate('/home');
+
         });
     }
 }
@@ -38,6 +42,9 @@ export default {
 
 function getFormData(form) {
     return {
-        name: form.name.value
+        eventType: form.eventType.value,
+        notes: form.notes.value,
+        startDate: form.startTime.value,
+        endDate: form.endTime.value
     };
 }

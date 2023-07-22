@@ -10,4 +10,5 @@ import java.util.UUID;
 
 public interface BabyRepository extends JpaRepository<Baby, UUID> {
     Page<Baby> findAllByNameIsLikeIgnoreCase(String name, Pageable pageable);
+    Baby findBabyByName(String name);
 }

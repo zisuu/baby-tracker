@@ -4,6 +4,7 @@ package ch.finecloud.babytracker.bootstrap;
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.entities.UserAccount;
+import ch.finecloud.babytracker.mappers.BabyMapper;
 import ch.finecloud.babytracker.model.BabyCSVRecord;
 import ch.finecloud.babytracker.model.EventCSVRecord;
 import ch.finecloud.babytracker.model.EventType;
@@ -25,6 +26,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +42,8 @@ public class BootstrapData implements CommandLineRunner {
     //    private final EventCsvService eventCsvService;
     @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private BabyMapper babyMapper;
 
     @Transactional
     @Override
@@ -191,13 +195,35 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(1)
                     .eventType(EventType.SLEEPING)
-                    .baby(babyRepository.findAll().get(0))
+                    .startDate(LocalDateTime.now().minusHours(1))
+                    .endDate(LocalDateTime.now())
+                    .baby(babyRepository.findBabyByName("Billy"))
+                    .build();
+
+            Event event12 = Event.builder()
+                    .id(UUID.randomUUID())
+                    .version(1)
+                    .eventType(EventType.BEDTIME)
+                    .startDate(LocalDateTime.now().minusHours(4))
+                    .endDate(LocalDateTime.now())
+                    .baby(babyRepository.findBabyByName("Billy"))
+                    .build();
+
+            Event event13 = Event.builder()
+                    .id(UUID.randomUUID())
+                    .version(1)
+                    .eventType(EventType.WAKEUP)
+                    .startDate(LocalDateTime.now().minusHours(5))
+                    .endDate(LocalDateTime.now())
+                    .baby(babyRepository.findBabyByName("Billy"))
                     .build();
 
             Event event2 = Event.builder()
                     .id(UUID.randomUUID())
                     .version(1)
                     .eventType(EventType.DIAPER)
+                    .startDate(LocalDateTime.now().minusHours(2).minusMinutes(1))
+                    .endDate(LocalDateTime.now().minusHours(2))
                     .baby(babyRepository.findAll().get(1))
                     .build();
 
@@ -205,10 +231,14 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(1)
                     .eventType(EventType.FEEDING)
+                    .startDate(LocalDateTime.now().minusHours(3))
+                    .endDate(LocalDateTime.now().minusHours(3).minusMinutes(20))
                     .baby(babyRepository.findAll().get(2))
                     .build();
 
             eventRepository.save(event1);
+            eventRepository.save(event12);
+            eventRepository.save(event13);
             eventRepository.save(event2);
             eventRepository.save(event3);
         }
