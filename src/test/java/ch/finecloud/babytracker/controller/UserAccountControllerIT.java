@@ -155,7 +155,7 @@ public class UserAccountControllerIT {
     }
 
     @Test
-    void testBabyByIdNotFound() {
+    void testUserByIdNotFound() {
         assertThrows(NotFoundException.class, () -> userAccountController.getUserById(UUID.randomUUID()));
     }
 
