@@ -1,15 +1,16 @@
 <h2>Add Event</h2>
 <form>
-  <label>EventType<sup>*</sup></label>
-  <input name="eventType" required />
-  <label>Start</label>
-  <input type="datetime-local"
-         name="startTime" required>
-  <label>End</label>
-  <input type="datetime-local"
-         name="endTime" required>
-  <label>Notes</label>
-  <input name="notes" />
-  <button data-action="add" class="primary">Add</button> <button data-action="cancel" class="secondary">Cancel</button>
+    <label>EventType<sup>*</sup></label>
+    <input name="eventType" required/>
+    <label>Start</label>
+    <input name="startTime"
+           required type="text">
+    <label>End</label>
+    <input name="endTime"
+           required type="text">
+    <label>Notes</label>
+    <input name="notes"/>
+    <button class="primary" data-action="add">Add</button>
+    <button class="secondary" data-action="cancel">Cancel</button>
 </form>
 <p data-field="error"></p>

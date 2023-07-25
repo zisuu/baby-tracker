@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.config.TestConfig;
 import ch.finecloud.babytracker.model.UserAccountDTO;
 import ch.finecloud.babytracker.services.UserAccountService;
 import ch.finecloud.babytracker.services.UserAccountServiceImpl;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserAccountController.class)
 //@Import(BasicAuthSecurityConfig.class)
+@Import(TestConfig.class)
 class UserAccountControllerTest {
 
     @Autowired

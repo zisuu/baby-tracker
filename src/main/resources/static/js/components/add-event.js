@@ -12,6 +12,15 @@ export default {
             router.navigate('/home');
         });
 
+        $('input[name="startTime"]').datetimepicker({
+            format: 'Y-m-d H:i:s',
+            step: 15
+        });
+        $('input[name="endTime"]').datetimepicker({
+            format: 'Y-m-d H:i:s',
+            step: 15
+        });
+
         view.querySelector('[data-action=add]').addEventListener('click', e => {
             e.preventDefault();
 
@@ -32,7 +41,7 @@ export default {
                     babyId = store.getBabies()[0].id;
                     return service.putEventToBaby(eventId, babyId);
                 })
-                .then(() => router.navigate("#/events/"+babyId))
+                .then(() => router.navigate("#/events/" + babyId))
                 .catch(error => view.querySelector('[data-field=error]').innerHTML = "Adding event failed! msg: " + error);
 
         });
