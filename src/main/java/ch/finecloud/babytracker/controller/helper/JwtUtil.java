@@ -21,7 +21,7 @@ public class JwtUtil {
     private static final long TOKEN_VALIDITY_IN_MILLIS = 3600000L;
     private static final byte[] key = new byte[32];
 
-    private JwtUtil() {
+    public JwtUtil() {
         new SecureRandom().nextBytes(key);
     }
 

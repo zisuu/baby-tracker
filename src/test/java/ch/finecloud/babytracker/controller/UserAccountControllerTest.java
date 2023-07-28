@@ -1,7 +1,10 @@
 package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.config.SecurityConfig;
 import ch.finecloud.babytracker.config.TestConfig;
+import ch.finecloud.babytracker.controller.helper.JwtUtil;
 import ch.finecloud.babytracker.model.UserAccountDTO;
+import ch.finecloud.babytracker.repositories.UserAccountRepository;
 import ch.finecloud.babytracker.services.UserAccountService;
 import ch.finecloud.babytracker.services.UserAccountServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -34,18 +38,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(UserAccountController.class)
-//@Import(BasicAuthSecurityConfig.class)
-@Import(TestConfig.class)
+@Import({TestConfig.class, SecurityConfig.class})
 class UserAccountControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    UserAccountService userAccountService;
-
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    UserAccountService userAccountService;
 
     UserAccountService userAccountServiceImpl;
 
@@ -57,6 +60,12 @@ class UserAccountControllerTest {
 
     public static final String USERNAME = "user1";
     public static final String PASSWORD = "password1";
+    public static final JwtUtil jwtUtil = new JwtUtil();
+
+
+    private String generateJwtToken(String username) {
+        return "Bearer " + jwtUtil.generateToken(username);
+    }
 
     @BeforeEach
     void setUp() {
@@ -68,13 +77,13 @@ class UserAccountControllerTest {
         UserAccountDTO userAccountDTO = UserAccountDTO.builder().build();
         given(userAccountService.saveNewUser(any(UserAccountDTO.class))).willReturn(userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(1));
         MvcResult MvcResult = mockMvc.perform(post(UserAccountController.BASE_URL)
-                        .with(httpBasic(USERNAME, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userAccountDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.length()", is(4)))
                 .andReturn();
+
         System.out.println(MvcResult.getResponse().getContentAsString());
     }
 
