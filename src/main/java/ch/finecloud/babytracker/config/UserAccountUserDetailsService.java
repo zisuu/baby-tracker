@@ -2,6 +2,7 @@ package ch.finecloud.babytracker.config;
 
 import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.repositories.UserAccountRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class UserAccountUserDetailsService implements UserDetailsService {
 
 
+    @Autowired
     private UserAccountRepository repository;
 
     @Override

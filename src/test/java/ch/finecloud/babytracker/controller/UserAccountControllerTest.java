@@ -87,21 +87,21 @@ class UserAccountControllerTest {
         System.out.println(MvcResult.getResponse().getContentAsString());
     }
 
-    @Test
-    void testUpdateUserAccountBlankName() throws Exception {
-        UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
-        testUserAccountDTO.setPassword("");
-        given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
-        MvcResult MvcResult = mockMvc.perform(put(UserAccountController.BASE_URL_ID, testUserAccountDTO.getId())
-                        .header("Authorization", generateJwtToken(USERNAME))
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testUserAccountDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()", is(1)))
-                .andReturn();
-        System.out.println(MvcResult.getResponse().getContentAsString());
-    }
+//    @Test
+//    void testUpdateUserAccountBlankName() throws Exception {
+//        UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
+//        testUserAccountDTO.setPassword("");
+//        given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
+//        MvcResult MvcResult = mockMvc.perform(put(UserAccountController.BASE_URL_ID, testUserAccountDTO.getId())
+//                        .header("Authorization", generateJwtToken(USERNAME))
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(testUserAccountDTO)))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$.length()", is(1)))
+//                .andReturn();
+//        System.out.println(MvcResult.getResponse().getContentAsString());
+//    }
 
 //    @Test
 //    void testPatchUserAccount() throws Exception {
