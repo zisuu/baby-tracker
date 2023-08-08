@@ -1,7 +1,9 @@
 package ch.finecloud.babytracker.controller;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,5 +47,13 @@ public class CustomErrorController {
                 }).collect(Collectors.toList());
 
         return ResponseEntity.badRequest().body(errorList);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    ResponseEntity handleBindErrors(BadCredentialsException exception) {
+
+        String errorMessage = exception.getMessage();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
     }
 }

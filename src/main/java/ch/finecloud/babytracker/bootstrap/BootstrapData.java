@@ -3,17 +3,14 @@ package ch.finecloud.babytracker.bootstrap;
 
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.entities.Role;
 import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.mappers.BabyMapper;
-import ch.finecloud.babytracker.model.BabyCSVRecord;
-import ch.finecloud.babytracker.model.EventCSVRecord;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.model.UserAccountCSVRecord;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import ch.finecloud.babytracker.repositories.UserAccountRepository;
-import ch.finecloud.babytracker.services.BabyCsvService;
-import ch.finecloud.babytracker.services.EventCsvService;
 import ch.finecloud.babytracker.services.UserCsvService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +23,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,14 +57,13 @@ public class BootstrapData implements CommandLineRunner {
             List<UserAccountCSVRecord> userAccountCSVRecords = userCsvService.convertCSV(file);
 
             userAccountCSVRecords.forEach(userAccountCSVRecord -> {
-                String username = userAccountCSVRecord.getUsername();
-                String password = userAccountCSVRecord.getPassword();
                 String email = userAccountCSVRecord.getEmail();
+                String password = userAccountCSVRecord.getPassword();
 
                 userAccountRepository.save(UserAccount.builder()
-                        .username(username)
-                        .password(passwordEncoder.encode(password))
                         .email(email)
+                        .password(passwordEncoder.encode(password))
+                        .role(Role.USER)
                         .build());
             });
         }
@@ -107,34 +102,31 @@ public class BootstrapData implements CommandLineRunner {
             UserAccount userAccount1 = UserAccount.builder()
                     .id(UUID.randomUUID())
                     .version(1)
-                    .username("userAccount1")
+                    .email("userAccount1")
                     .password(passwordEncoder.encode("password1"))
-                    .email("dummy@example.com")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
-                    .roles("ROLE_USER")
+                    .role(Role.USER)
                     .build();
 
             UserAccount userAccount2 = UserAccount.builder()
                     .id(UUID.randomUUID())
                     .version(2)
-                    .username("userAccount2")
+                    .email("userAccount2")
                     .password(passwordEncoder.encode("password2"))
-                    .email("dummy@example.com")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
-                    .roles("ROLE_USER")
+                    .role(Role.USER)
                     .build();
 
             UserAccount userAccount3 = UserAccount.builder()
                     .id(UUID.randomUUID())
                     .version(3)
-                    .username("userAccount3")
+                    .email("userAccount3")
                     .password(passwordEncoder.encode("password3"))
-                    .email("dummy@example.com")
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
-                    .roles("ROLE_USER")
+                    .role(Role.USER)
                     .build();
 
             userAccountRepository.save(userAccount1);
@@ -176,7 +168,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(4)
                     .name("Billy")
-                    .userAccount(userAccountRepository.findUserAccountByUsername("userAccount2").get())
+                    .userAccount(userAccountRepository.findUserAccountByEmail("userAccount2").get())
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();

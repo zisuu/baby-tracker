@@ -12,10 +12,8 @@ public class UserAccountCSVRecord {
     @CsvBindByName
     private int row;
     @CsvBindByName
-    private String username;
+    private String email;
     @CsvBindByName
     private String password;
-    @CsvBindByName
-    private String email;
 
 }

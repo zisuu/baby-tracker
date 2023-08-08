@@ -17,12 +17,11 @@ public class UserAccountDTO {
     private UUID id;
     @NotNull
     @NotBlank
-    private String username;
+    private String email;
     @NotNull
     @NotBlank
     private String password;
-    private String email;
-    private String roles;
+    private String role;
     private Integer version;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
