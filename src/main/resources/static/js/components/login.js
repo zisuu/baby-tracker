@@ -5,6 +5,8 @@ import util from '../util.js';
 
 export default {
 	templatePath: 'login.html',
+	requiresAuth: false,
+	css: 'signin.css',
 	init: function(view) {
 		view.querySelector('[data-action=login]').addEventListener('click', e => {
 			e.preventDefault();
@@ -19,7 +21,7 @@ function processLogin(view) {
 	const user = getFormData(form);
 	service.postToken(user)
 		.then(token => {
-			user.token = token;
+			user.token = JSON.parse(token).token;
 			delete user.password;
 			store.setUser(user);
 			return service.getUserAccountInfos(user);
@@ -46,14 +48,14 @@ function initAfterLogin(user, myUserAccountInfos) {
 	store.setUserAccountInfos(myUserAccountInfos);
 	store.setBabies(myUserAccountInfos.babies);
 	util.showAuthContent(true);
-	util.updateViewField('user.name', user.name);
+	util.updateViewField('user.email', user.email);
 	router.navigate('/home');
 }
 
 
 function getFormData(form) {
 	return {
-		name: form.name.value,
+		email: form.email.value,
 		password: form.password.value
 	};
 }

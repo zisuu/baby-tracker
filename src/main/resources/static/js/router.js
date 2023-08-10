@@ -18,8 +18,9 @@ export default {
 window.addEventListener('hashchange', render);
 
 function render() {
-	const view = document.createElement('div');
-	document.querySelector('main').replaceChildren(view);
+	const view = document.createElement('body');
+	document.querySelector('body').remove();
+	document.querySelector('html').append(view);
 
 	const [path, param] = location.hash.split('/').splice(1);
 	const component = routes['/' + path];
@@ -29,6 +30,7 @@ function render() {
 	if (component.requiresAuth && !store.getUser()) {
 		return view.innerHTML = `<h2>401 Unauthorized</h2><p>Please login!</p>`;
 	}
+	setCSS(component)
 	getTemplate(component)
 		.then(template => {
 			view.innerHTML = template;
@@ -38,6 +40,11 @@ function render() {
 		.catch(errorTemplate => {
 			view.innerHTML = errorTemplate;
 		});
+}
+
+function setCSS(component) {
+	const customCSS = document.querySelector('[data-field=custom-css]');
+	customCSS.href = `css/${component.css}`
 }
 
 function getTemplate(component) {

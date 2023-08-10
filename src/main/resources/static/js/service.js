@@ -4,29 +4,33 @@ const BASE_URL = '/api/v1/';
 
 export default {
     postUser: function (user) {
-        const url = BASE_URL + 'users';
+        const url = BASE_URL + 'auth/register';
         const options = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
             body: JSON.stringify(user)
         };
         return fetch(url, options)
             .then(response => response.ok ? Promise.resolve(response) : Promise.reject(response));
     },
     postToken: function (user) {
-        const url = BASE_URL + 'token';
+        const url = BASE_URL + 'auth/authenticate';
         const options = {
             method: 'POST',
             headers: {
-                'Authorization': getBasicAuthHeader(user),
-                'Accept': 'text/plain'
-            }
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(user)
         };
         return fetch(url, options)
             .then(response => response.ok ? response.text() : Promise.reject(response));
     },
     getUserAccountInfos: function (user) {
-        const url = BASE_URL + 'users?username=' + user.name;
+        const url = BASE_URL + 'users?email=' + user.email;
         const options = {
             method: 'GET',
             headers: {
@@ -50,7 +54,7 @@ export default {
             .then(response => response.ok ? response.json() : Promise.reject((response)))
     },
     getBabies: function (user) {
-        const url = BASE_URL + 'babies?username=' + user.name;
+        const url = BASE_URL + 'babies?username=' + user.email;
         const options = {
             method: 'GET',
             headers: {
@@ -148,8 +152,4 @@ export default {
         return fetch(url, options)
             .then(response => response.ok ? Promise.resolve(response) : Promise.reject(response));
     }
-}
-
-function getBasicAuthHeader(user) {
-    return 'Basic ' + btoa(user.name + ':' + user.password);
 }

@@ -54,7 +54,7 @@
 //    @Captor
 //    ArgumentCaptor<UUID> uuidArgumentCaptor;
 //
-//    public static final String USERNAME = "user1";
+//    public static final String USERNAME = "user1@example.com";
 //    public static final String PASSWORD = "password1";
 //
 //    @BeforeEach
