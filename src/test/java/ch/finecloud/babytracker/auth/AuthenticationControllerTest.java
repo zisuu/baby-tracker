@@ -88,8 +88,6 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testAuthenticationGoodCredentials() throws Exception {
-        UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
-        System.out.println(testUserAccountDTO.toString());
         String requestBody = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", USERNAME, PASSWORD);
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/authenticate")
                 .contentType("application/json")
