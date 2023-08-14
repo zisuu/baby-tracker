@@ -19,6 +19,10 @@ export default {
 	setEvents: function(events) {
 		data.events = events;
 	},
+	deleteEvent: function(eventId) {
+		const i = data.events.findIndex(event => event.id === eventId);
+		if (i >= 0) data.events.splice(i, 1)
+	},
 	addEvent(event) {
 		data.events.push(event);
 	},

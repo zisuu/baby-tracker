@@ -60,12 +60,12 @@ public class UserAccountController {
     }
 
     @GetMapping(BASE_URL)
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.principal.username")
-    public Page<UserAccountDTO> listUsers(@RequestParam(required = false) String username,
+//    @PreAuthorize("hasRole('ROLE_ADMIN') or #email == authentication.principal.email")
+    public Page<UserAccountDTO> listUsers(@RequestParam(required = false) String email,
                                           @RequestParam(required = false) Integer pageNumber,
                                           @RequestParam(required = false) Integer pageSize) {
         log.debug("listUsers was called, in Controller");
-        return userAccountService.listUsers(username, pageNumber, pageSize);
+        return userAccountService.listUsers(email, pageNumber, pageSize);
     }
 
     @GetMapping(BASE_URL_ID)

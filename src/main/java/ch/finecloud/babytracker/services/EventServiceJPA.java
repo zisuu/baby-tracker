@@ -8,6 +8,7 @@ import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -99,6 +100,7 @@ public class EventServiceJPA implements EventService {
         return atomicReference.get();
     }
 
+    @Transactional
     @Override
     public Boolean deleteById(UUID eventId) {
         if (eventRepository.existsById(eventId)) {

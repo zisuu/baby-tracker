@@ -47,9 +47,10 @@ function processLogin(view) {
 function initAfterLogin(user, myUserAccountInfos) {
 	store.setUserAccountInfos(myUserAccountInfos);
 	store.setBabies(myUserAccountInfos.babies);
+	// this must be dynamic
+	store.setEvents(myUserAccountInfos.babies[0].events);
 	util.showAuthContent(true);
-	util.updateViewField('user.email', user.email);
-	router.navigate('/home');
+	router.navigate('/dashboard');
 }
 
 

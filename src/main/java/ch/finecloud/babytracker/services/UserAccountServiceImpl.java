@@ -52,7 +52,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         userMap.put(user3.getId(), user3);
     }
     @Override
-    public Page<UserAccountDTO> listUsers(String username, Integer pageNumber, Integer pageSize) {
+    public Page<UserAccountDTO> listUsers(String email, Integer pageNumber, Integer pageSize) {
         return new PageImpl<>(new ArrayList<>(userMap.values()));
     }
 

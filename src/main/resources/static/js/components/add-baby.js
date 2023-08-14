@@ -9,7 +9,7 @@ export default {
     init: function (view) {
         view.querySelector('[data-action=cancel]').addEventListener('click', e => {
             e.preventDefault();
-            router.navigate('/home');
+            router.navigate('/dashboard');
         });
 
         view.querySelector('[data-action=add]').addEventListener('click', e => {
@@ -26,11 +26,11 @@ export default {
                 })
                 .then(baby => {
                     store.addBaby(baby);
-                    router.navigate('/home');
+                    router.navigate('/dashboard');
                     return service.putBabyToUser(babyId, store.getUserAccountInfos().id);
                 })
                 .catch(error => view.querySelector('[data-field=error]').innerHTML = "Adding baby failed! msg: " + error);
-            router.navigate('/home');
+            router.navigate('/dashboard');
         });
     }
 }

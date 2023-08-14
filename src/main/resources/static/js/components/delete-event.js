@@ -3,10 +3,10 @@ import router from '../router.js';
 import store from '../store.js';
 
 export default {
-    title: 'Add Event',
-    templatePath: 'add-event.html',
+    // title: 'Add Event',
+    // templatePath: 'add-event.html',
     requiresAuth: true,
-    init: function (view) {
+    init: function () {
         view.querySelector('[data-action=cancel]').addEventListener('click', e => {
             e.preventDefault();
             router.navigate('/dashboard');

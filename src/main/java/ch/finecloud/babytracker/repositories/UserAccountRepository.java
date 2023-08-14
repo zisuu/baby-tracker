@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserAccountRepository extends JpaRepository<UserAccount, UUID> {
-    Page<UserAccount> findAllByUsernameIsLikeIgnoreCase(String username, Pageable pageable);
+    Page<UserAccount> findAllByEmailIsLikeIgnoreCase(String username, Pageable pageable);
 
     Optional<UserAccount> findUserAccountByEmail(String email);
 }

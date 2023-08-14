@@ -29,11 +29,11 @@ public class UserAccountServiceJPA implements UserAccountService {
     private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public Page<UserAccountDTO> listUsers(String username, Integer pageNumber, Integer pageSize) {
+    public Page<UserAccountDTO> listUsers(String email, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
         Page<UserAccount> userPage;
-        if (StringUtils.hasText(username)) {
-            userPage = listUserByName(username, pageRequest);
+        if (StringUtils.hasText(email)) {
+            userPage = listUserByEmail(email, pageRequest);
         } else {
             userPage = userAccountRepository.findAll(pageRequest);
         }
@@ -61,8 +61,8 @@ public class UserAccountServiceJPA implements UserAccountService {
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
-    public Page<UserAccount> listUserByName(String username, Pageable pageable) {
-        return userAccountRepository.findAllByUsernameIsLikeIgnoreCase(username, pageable);
+    public Page<UserAccount> listUserByEmail(String email, Pageable pageable) {
+        return userAccountRepository.findAllByEmailIsLikeIgnoreCase(email, pageable);
     }
 
     @Override

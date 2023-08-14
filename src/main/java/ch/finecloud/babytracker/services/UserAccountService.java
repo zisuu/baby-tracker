@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserAccountService {
-    Page<UserAccountDTO> listUsers(String username, Integer pageNumber, Integer pageSize);
+    Page<UserAccountDTO> listUsers(String email, Integer pageNumber, Integer pageSize);
 
     Optional<UserAccountDTO> getUserById(UUID id);
     Optional<UserAccountDTO> getUserByUsername(String username);

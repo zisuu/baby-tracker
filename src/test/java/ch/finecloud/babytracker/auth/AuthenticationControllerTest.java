@@ -37,12 +37,6 @@ public class AuthenticationControllerTest {
 
     UserAccountService userAccountServiceImpl;
 
-    @Captor
-    ArgumentCaptor<UserAccountDTO> userArgumentCaptor;
-
-    @Captor
-    ArgumentCaptor<UUID> uuidArgumentCaptor;
-
     public static final String USERNAME = "userAccount1@example.com";
     public static final String PASSWORD = "password1";
 
