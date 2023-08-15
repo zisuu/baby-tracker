@@ -10,6 +10,7 @@ import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Primary
 @RequiredArgsConstructor
@@ -105,6 +107,7 @@ public class EventServiceJPA implements EventService {
     public Boolean deleteById(UUID eventId) {
         if (eventRepository.existsById(eventId)) {
             eventRepository.deleteById(eventId);
+            log.debug("EventServiceJPA.deleteById was called with eventId: "+ eventId);
             return true;
         }
         return false;

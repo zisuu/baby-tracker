@@ -52,7 +52,7 @@ public class Baby {
 
     @Builder.Default
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "baby", cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "baby", cascade = CascadeType.PERSIST)
     private Set<Event> events = new HashSet<>();
 
     @Override

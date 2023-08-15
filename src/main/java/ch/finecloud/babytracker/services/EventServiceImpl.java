@@ -15,7 +15,7 @@ import java.util.*;
 @Service
 public class EventServiceImpl implements EventService {
 
-    private Map<UUID, EventDTO> eventMap;
+    private final Map<UUID, EventDTO> eventMap;
 
     public EventServiceImpl() {
         this.eventMap = new HashMap<>();

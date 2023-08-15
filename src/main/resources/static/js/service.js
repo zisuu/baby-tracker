@@ -151,5 +151,16 @@ export default {
         }
         return fetch(url, options)
             .then(response => response.ok ? Promise.resolve(response) : Promise.reject(response));
+    },
+    deleteEvent(eventId) {
+        const url = BASE_URL + 'events/' + eventId;
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + store.getUserToken()
+            },
+        }
+        return fetch(url, options)
+            .then(response => response.ok ? Promise.resolve(response) : Promise.reject(response));
     }
 }

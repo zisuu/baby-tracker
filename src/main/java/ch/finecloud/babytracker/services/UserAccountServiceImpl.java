@@ -15,7 +15,7 @@ import java.util.*;
 public class UserAccountServiceImpl implements UserAccountService {
 
 
-    private Map<UUID, UserAccountDTO> userMap;
+    private final Map<UUID, UserAccountDTO> userMap;
 
     public UserAccountServiceImpl() {
         this.userMap = new HashMap<>();

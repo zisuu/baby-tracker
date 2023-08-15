@@ -34,6 +34,7 @@ public class EventController {
     @DeleteMapping(BASE_URL_ID)
     public ResponseEntity deleteById(@PathVariable("eventId") UUID eventId) {
         if (!eventService.deleteById(eventId)) {
+            log.debug("EventController.deleteById was called with eventId: "+ eventId);
             throw new NotFoundException();
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
