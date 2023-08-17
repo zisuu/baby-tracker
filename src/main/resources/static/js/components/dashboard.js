@@ -8,66 +8,73 @@ export default {
     templatePath: 'dashboard.html',
     requiresAuth: true,
     // css: 'dashboard.css',
-    init: function (view){
-        // this must be dynamic
-        const firstBaby = store.getUserAccountInfos().babies[0];
+    init: function (view) {
         const username = store.getUser().email
         util.updateViewField('username', `Logout ${username}`, view);
-        util.updateViewField('babyname', `Timeline of ${firstBaby.name}`, view);
 
-        const tbody = view.querySelector('tbody'); // Select the tbody element
+        if (store.getBabies().length !== 0) {
+            // this must be dynamic
+            const firstBaby = store.getBabies()[0];
+            util.updateViewField('babyname', `Timeline of ${firstBaby.name}`, view);
 
-        store.getEvents().forEach(babyEvent => {
-            const eventRow = document.createElement('tr'); // Create a new <tr> element
+            const tbody = view.querySelector('tbody'); // Select the tbody element
 
-            const eventTypeCell = document.createElement('td');
-            eventTypeCell.textContent = babyEvent.eventType;
-            eventRow.appendChild(eventTypeCell);
+            store.getEvents().forEach(babyEvent => {
+                const eventRow = document.createElement('tr'); // Create a new <tr> element
 
-            const startDateCell = document.createElement('td');
-            const parsedStartDate = new Date(babyEvent.startDate);
-            const options = {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-            };
-            startDateCell.textContent = parsedStartDate.toLocaleDateString('UTC', options);
-            eventRow.appendChild(startDateCell);
+                const eventTypeCell = document.createElement('td');
+                eventTypeCell.textContent = babyEvent.eventType;
+                eventRow.appendChild(eventTypeCell);
 
-            const endDateCell = document.createElement('td');
-            const parsedEndDate = new Date(babyEvent.endDate);
-            endDateCell.textContent = parsedEndDate.toLocaleDateString('UTC', options);
-            eventRow.appendChild(endDateCell);
+                const startDateCell = document.createElement('td');
+                const parsedStartDate = new Date(babyEvent.startDate);
+                const options = {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                };
+                startDateCell.textContent = parsedStartDate.toLocaleDateString('UTC', options);
+                eventRow.appendChild(startDateCell);
 
-            const notesCell = document.createElement('td');
-            notesCell.textContent = babyEvent.notes;
-            eventRow.appendChild(notesCell);
+                const endDateCell = document.createElement('td');
+                const parsedEndDate = new Date(babyEvent.endDate);
+                endDateCell.textContent = parsedEndDate.toLocaleDateString('UTC', options);
+                eventRow.appendChild(endDateCell);
 
-            const deleteCell = document.createElement('td');
-            const deleteLink = document.createElement('a');
-            // deleteLink.innerHTML = `<a id="delete" class="btn bg-warning">DELETE</a>`;
-            deleteLink.className = 'btn bg-warning';
-            deleteLink.id = 'delete';
-            deleteLink.textContent = 'DELETE';
-            deleteCell.appendChild(deleteLink);
-            eventRow.appendChild(deleteCell);
-            deleteCell.querySelector('#delete').onclick = event => deleteEvent(babyEvent.id);
+                const notesCell = document.createElement('td');
+                notesCell.textContent = babyEvent.notes;
+                eventRow.appendChild(notesCell);
 
-            const updateCell = document.createElement('td');
-            const updateLink = document.createElement('a');
-            updateLink.className = 'btn bg-success';
-            updateLink.href = `update-event?id=${babyEvent.id}`;
-            updateLink.textContent = 'UPDATE';
-            updateCell.appendChild(updateLink);
-            eventRow.appendChild(updateCell);
+                const deleteCell = document.createElement('td');
+                const deleteLink = document.createElement('a');
+                // deleteLink.innerHTML = `<a id="delete" class="btn bg-warning">DELETE</a>`;
+                deleteLink.className = 'btn bg-warning';
+                deleteLink.id = 'delete';
+                deleteLink.textContent = 'DELETE';
+                deleteCell.appendChild(deleteLink);
+                eventRow.appendChild(deleteCell);
+                deleteCell.querySelector('#delete').onclick = event => deleteEvent(babyEvent.id);
 
-            tbody.appendChild(eventRow);
-        });
+                const updateCell = document.createElement('td');
+                const updateLink = document.createElement('a');
+                updateLink.className = 'btn bg-success';
+                updateLink.href = `update-event?id=${babyEvent.id}`;
+                updateLink.textContent = 'UPDATE';
+                updateCell.appendChild(updateLink);
+                eventRow.appendChild(updateCell);
+
+                tbody.appendChild(eventRow);
+            });
+        } else {
+            removeEventTableAndButton(view);
+            util.updateViewField('babyname', 'Add your Baby in the menu above, to track your babies events here.', view);
+        }
     }
 }
+
 function deleteEvent(eventId) {
     service.deleteEvent(eventId)
         .then(() => {
@@ -75,4 +82,11 @@ function deleteEvent(eventId) {
             router.navigate('/dashboard');
         })
         .catch(error => document.querySelector('footer').innerHTML = 'Unexpected error occurred');
+}
+
+function removeEventTableAndButton(view) {
+    const eventTable = view.querySelector('table');
+    eventTable.remove();
+    const addBabyButton = view.querySelector('#addBabyButton');
+    addBabyButton.remove();
 }

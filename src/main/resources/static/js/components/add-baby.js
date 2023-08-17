@@ -6,6 +6,7 @@ export default {
     title: 'Add Baby',
     templatePath: 'add-baby.html',
     requiresAuth: true,
+    css: 'add-event.css',
     init: function (view) {
         view.querySelector('[data-action=cancel]').addEventListener('click', e => {
             e.preventDefault();
@@ -38,6 +39,6 @@ export default {
 
 function getFormData(form) {
     return {
-        name: form.name.value
+        name: form.babyName.value
     };
 }
