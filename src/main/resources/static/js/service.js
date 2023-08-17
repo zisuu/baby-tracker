@@ -139,7 +139,18 @@ export default {
         };
         return fetch(url, options)
             .then(response => response.ok ? response.json() : Promise.reject((response)))
-
+    },
+    getEventTypes() {
+        const url = BASE_URL + 'eventtypes';
+        const options = {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + store.getUserToken(),
+                'Accept': 'application/json'
+            }
+        };
+        return fetch(url, options)
+            .then(response => response.ok ? response.json() : Promise.reject((response)))
     },
     putEventToBaby(eventId, babyId) {
         const url = BASE_URL + 'events/' + eventId + '/baby/' + babyId;

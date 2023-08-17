@@ -64,7 +64,7 @@ export default {
             updateCell.appendChild(updateLink);
             eventRow.appendChild(updateCell);
 
-            tbody.appendChild(eventRow); // Append the babyEvent row to the tbody
+            tbody.appendChild(eventRow);
         });
     }
 }

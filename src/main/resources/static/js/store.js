@@ -40,5 +40,11 @@ export default {
 	},
 	clear: function() {
 		data = {};
+	},
+    setEventTypes(eventTypes) {
+        data.eventTypes = eventTypes;
+    },
+	getEventTypes() {
+		return data.eventTypes;
 	}
 }

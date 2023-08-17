@@ -35,6 +35,10 @@ function processLogin(view) {
 		.then(data => data.content[0])
 		.then(myUserAccountInfos => {
 			initAfterLogin(user, myUserAccountInfos)
+			return getEventTypes();
+		})
+		.then(() => {
+			router.navigate('/dashboard');
 		})
 		.catch(error => {
 			let msg = error.status === 401
@@ -50,9 +54,19 @@ function initAfterLogin(user, myUserAccountInfos) {
 	// this must be dynamic
 	store.setEvents(myUserAccountInfos.babies[0].events);
 	util.showAuthContent(true);
-	router.navigate('/dashboard');
 }
 
+function getEventTypes() {
+	service.getEventTypes()
+		.then(eventTypes => {
+			store.setEventTypes(eventTypes);
+			return eventTypes;
+		})
+		.catch(error => {
+			let msg = 'Could not load EventTypes!'
+			util.updateViewField('error', msg);
+		});
+}
 
 function getFormData(form) {
 	return {

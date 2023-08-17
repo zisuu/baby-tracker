@@ -1,16 +1,43 @@
-<h2>Add Event</h2>
-<form>
-    <label>EventType<sup>*</sup></label>
-    <input name="eventType" required/>
-    <label>Start</label>
-    <input name="startTime"
-           required type="text">
-    <label>End</label>
-    <input name="endTime"
-           required type="text">
-    <label>Notes</label>
-    <input name="notes"/>
-    <button class="primary" data-action="add">Add</button>
-    <button class="secondary" data-action="cancel">Cancel</button>
-</form>
-<p data-field="error"></p>
+<body class="bg-body-tertiary">
+<div class="container">
+    <main>
+        <div class="py-5">
+            <h2>Add Event</h2>
+        </div>
+        <div class="col-md-7 col-lg-8">
+            <form>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="eventtype" class="form-label">EventType</label>
+                        <select name="eventType" class="form-select" id="eventtype" required>
+                            <option value="">Choose...</option>
+                            <option>SLEEPING-Static</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="startTime" class="form-label">Start</label>
+                        <input name="startTime" type="text" class="form-control"  id="startTime" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="endTime" class="form-label">End</label>
+                        <input  name="endTime" type="text" class="form-control" id="endTime" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="notes" class="form-label">Notes</label>
+                        <input name="notes" id="notes" type="text" class="form-control" placeholder="Put your notes in here...">
+                    </div>
+
+                </div>
+                <hr class="my-4">
+                <!--          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>-->
+                <button class="btn btn-primary btn-lg" data-action="add">Add</button>
+                <button class="btn btn-secondary btn-lg" data-action="cancel">Cancel</button>
+            </form>
+        </div>
+    </main>
+
+</div>
+</body>

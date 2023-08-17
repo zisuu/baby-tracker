@@ -6,6 +6,7 @@ export default {
     title: 'Add Event',
     templatePath: 'add-event.html',
     requiresAuth: true,
+    css: 'add-event.css',
     init: function (view) {
         view.querySelector('[data-action=cancel]').addEventListener('click', e => {
             e.preventDefault();
@@ -43,6 +44,14 @@ export default {
                 .then(() => router.navigate('/dashboard'))
                 .catch(error => view.querySelector('[data-field=error]').innerHTML = "Adding event failed! msg: " + error);
 
+        });
+
+        const eventTypes = store.getEventTypes();
+        const eventTypeElement = document.getElementsByName('eventType')[0];
+        eventTypes.forEach(eventType => {
+            const optionElement = document.createElement('option');
+            optionElement.textContent = eventType;
+            eventTypeElement.appendChild(optionElement);
         });
     }
 }
