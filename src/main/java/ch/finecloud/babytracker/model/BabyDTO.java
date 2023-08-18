@@ -5,6 +5,8 @@ import ch.finecloud.babytracker.entities.UserAccount;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +19,8 @@ public class BabyDTO {
     @NotNull
     @NotBlank
     private String name;
+    @NotNull
+    private LocalDate birthday;
     private Integer version;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;

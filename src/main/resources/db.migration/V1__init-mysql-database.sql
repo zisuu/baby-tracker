@@ -18,6 +18,7 @@ create table baby
     created_date       datetime(6),
     last_modified_date datetime(6),
     name               varchar(50) not null,
+    birthday           DATE,
     version            integer,
     user_account_id    varchar(36),
     primary key (id)

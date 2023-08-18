@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,6 +46,7 @@ class BabyRepositoryTest {
     void testAddBaby() {
         Baby baby = Baby.builder()
                 .name("testBaby")
+                .birthday(LocalDate.now())
                 .build();
         baby.setUserAccount(testUserAccount);
         Baby savedBaby = babyRepository.save(baby);
@@ -64,6 +67,7 @@ class BabyRepositoryTest {
     void testDeleteBaby() {
         Baby baby = Baby.builder()
                 .name("testBaby")
+                .birthday(LocalDate.now())
                 .build();
         baby.setUserAccount(testUserAccount);
         Baby savedBaby = babyRepository.save(baby);

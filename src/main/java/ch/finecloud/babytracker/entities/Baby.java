@@ -13,7 +13,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +40,8 @@ public class Baby {
     @Size(max = 50)
     @Column(length = 50)
     private String name;
+    @NotNull
+    private LocalDate birthday;
     @Version
     private Integer version;
     @CreationTimestamp

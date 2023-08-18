@@ -22,6 +22,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -141,6 +142,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(1)
                     .name("Max")
+                    .birthday(LocalDate.now().minusMonths(1))
                     .userAccount(userAccountRepository.findAll().get(0))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
@@ -150,6 +152,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(2)
                     .name("Miriam")
+                    .birthday(LocalDate.now().minusMonths(2))
                     .userAccount(userAccountRepository.findAll().get(1))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
@@ -159,6 +162,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(3)
                     .name("Paul")
+                    .birthday(LocalDate.now().minusMonths(3))
                     .userAccount(userAccountRepository.findAll().get(2))
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
@@ -168,6 +172,7 @@ public class BootstrapData implements CommandLineRunner {
                     .id(UUID.randomUUID())
                     .version(4)
                     .name("Billy")
+                    .birthday(LocalDate.now().minusMonths(4))
                     .userAccount(userAccountRepository.findUserAccountByEmail("userAccount2@example.com").get())
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())

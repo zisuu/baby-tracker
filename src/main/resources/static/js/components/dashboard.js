@@ -16,6 +16,8 @@ export default {
             // this must be dynamic
             const firstBaby = store.getBabies()[0];
             util.updateViewField('babyname', `Timeline of ${firstBaby.name}`, view);
+            let ageString = calculateAge(firstBaby.birthday)
+            util.updateViewField('age', `Age: ${ageString}`, view);
 
             const tbody = view.querySelector('tbody'); // Select the tbody element
 
@@ -89,4 +91,30 @@ function removeEventTableAndButton(view) {
     eventTable.remove();
     const addBabyButton = view.querySelector('#addBabyButton');
     addBabyButton.remove();
+}
+
+function calculateAge(inputDate) {
+    const birthDate = new Date(inputDate);
+    const currentDate = new Date();
+
+    let years = currentDate.getFullYear() - birthDate.getFullYear();
+    const months = currentDate.getMonth() - birthDate.getMonth();
+    const days = currentDate.getDate() - birthDate.getDate();
+
+    if (months < 0 || (months === 0 && days < 0)) {
+        years--;
+    }
+
+    const ageString = [];
+    if (years > 0) {
+        ageString.push(`${years} year${years > 1 ? 's' : ''}`);
+    }
+    if (months > 0) {
+        ageString.push(`${months} month${months > 1 ? 's' : ''}`);
+    }
+    if (days > 0) {
+        ageString.push(`${days} day${days > 1 ? 's' : ''}`);
+    }
+
+    return ageString.join(', ');
 }

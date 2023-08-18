@@ -39,6 +39,7 @@ export default {
 
 function getFormData(form) {
     return {
-        name: form.babyName.value
+        name: form.babyName.value,
+        birthday: form.babyBirthday.value,
     };
 }
