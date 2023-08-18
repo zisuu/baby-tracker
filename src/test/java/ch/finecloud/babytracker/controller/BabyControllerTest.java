@@ -90,7 +90,7 @@ class BabyControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(babyDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.length()", is(3)))
                 .andReturn();
         System.out.println(MvcResult.getResponse().getContentAsString());
     }

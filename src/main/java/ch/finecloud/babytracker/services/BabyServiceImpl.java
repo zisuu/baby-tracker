@@ -24,6 +24,7 @@ public class BabyServiceImpl implements BabyService {
                 .id(UUID.randomUUID())
                 .version(1)
                 .name("Hans Fischer")
+                .birthday(LocalDateTime.now().toLocalDate())
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
@@ -32,6 +33,7 @@ public class BabyServiceImpl implements BabyService {
                 .id(UUID.randomUUID())
                 .version(2)
                 .name("Peter Muster")
+                .birthday(LocalDateTime.now().toLocalDate())
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
@@ -40,6 +42,7 @@ public class BabyServiceImpl implements BabyService {
                 .id(UUID.randomUUID())
                 .version(3)
                 .name("Max Müller")
+                .birthday(LocalDateTime.now().toLocalDate())
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
@@ -68,6 +71,7 @@ public class BabyServiceImpl implements BabyService {
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .name(babyDTO.getName())
+                .birthday(babyDTO.getBirthday())
                 .build();
 
         babyMap.put(savedBabyDTO.getId(), savedBabyDTO);
