@@ -94,7 +94,10 @@ public class EventServiceJPA implements EventService {
     public Optional<EventDTO> updateEventById(UUID eventId, EventDTO eventDTO) {
         AtomicReference<Optional<EventDTO>> atomicReference = new AtomicReference<>();
         eventRepository.findById(eventId).ifPresentOrElse(event -> {
+            event.setEventType(eventDTO.getEventType());
             event.setNotes(eventDTO.getNotes());
+            event.setStartDate(eventDTO.getStartDate());
+            event.setEndDate(eventDTO.getEndDate());
             atomicReference.set(Optional.of(eventMapper.eventToEventDto(eventRepository.save(event))));
         }, () -> {
             atomicReference.set(Optional.empty());

@@ -91,19 +91,6 @@ export default {
         return fetch(url, options)
             .then(response => response.ok ? Promise.resolve(response) : Promise.reject(response));
     },
-    putTodo: function (user, todo) {
-        const url = BASE_URL + 'todos/' + todo.id;
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Authorization': getBasicAuthHeader(user),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(todo)
-        };
-        return fetch(url, options)
-            .then(response => response.ok ? response.json() : Promise.reject(response));
-    },
     putBabyToUser(babyId, userAccountId) {
         const url = BASE_URL + 'babies/' + babyId + '/user/' + userAccountId;
         const options = {
@@ -173,5 +160,18 @@ export default {
         };
         console.log('Send ' + options.method + ' request to ' + url);
         return fetch(url, options);
+    },
+    putEvent(event) {
+        const url = BASE_URL + 'events/' + event.id;
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + store.getUserToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(event)
+        }
+        return fetch(url, options)
+            .then(response => response.ok ? Promise.resolve(response) : Promise.reject(response));
     }
 }

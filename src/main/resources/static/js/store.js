@@ -29,6 +29,9 @@ export default {
 	getEvents: function() {
 		return data.events;
 	},
+	getEvent: function(id) {
+		return data.events.find(event => event.id == id);
+	},
 	getUserToken: function() {
 		return data.user.token;
 	},
@@ -46,5 +49,8 @@ export default {
     },
 	getEventTypes() {
 		return data.eventTypes;
+	},
+	updateEvent(event) {
+		Object.assign(this.getEvent(event.id), event);
 	}
 }

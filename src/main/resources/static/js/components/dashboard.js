@@ -7,7 +7,7 @@ export default {
     title: 'Dashboard',
     templatePath: 'dashboard.html',
     requiresAuth: true,
-    // css: 'dashboard.css',
+    css: null,
     init: function (view) {
         const username = store.getUser().email
         util.updateViewField('username', `Logout ${username}`, view);
@@ -61,7 +61,7 @@ export default {
                 const updateCell = document.createElement('td');
                 const updateLink = document.createElement('a');
                 updateLink.className = 'btn bg-success';
-                updateLink.href = `update-event?id=${babyEvent.id}`;
+                updateLink.href = `#/update-event/${babyEvent.id}`;
                 updateLink.textContent = 'UPDATE';
                 updateCell.appendChild(updateLink);
                 eventRow.appendChild(updateCell);
