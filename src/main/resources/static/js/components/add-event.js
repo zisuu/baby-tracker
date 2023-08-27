@@ -36,14 +36,15 @@ export default {
                     return service.getEvent(eventId);
                 })
                 .then(event => {
-                    store.addEvent(event);
                     // todo: this must be dynamic
                     babyId = store.getBabies()[0].id;
-                    return service.putEventToBaby(eventId, babyId);
+                    return service.putEventToBaby(eventId, babyId)
+                        .then(() => {
+                            store.addEvent(event);
+                        });
                 })
                 .then(() => router.navigate('/dashboard'))
-                .catch(error => view.querySelector('[data-field=error]').innerHTML = "Adding event failed! msg: " + error);
-
+                .catch(async error => view.querySelector('[data-field=error]').innerHTML = "Adding event failed! msg: " + await error.text());
         });
 
         const eventTypes = store.getEventTypes();

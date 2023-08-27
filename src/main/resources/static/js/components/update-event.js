@@ -59,7 +59,7 @@ function updateEvent(jsEvent, view, event) {
             store.updateEvent(updatedEvent);
             router.navigate('/dashboard');
         })
-        .catch(error => view.querySelector('[data-field=error]').innerHTML = "Updating event failed! msg: " + error);
+        .catch(error => view.querySelector('[data-field=error]').innerHTML = "Updating event failed! msg: " + error.text());
 }
 
 function getFormData(form) {
