@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,7 +45,6 @@ public class EventServiceJPA implements EventService {
         Page<Event> eventPage;
         if (babyId != null) {
             eventPage = listEventByBabyUuid(babyId, pageRequest);
-//            eventPage = listEventByType(eventType, pageRequest);
         } else {
             eventPage = eventRepository.findAll(pageRequest);
         }
@@ -71,10 +71,6 @@ public class EventServiceJPA implements EventService {
         Sort sort = Sort.by(Sort.Order.asc("createdDate"));
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
-
-//    public Page<Event> listEventByType(EventType eventType, Pageable pageable) {
-//        return eventRepository.findAllByEventType(eventType, pageable);
-//    }
 
     public Page<Event> listEventByBabyUuid(UUID babyUuid, Pageable pageable) {
         return eventRepository.findAllByBabyId(babyUuid, pageable);
@@ -110,7 +106,7 @@ public class EventServiceJPA implements EventService {
     public Boolean deleteById(UUID eventId) {
         if (eventRepository.existsById(eventId)) {
             eventRepository.deleteById(eventId);
-            log.debug("EventServiceJPA.deleteById was called with eventId: "+ eventId);
+            log.debug("EventServiceJPA.deleteById was called with eventId: " + eventId);
             return true;
         }
         return false;
@@ -136,7 +132,13 @@ public class EventServiceJPA implements EventService {
     public void createAssociation(UUID eventId, UUID babyId) {
         Event event = eventRepository.findById(eventId).get();
         Baby baby = babyRepository.findById(babyId).get();
-        event.setBaby(baby);
-        eventRepository.save(event);
+        LocalDate eventStartDate = event.getStartDate() != null ? event.getStartDate().toLocalDate() : null;
+        LocalDate babyBirthday = baby.getBirthday();
+        if (eventStartDate != null && eventStartDate.isBefore(babyBirthday)) {
+            throw new IllegalArgumentException("Event start date is before baby birthday");
+        } else {
+            event.setBaby(baby);
+            eventRepository.save(event);
+        }
     }
 }

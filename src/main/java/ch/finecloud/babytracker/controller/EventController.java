@@ -34,7 +34,7 @@ public class EventController {
     @DeleteMapping(BASE_URL_ID)
     public ResponseEntity deleteById(@PathVariable("eventId") UUID eventId) {
         if (!eventService.deleteById(eventId)) {
-            log.debug("EventController.deleteById was called with eventId: "+ eventId);
+            log.debug("EventController.deleteById was called with eventId: " + eventId);
             throw new NotFoundException();
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -73,7 +73,7 @@ public class EventController {
     }
 
     @GetMapping(BASE_URL_ID)
-    public EventDTO getEventById(@PathVariable("eventId")  UUID eventId) {
+    public EventDTO getEventById(@PathVariable("eventId") UUID eventId) {
         log.debug("getEventById was called with id: " + eventId + ", in Controller");
         return eventService.getEventById(eventId).orElseThrow(NotFoundException::new);
     }

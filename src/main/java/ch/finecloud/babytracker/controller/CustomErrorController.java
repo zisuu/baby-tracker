@@ -19,6 +19,11 @@ import java.util.stream.Collectors;
 public class CustomErrorController {
 
     @ExceptionHandler
+    ResponseEntity handleIllegalArgumentExceptions(IllegalArgumentException exception){
+        return ResponseEntity.badRequest().body(exception.getMessage());
+    }
+
+    @ExceptionHandler
     ResponseEntity handleJPAViolations(TransactionSystemException exception) {
         ResponseEntity.BodyBuilder responseEntity = ResponseEntity.badRequest();
 
