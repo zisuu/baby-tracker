@@ -1,6 +1,7 @@
 package ch.finecloud.babytracker.model;
 
 import ch.finecloud.babytracker.entities.Baby;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class UserAccountDTO {
     private UUID id;
     @NotNull
     @NotBlank
+    @Email
     private String email;
     @NotNull
     @NotBlank

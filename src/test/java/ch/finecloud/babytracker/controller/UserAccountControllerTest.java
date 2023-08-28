@@ -78,24 +78,79 @@ class UserAccountControllerTest {
     }
 
     @Test
-    void testCreateUserNullName() throws Exception {
-        UserAccountDTO userAccountDTO = UserAccountDTO.builder().build();
+    void testCreateUserNullEmail() throws Exception {
+        UserAccountDTO userAccountDTO = UserAccountDTO.builder()
+                .email(null)
+                .password("password1")
+                .role("USER")
+                .build();
         given(userAccountService.saveNewUser(any(UserAccountDTO.class))).willReturn(userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(1));
         MvcResult MvcResult = mockMvc.perform(post(UserAccountController.BASE_URL)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userAccountDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()", is(4)))
+                .andExpect(jsonPath("$.length()", is(2)))
                 .andReturn();
 
         System.out.println(MvcResult.getResponse().getContentAsString());
     }
 
     @Test
-    void testUpdateUserAccountBlankName() throws Exception {
+    void testCreateUserBlankEmail() throws Exception {
+        UserAccountDTO userAccountDTO = UserAccountDTO.builder()
+                .email("")
+                .password("password1")
+                .role("USER")
+                .build();
+        given(userAccountService.saveNewUser(any(UserAccountDTO.class))).willReturn(userAccountServiceImpl.listUsers("", 1, 25).getContent().get(1));
+        MvcResult MvcResult = mockMvc.perform(post(UserAccountController.BASE_URL)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userAccountDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+
+        System.out.println(MvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateUserAccountBlankPassword() throws Exception {
         UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
         testUserAccountDTO.setPassword("");
+        given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
+        MvcResult MvcResult = mockMvc.perform(put(UserAccountController.BASE_URL_ID, testUserAccountDTO.getId())
+                        .header("Authorization", "Bearer " + getJwtToken())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testUserAccountDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+        System.out.println(MvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateUserAccountNullPassword() throws Exception {
+        UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
+        testUserAccountDTO.setPassword(null);
+        given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
+        MvcResult MvcResult = mockMvc.perform(put(UserAccountController.BASE_URL_ID, testUserAccountDTO.getId())
+                        .header("Authorization", "Bearer " + getJwtToken())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testUserAccountDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andReturn();
+        System.out.println(MvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateUserAccountNoEmail() throws Exception {
+        UserAccountDTO testUserAccountDTO = userAccountServiceImpl.listUsers(null, 1, 25).getContent().get(0);
+        testUserAccountDTO.setEmail("test");
         given(userAccountService.updateUserById(any(UUID.class), any(UserAccountDTO.class))).willReturn(Optional.of(testUserAccountDTO));
         MvcResult MvcResult = mockMvc.perform(put(UserAccountController.BASE_URL_ID, testUserAccountDTO.getId())
                         .header("Authorization", "Bearer " + getJwtToken())
