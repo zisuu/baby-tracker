@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,6 +84,13 @@ public class EventServiceJPA implements EventService {
 
     @Override
     public EventDTO saveNewEvent(EventDTO eventDTO) {
+        Optional<LocalDateTime> startDate = Optional.ofNullable(eventDTO.getStartDate());
+        Optional<LocalDateTime> endDate = Optional.ofNullable(eventDTO.getEndDate());
+        if (startDate.isPresent() && endDate.isPresent()) {
+            if (startDate.get().isAfter(endDate.get())) {
+                throw new IllegalArgumentException("Event start date is after event end date");
+            }
+        }
         return eventMapper.eventToEventDto(eventRepository.save(eventMapper.eventDtoToEvent(eventDTO)));
     }
 

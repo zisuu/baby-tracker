@@ -2,6 +2,8 @@ package ch.finecloud.babytracker.services;
 
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.model.EventDTO;
+import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,6 +72,17 @@ public class EventServiceJPATest {
         Mockito.when(babyRepository.findById(babyId)).thenReturn(Optional.of(baby));
 
         assertThrows(IllegalArgumentException.class, () -> eventServiceJPA.createAssociation(eventId, babyId));
+    }
+
+    @Test
+    void testCreateNewEventEndDateAfterStartDate() {
+        EventDTO event = EventDTO.builder()
+                .eventType(EventType.SLEEPING)
+                .startDate(LocalDateTime.of(2020, 1, 1, 1, 1))
+                .endDate(LocalDateTime.of(2020, 1, 1, 1, 0))
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> eventServiceJPA.saveNewEvent(event));
     }
 }
 
