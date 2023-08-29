@@ -30,7 +30,16 @@ export default {
                     router.navigate('/dashboard');
                     return service.putBabyToUser(babyId, store.getUserAccountInfos().id);
                 })
-                .catch(error => view.querySelector('[data-field=error]').innerHTML = "Adding baby failed! msg: " + error.text());
+                .catch(error => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger';
+                    alertDiv.role = 'alert';
+                    alertDiv.textContent = "Adding baby failed! " + error.text();
+
+                    const field = view.querySelector('[data-field=error]');
+                    field.innerHTML = '';
+                    field.appendChild(alertDiv);
+                });
             router.navigate('/dashboard');
         });
     }

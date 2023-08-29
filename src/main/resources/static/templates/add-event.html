@@ -8,35 +8,38 @@
             <form>
                 <div class="row g-3">
                     <div class="col-12">
-                        <label for="eventtype" class="form-label">EventType</label>
-                        <select name="eventType" class="form-select" id="eventtype" required>
+                        <label class="form-label" for="eventtype">EventType</label>
+                        <select class="form-select" id="eventtype" name="eventType" required>
                             <option value="">Choose...</option>
                         </select>
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="startTime" class="form-label">Start</label>
-                        <input name="startTime" type="text" class="form-control"  id="startTime" placeholder="" value="" required>
+                        <label class="form-label" for="startTime">Start</label>
+                        <input class="form-control" id="startTime" name="startTime" placeholder="" required type="text"
+                               value="">
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="endTime" class="form-label">End</label>
-                        <input  name="endTime" type="text" class="form-control" id="endTime" placeholder="" value="" required>
+                        <label class="form-label" for="endTime">End</label>
+                        <input class="form-control" id="endTime" name="endTime" placeholder="" required type="text"
+                               value="">
                     </div>
 
                     <div class="col-12">
-                        <label for="notes" class="form-label">Notes</label>
-                        <input name="notes" id="notes" type="text" class="form-control" placeholder="Put your notes in here...">
+                        <label class="form-label" for="notes">Notes</label>
+                        <input class="form-control" id="notes" name="notes" placeholder="Put your notes in here..."
+                               type="text">
                     </div>
 
                 </div>
+                <br>
+                <div data-field="error"></div>
                 <hr class="my-4">
                 <button class="btn btn-primary btn-lg" data-action="add">Add</button>
                 <button class="btn btn-secondary btn-lg" data-action="cancel">Cancel</button>
             </form>
-            <p data-field="error"></p>
         </div>
     </main>
-
 </div>
 </body>

@@ -44,7 +44,17 @@ export default {
                         });
                 })
                 .then(() => router.navigate('/dashboard'))
-                .catch(async error => view.querySelector('[data-field=error]').innerHTML = "Adding event failed! msg: " + await error.text());
+                .catch(async error => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger';
+                    alertDiv.role = 'alert';
+                    alertDiv.textContent = "Adding event failed! " + await error.text();
+
+                    const field = view.querySelector('[data-field=error]');
+                    field.innerHTML = '';
+                    field.appendChild(alertDiv);
+                });
+
         });
 
         const eventTypes = store.getEventTypes();
