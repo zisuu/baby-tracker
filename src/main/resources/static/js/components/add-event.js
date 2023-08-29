@@ -67,18 +67,25 @@ export default {
     }
 }
 
-
 function getFormData(form) {
     const timezoneOffset = new Date().getTimezoneOffset() * 60000; // in milliseconds
-    const startDate = new Date(form.startTime.value);
-    const endDate = new Date(form.endTime.value);
-
-    const utcStartDate = new Date(startDate.getTime() - timezoneOffset);
-    const utcEndDate = new Date(endDate.getTime() - timezoneOffset);
-    return {
+    const formData = {
         eventType: form.eventType.value,
-        notes: form.notes.value,
-        startDate: utcStartDate.toISOString().slice(0, 16),
-        endDate: utcEndDate.toISOString().slice(0, 16)
+        notes: form.notes.value
     };
+
+    if (form.startTime.value && form.endTime.value) {
+        const startDate = new Date(form.startTime.value);
+        const endDate = new Date(form.endTime.value);
+        const utcStartDate = new Date(startDate.getTime() - timezoneOffset);
+        const utcEndDate = new Date(endDate.getTime() - timezoneOffset);
+        formData.startDate = utcStartDate.toISOString().slice(0, 16);
+        formData.endDate = utcEndDate.toISOString().slice(0, 16);
+    } else if (form.startTime.value) {
+        const startDate = new Date(form.startTime.value);
+        const utcStartDate = new Date(startDate.getTime() - timezoneOffset);
+        formData.startDate = utcStartDate.toISOString().slice(0, 16);
+    }
+
+    return formData;
 }

@@ -29,21 +29,37 @@ export default {
                 eventRow.appendChild(eventTypeCell);
 
                 const startDateCell = document.createElement('td');
-                const parsedStartDate = new Date(babyEvent.startDate);
-                const options = {
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric'
-                };
-                startDateCell.textContent = parsedStartDate.toLocaleDateString('UTC', options);
+                if (babyEvent.startDate) {
+                    const parsedStartDate = new Date(babyEvent.startDate);
+                    const options = {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric'
+                    };
+                    startDateCell.textContent = parsedStartDate.toLocaleDateString('UTC', options);
+                } else {
+                    startDateCell.textContent = 'N/A';
+                }
                 eventRow.appendChild(startDateCell);
 
                 const endDateCell = document.createElement('td');
-                const parsedEndDate = new Date(babyEvent.endDate);
-                endDateCell.textContent = parsedEndDate.toLocaleDateString('UTC', options);
+                if (babyEvent.endDate) {
+                    const parsedEndDate = new Date(babyEvent.endDate);
+                    const options = {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric'
+                    };
+                    endDateCell.textContent = parsedEndDate.toLocaleDateString('UTC', options);
+                } else {
+                    endDateCell.textContent = 'N/A';
+                }
                 eventRow.appendChild(endDateCell);
 
                 const notesCell = document.createElement('td');

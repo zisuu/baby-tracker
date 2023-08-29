@@ -59,21 +59,38 @@ function updateEvent(jsEvent, view, event) {
             store.updateEvent(updatedEvent);
             router.navigate('/dashboard');
         })
-        .catch(error => view.querySelector('[data-field=error]').innerHTML = "Updating event failed! msg: " + error.text());
+        .catch(error => {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger';
+            alertDiv.role = 'alert';
+            alertDiv.textContent = "Updating event failed! " + error.text();
+
+            const field = view.querySelector('[data-field=error]');
+            field.innerHTML = '';
+            field.appendChild(alertDiv);
+        });
 }
 
 function getFormData(form) {
     const timezoneOffset = new Date().getTimezoneOffset() * 60000; // in milliseconds
-    const startDate = new Date(form.startDate.value);
-    const endDate = new Date(form.endDate.value);
-
-    const utcStartDate = new Date(startDate.getTime() - timezoneOffset);
-    const utcEndDate = new Date(endDate.getTime() - timezoneOffset);
-    return {
+    const formData = {
         eventType: form.eventType.value,
-        notes: form.notes.value,
-        startDate: utcStartDate.toISOString().slice(0, 16),
-        endDate: utcEndDate.toISOString().slice(0, 16)
+        notes: form.notes.value
     };
+
+    if (form.startDate.value && form.endDate.value) {
+        const startDate = new Date(form.startDate.value);
+        const endDate = new Date(form.endDate.value);
+        const utcStartDate = new Date(startDate.getTime() - timezoneOffset);
+        const utcEndDate = new Date(endDate.getTime() - timezoneOffset);
+        formData.startDate = utcStartDate.toISOString().slice(0, 16);
+        formData.endDate = utcEndDate.toISOString().slice(0, 16);
+    } else if (form.startDate.value) {
+        const startDate = new Date(form.startDate.value);
+        const utcStartDate = new Date(startDate.getTime() - timezoneOffset);
+        formData.startDate = utcStartDate.toISOString().slice(0, 16);
+    }
+
+    return formData;
 }
 
