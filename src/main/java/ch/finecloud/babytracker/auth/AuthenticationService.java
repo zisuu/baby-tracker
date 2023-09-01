@@ -46,4 +46,8 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+    public boolean checkIfUserExists(String email) {
+        return repository.findUserAccountByEmail(email).isPresent();
+    }
 }

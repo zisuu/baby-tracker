@@ -28,7 +28,7 @@ function processRegister(view) {
                     msg = "The provided user data is invalid!";
                     break;
                 case 409:
-                    msg = "Please choose another username!";
+                    msg = "Please choose another email address! User with this email already exists!";
                     break;
                 default:
                     msg = "Registering user failed!";

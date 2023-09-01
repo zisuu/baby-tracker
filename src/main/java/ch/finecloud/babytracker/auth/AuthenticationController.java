@@ -1,6 +1,7 @@
 package ch.finecloud.babytracker.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,11 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (@Validated @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(service.register(request));
+        if (service.checkIfUserExists(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else {
+            return ResponseEntity.ok(service.register(request));
+        }
     }
 
     @PostMapping("/authenticate")
