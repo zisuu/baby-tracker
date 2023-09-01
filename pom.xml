@@ -110,8 +110,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
-			<artifactId>feather-icons</artifactId>
-			<version>4.29.0</version>
+			<artifactId>fortawesome__fontawesome-free</artifactId>
+			<version>6.4.2</version>
 		</dependency>
 	</dependencies>
 

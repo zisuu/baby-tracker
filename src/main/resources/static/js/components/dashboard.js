@@ -18,28 +18,20 @@ export default {
             util.updateViewField('babyname', `Timeline of ${firstBaby.name}`, view);
             let ageString = calculateAge(firstBaby.birthday)
             util.updateViewField('age', `Age: ${ageString}`, view);
-
             const tbody = view.querySelector('tbody'); // Select the tbody element
 
             store.getEvents().forEach(babyEvent => {
                 const eventRow = document.createElement('tr'); // Create a new <tr> element
 
                 const eventTypeCell = document.createElement('td');
-                eventTypeCell.textContent = babyEvent.eventType;
+
+                eventTypeCell.innerHTML = `<i class="${getIconClassForEventType(babyEvent.eventType)}"></i>
+                    <span>${babyEvent.eventType}</span>`
                 eventRow.appendChild(eventTypeCell);
 
                 const startDateCell = document.createElement('td');
                 if (babyEvent.startDate) {
-                    const parsedStartDate = new Date(babyEvent.startDate);
-                    const options = {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        second: 'numeric'
-                    };
-                    startDateCell.textContent = parsedStartDate.toLocaleDateString('UTC', options);
+                    startDateCell.textContent = formatDate(babyEvent.startDate)
                 } else {
                     startDateCell.textContent = 'N/A';
                 }
@@ -47,16 +39,7 @@ export default {
 
                 const endDateCell = document.createElement('td');
                 if (babyEvent.endDate) {
-                    const parsedEndDate = new Date(babyEvent.endDate);
-                    const options = {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        second: 'numeric'
-                    };
-                    endDateCell.textContent = parsedEndDate.toLocaleDateString('UTC', options);
+                    endDateCell.textContent = formatDate(babyEvent.endDate)
                 } else {
                     endDateCell.textContent = 'N/A';
                 }
@@ -91,7 +74,7 @@ export default {
             util.updateViewField('babyname', 'Add your Baby in the menu above, to track your babies events here.', view);
         }
     }
-}
+};
 
 function deleteEvent(eventId) {
     service.deleteEvent(eventId)
@@ -133,4 +116,41 @@ function calculateAge(inputDate) {
     }
 
     return ageString.join(', ');
+}
+
+function getIconClassForEventType(eventType) {
+    switch (eventType) {
+        case 'FEEDING':
+            return 'fas fa-person-breastfeeding fa-2xl';
+        case 'SLEEPING':
+            return 'fas fa-moon fa-2xl';
+        case 'DIAPER':
+            return 'fas fa-toilet-paper fa-2xl';
+        case 'BEDTIME':
+            return 'fas fa-bed fa-2xl';
+        case 'WAKEUP':
+            return 'fas fa-sun fa-2xl';
+        case 'BATH':
+            return 'fas fa-bath fa-2xl';
+        case 'CRYING':
+            return 'fas fa-face-sad-cry fa-2xl';
+        default:
+            return 'fas fa-question fa-2xl';
+    }
+}
+
+function formatDate(dateString) {
+    if (!dateString) {
+        return null;
+    }
+    const parsedDate = new Date(dateString);
+    const options = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    };
+    return parsedDate.toLocaleDateString('UTC', options);
 }
