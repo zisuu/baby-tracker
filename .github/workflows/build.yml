@@ -29,18 +29,18 @@ jobs:
           name: Package
           path: staging
 
-#  be-lint:
-#    name: 🕵️ Lint Backend Code
-#    needs: [be-build]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Super-Linter
-#        uses: super-linter/super-linter@v5.0.0
-#        env:
-#          VALIDATE_JAVA: true
+  be-lint:
+    name: 🕵️ Lint Backend Code
+    needs: [be-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Super-Linter
+        uses: super-linter/super-linter@v5.0.0
+        env:
+          VALIDATE_JAVA: true
 
 #  be-security-audit:
 #    name: 🛡️ Audit Backend Packages for Security Vulnerabilities
