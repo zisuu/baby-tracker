@@ -2,7 +2,6 @@ package ch.finecloud.babytracker.controller;
 
 import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.services.BabyService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -25,40 +23,40 @@ public class BabyController {
     public static final String BASE_URL_ID = BASE_URL + "/{babyId}";
 
     @PatchMapping(BASE_URL_ID)
-    public ResponseEntity updateCustomerPatchById(@PathVariable("babyId") UUID babyId, @RequestBody BabyDTO babyDTO) {
+    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("babyId") UUID babyId, @RequestBody BabyDTO babyDTO) {
         babyService.patchBabyById(babyId, babyDTO);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(BASE_URL_ID)
-    public ResponseEntity deleteById(@PathVariable("babyId") UUID babyId) {
-        if (!babyService.deleteById(babyId)) {
+    public ResponseEntity<Void> deleteById(@PathVariable("babyId") UUID babyId) {
+        if (Boolean.FALSE.equals(babyService.deleteById(babyId))) {
             throw new NotFoundException();
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID)
-    public ResponseEntity updateById(@PathVariable("babyId") UUID babyId, @Validated @RequestBody BabyDTO babyDTO) {
+    public ResponseEntity<Void> updateById(@PathVariable("babyId") UUID babyId, @Validated @RequestBody BabyDTO babyDTO) {
         if (babyService.updateBabyById(babyId, babyDTO).isEmpty()) {
             throw new NotFoundException();
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID + "/user/{userId}")
     @PreAuthorize("#userId == authentication.principal.id")
-    public ResponseEntity createAssociation(@PathVariable("babyId") UUID babyId, @PathVariable("userId") UUID userId) {
+    public ResponseEntity<Void> createAssociation(@PathVariable("babyId") UUID babyId, @PathVariable("userId") UUID userId) {
         babyService.createAssociation(babyId, userId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(BASE_URL)
-    public ResponseEntity handlePost(@Validated @RequestBody BabyDTO babyDTO) {
+    public ResponseEntity<Void> handlePost(@Validated @RequestBody BabyDTO babyDTO) {
         BabyDTO savedBabyDTO = babyService.saveNewBaby(babyDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/babies/" + savedBabyDTO.getId().toString());
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(BASE_URL)

@@ -1,8 +1,9 @@
 package ch.finecloud.babytracker.services;
 
+import ch.finecloud.babytracker.controller.NotFoundException;
 import ch.finecloud.babytracker.model.BabyCSVRecord;
-import ch.finecloud.babytracker.model.EventCSVRecord;
 import com.opencsv.bean.CsvToBeanBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+@Slf4j
 @Service
 public class BabyCsvServiceImpl implements BabyCsvService {
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -23,19 +25,22 @@ public class BabyCsvServiceImpl implements BabyCsvService {
                     .withType(BabyCSVRecord.class)
                     .build().parse();
             // Process the records and update date fields using the correct formatter
-            for (BabyCSVRecord record : babyCSVRecords) {
-                try {
-                    LocalDate date = LocalDate.parse(record.getBirthday(), dateFormatter);
-                    record.setBirthday(String.valueOf(date));
-                } catch (DateTimeParseException e) {
-                    // Handle the parsing error, e.g., log it or skip the record
-                    System.err.println("Error parsing date for record: " + record.getBirthday());
-                }
+            for (BabyCSVRecord babyCSVRecord : babyCSVRecords) {
+                parseCSVRecord(babyCSVRecord);
             }
             return babyCSVRecords;
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new NotFoundException(e.getMessage());
+        }
+    }
 
+    private void parseCSVRecord(BabyCSVRecord babyCSVRecord) {
+        try {
+            LocalDate date = LocalDate.parse(babyCSVRecord.getBirthday(), dateFormatter);
+            babyCSVRecord.setBirthday(String.valueOf(date));
+        } catch (DateTimeParseException e) {
+            // Handle the parsing error, e.g., log it or skip the babyCSVRecord
+            log.debug("Error parsing date for babyCSVRecord: " + babyCSVRecord.getBirthday());
         }
     }
 }

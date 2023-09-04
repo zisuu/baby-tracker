@@ -2,7 +2,9 @@ package ch.finecloud.babytracker.model;
 
 import ch.finecloud.babytracker.entities.Baby;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 

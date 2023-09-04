@@ -18,6 +18,6 @@ class BabyCsvServiceImplTest {
         File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
         List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
         System.out.println(babyCSVRecords.size());
-        assertThat(babyCSVRecords.size()).isGreaterThan(0);
+        assertThat(babyCSVRecords).isNotEmpty();
     }
 }

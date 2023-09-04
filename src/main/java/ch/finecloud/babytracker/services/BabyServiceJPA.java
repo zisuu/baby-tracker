@@ -6,6 +6,7 @@ import ch.finecloud.babytracker.mappers.BabyMapper;
 import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.UserAccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -15,13 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -38,13 +35,13 @@ public class BabyServiceJPA implements BabyService {
     @Override
     public Page<BabyDTO> listBabies(String name, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
-        Page<Baby> beerPage;
+        Page<Baby> babyPage;
         if (StringUtils.hasText(name)) {
-            beerPage = listBabyByName(name, pageRequest);
+            babyPage = listBabyByName(name, pageRequest);
         } else {
-            beerPage = babyRepository.findAll(pageRequest);
+            babyPage = babyRepository.findAll(pageRequest);
         }
-        return beerPage.map(babyMapper::babyToBabyDto);
+        return babyPage.map(babyMapper::babyToBabyDto);
     }
 
     public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
@@ -88,9 +85,7 @@ public class BabyServiceJPA implements BabyService {
         babyRepository.findById(babyId).ifPresentOrElse(baby -> {
             baby.setName(babyDTO.getName());
             atomicReference.set(Optional.of(babyMapper.babyToBabyDto(babyRepository.save(baby))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }
 
@@ -108,14 +103,12 @@ public class BabyServiceJPA implements BabyService {
         AtomicReference<Optional<BabyDTO>> atomicReference = new AtomicReference<>();
 
         babyRepository.findById(babyId).ifPresentOrElse(foundBaby -> {
-            if (StringUtils.hasText(babyDTO.getName())){
+            if (StringUtils.hasText(babyDTO.getName())) {
                 foundBaby.setName(babyDTO.getName());
             }
             atomicReference.set(Optional.of(babyMapper
                     .babyToBabyDto(babyRepository.save(foundBaby))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
@@ -123,8 +116,12 @@ public class BabyServiceJPA implements BabyService {
 
     @Override
     public void createAssociation(UUID babyId, UUID userId) {
-        Baby baby = babyRepository.findById(babyId).get();
-        UserAccount user = userAccountRepository.findById(userId).get();
+        Baby baby = babyRepository.findById(babyId)
+                .orElseThrow(() -> new EntityNotFoundException("Baby not found with ID: " + babyId));
+
+        UserAccount user = userAccountRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
         baby.setUserAccount(user);
         babyRepository.save(baby);
     }

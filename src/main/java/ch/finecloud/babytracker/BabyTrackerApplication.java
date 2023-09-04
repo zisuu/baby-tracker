@@ -2,9 +2,6 @@ package ch.finecloud.babytracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class BabyTrackerApplication {
@@ -12,10 +9,5 @@ public class BabyTrackerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BabyTrackerApplication.class, args);
 	}
-
-//	@Bean
-//	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
 
 }

@@ -2,10 +2,8 @@ package ch.finecloud.babytracker.services;
 
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
-import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
-import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import jakarta.transaction.Transactional;
@@ -21,11 +19,9 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

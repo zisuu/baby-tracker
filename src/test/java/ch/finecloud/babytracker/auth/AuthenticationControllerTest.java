@@ -1,26 +1,18 @@
 package ch.finecloud.babytracker.auth;
 
-import ch.finecloud.babytracker.model.UserAccountDTO;
+import ch.finecloud.babytracker.services.UserAccountService;
 import ch.finecloud.babytracker.services.UserAccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ch.finecloud.babytracker.services.UserAccountService;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.UUID;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,7 +40,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testRegisterSuccess() throws Exception {
+    void testRegisterSuccess() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
                 .contentType("application/json")
                 .content("{\"email\":\"test@example.com\",\"password\":\"password\"}"));
@@ -58,7 +50,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testRegisterFailNoUsername() throws Exception {
+    void testRegisterFailNoUsername() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
                 .contentType("application/json")
                 .content("{\"email\":\"\",\"password\":\"password\"}"));
@@ -68,7 +60,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testRegisterFailNoPassword() throws Exception {
+    void testRegisterFailNoPassword() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
                 .contentType("application/json")
                 .content("{\"email\":\"test\",\"password\":\"\"}"));
@@ -78,7 +70,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testAuthenticationBadCredentials() throws Exception {
+    void testAuthenticationBadCredentials() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/authenticate")
                 .contentType("application/json")
                 .content("{\"email\":\"test\",\"password\":\"test\"}"));
@@ -87,7 +79,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testAuthenticationGoodCredentials() throws Exception {
+    void testAuthenticationGoodCredentials() throws Exception {
         String requestBody = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", USERNAME, PASSWORD);
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/authenticate")
                 .contentType("application/json")

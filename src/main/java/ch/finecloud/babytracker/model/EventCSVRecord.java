@@ -1,9 +1,9 @@
 package ch.finecloud.babytracker.model;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.opencsv.bean.CsvBindByName;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -4,8 +4,6 @@ import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.mappers.EventMapper;
 import ch.finecloud.babytracker.model.EventDTO;
 import ch.finecloud.babytracker.model.EventType;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -25,7 +23,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;

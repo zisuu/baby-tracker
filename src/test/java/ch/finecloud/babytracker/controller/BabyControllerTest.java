@@ -10,10 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,10 +29,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
 @SpringBootTest
@@ -124,7 +120,7 @@ class BabyControllerTest {
                 .andExpect(status().isNoContent());
         verify(babyService).patchBabyById(uuidArgumentCaptor.capture(), babyArgumentCaptor.capture());
         assertThat(testBabyDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
-        assertThat(babyMap.get("name")).isEqualTo(babyArgumentCaptor.getValue().getName());
+        assertThat(babyArgumentCaptor.getValue().getName()).isEqualTo(babyMap.get("name"));
     }
 
     @Test

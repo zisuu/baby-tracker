@@ -3,7 +3,6 @@ package ch.finecloud.babytracker.services;
 import ch.finecloud.babytracker.model.BabyDTO;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

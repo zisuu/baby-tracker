@@ -4,7 +4,8 @@ import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.entities.UserAccount;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

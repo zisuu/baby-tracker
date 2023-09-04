@@ -31,6 +31,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
 
+    public static final String BABYNAME = "Billy";
     private final UserAccountRepository userAccountRepository;
     private final BabyRepository babyRepository;
     private final EventRepository eventRepository;
@@ -171,7 +172,7 @@ public class BootstrapData implements CommandLineRunner {
             Baby baby4 = Baby.builder()
                     .id(UUID.randomUUID())
                     .version(4)
-                    .name("Billy")
+                    .name(BABYNAME)
                     .birthday(LocalDate.now().minusMonths(4))
                     .userAccount(userAccountRepository.findUserAccountByEmail("userAccount2@example.com").get())
                     .createdDate(LocalDateTime.now())

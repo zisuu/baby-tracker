@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,34 +28,34 @@ public class UserAccountController {
     private PasswordEncoder passwordEncoder;
 
     @PatchMapping(BASE_URL_ID)
-    public ResponseEntity updateUserPatchById(@PathVariable("userId") UUID userId, @RequestBody UserAccountDTO userAccountDTO) {
+    public ResponseEntity<Void> updateUserPatchById(@PathVariable("userId") UUID userId, @RequestBody UserAccountDTO userAccountDTO) {
         userAccountService.patchUserById(userId, userAccountDTO);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(BASE_URL_ID)
-    public ResponseEntity deleteById(@PathVariable("userId") UUID userId) {
-        if (!userAccountService.deleteById(userId)) {
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") UUID userId) {
+        if (Boolean.FALSE.equals(userAccountService.deleteById(userId))) {
             throw new NotFoundException();
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID)
-    public ResponseEntity updateById(@PathVariable("userId") UUID userId, @Validated @RequestBody UserAccountDTO userAccountDTO) {
+    public ResponseEntity<Void> updateById(@PathVariable("userId") UUID userId, @Validated @RequestBody UserAccountDTO userAccountDTO) {
         if (userAccountService.updateUserById(userId, userAccountDTO).isEmpty()) {
             throw new NotFoundException();
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(BASE_URL)
-    public ResponseEntity handlePost(@Validated @RequestBody UserAccountDTO userAccountDTO) {
+    public ResponseEntity<Void> handlePost(@Validated @RequestBody UserAccountDTO userAccountDTO) {
         userAccountDTO.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
         UserAccountDTO savedUserAccountDTO = userAccountService.saveNewUser(userAccountDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/users/" + savedUserAccountDTO.getId().toString());
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(BASE_URL)

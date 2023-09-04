@@ -2,7 +2,6 @@ package ch.finecloud.babytracker.services;
 
 import ch.finecloud.babytracker.model.UserAccountDTO;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Optional;
 import java.util.UUID;

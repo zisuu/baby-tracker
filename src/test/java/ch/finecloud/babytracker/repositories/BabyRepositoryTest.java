@@ -6,7 +6,6 @@ import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.services.UserCsvServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,8 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DataJpaTest
 @Import({BootstrapData.class, UserCsvServiceImpl.class, TestConfig.class})
