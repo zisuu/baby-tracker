@@ -29,18 +29,18 @@ jobs:
           name: Package
           path: staging
 
-  be-lint:
-    name: 🕵️ Lint Backend Code
-    needs: [be-build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Super-Linter
-        uses: super-linter/super-linter@v5.0.0
-        env:
-          VALIDATE_JAVA: true
+#  be-lint:
+#    name: 🕵️ Lint Backend Code
+#    needs: [be-build]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Super-Linter
+#        uses: super-linter/super-linter@v5.0.0
+#        env:
+#          VALIDATE_JAVA: true
 
 #  be-security-audit:
 #    name: 🛡️ Audit Backend Packages for Security Vulnerabilities
@@ -52,35 +52,31 @@ jobs:
 #
 #      - name: Check for security issue
 #        run: cd backend && npm audit --production --audit-level=medium
-#
-#  be-static-analysis:
-#    name: 🔬 Run Static Analysis on Backend Code
+
+  be-static-analysis:
+    name: 🔬 Run Static Analysis on Backend Code
 #    needs: [be-build, be-lint, be-test, be-security-audit]
-#    runs-on: ubuntu-latest
-#    permissions:
-#      security-events: write
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: Initialize CodeQL
-#        uses: github/codeql-action/init@v2
-#        with:
-#          config-file: ./.github/codeql/codeql.config.yml
-#
-#      - name: Setup Node
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 16.x
-#
-#      - name: Install Deps
-#        run: cd backend && npm i
-#
-#      - name: Build
-#        run: cd backend && npm run build
-#
-#      # - name: Perform Analysis
-#      #   uses: github/codeql-action/analyze@v1
-#
+    needs: [be-build]
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: java
+          queries: +security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
 #  fe-build:
 #    name: 🛠️ Build Frontend Artifact
 #    runs-on: ubuntu-latest
