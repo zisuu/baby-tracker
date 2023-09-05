@@ -148,13 +148,13 @@ public class EventControllerIT {
 
     @Test
     void testBabyByIdNotFound() {
-        assertThrows(NotFoundException.class, () -> eventController.getEventById(UUID.randomUUID()));
+        assertThrows(NotFoundException.class, () -> eventController.getEventById(String.valueOf(UUID.randomUUID())));
     }
 
     @Test
     void testGetById() {
         Event testEvent = eventRepository.findAll().get(0);
-        EventDTO eventDTO = eventController.getEventById(testEvent.getId());
+        EventDTO eventDTO = eventController.getEventById(String.valueOf(testEvent.getId()));
         assertThat(eventDTO).isNotNull();
     }
 
