@@ -76,7 +76,7 @@ public class EventController {
         return eventService.getEventById(eventId).orElseThrow(NotFoundException::new);
     } catch (IllegalArgumentException e) {
         // Handle the case where eventIdStr is not a valid UUID
-        throw new BadRequestException("Invalid eventId");
+        throw new IllegalArgumentException("Invalid eventId");
     }
 }
 
