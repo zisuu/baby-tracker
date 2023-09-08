@@ -162,7 +162,7 @@ public class EventControllerIT {
     @Test
     void testListEvents() {
         Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
-        assertThat(eventDTOList.getContent().size()).isEqualTo(5);
+        assertThat(eventDTOList.getContent()).hasSize(5);
     }
     @Rollback
     @Transactional
