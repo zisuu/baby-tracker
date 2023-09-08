@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,7 +92,7 @@ public class EventControllerIT {
         Event testEvent = eventRepository.findAll().get(0);
         ResponseEntity responseEntity = eventController.deleteById(testEvent.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
-        assertThat(eventRepository.findById(testEvent.getId()).isEmpty());
+        assertTrue(eventRepository.findById(testEvent.getId()).isEmpty());
     }
 
     @Test
