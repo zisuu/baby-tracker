@@ -38,7 +38,7 @@ class UserAccountAccountRepositoryTest {
     @Test
     void testGetUserByName() {
         Page<UserAccount> list = userAccountRepository.findAllByEmailIsLikeIgnoreCase("%augustus_harrb7@francis.xfv%", null);
-        assertThat(list.getContent().size()).isEqualTo(1);
+        assertThat(list.getContent()).hasSize(1);
     }
 
     @Test

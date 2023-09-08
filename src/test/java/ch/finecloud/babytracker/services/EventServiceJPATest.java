@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-public class EventServiceJPATest {
+class EventServiceJPATest {
 
     @Mock
     private EventRepository eventRepository;
@@ -33,7 +33,7 @@ public class EventServiceJPATest {
     private EventServiceJPA eventServiceJPA;
 
     @Test
-    public void testCreateAssociation_WithValidDate() {
+    void testCreateAssociation_WithValidDate() {
         UUID eventId = UUID.randomUUID();
         UUID babyId = UUID.randomUUID();
         LocalDate babyBirthday = LocalDate.of(2020, 1, 1);
@@ -55,7 +55,7 @@ public class EventServiceJPATest {
     }
 
     @Test
-    public void testCreateAssociation_WithInvalidDate() {
+    void testCreateAssociation_WithInvalidDate() {
         UUID eventId = UUID.randomUUID();
         UUID babyId = UUID.randomUUID();
         LocalDate babyBirthday = LocalDate.of(2020, 1, 1);

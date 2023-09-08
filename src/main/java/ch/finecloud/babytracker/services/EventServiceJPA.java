@@ -82,10 +82,8 @@ public class EventServiceJPA implements EventService {
     public EventDTO saveNewEvent(EventDTO eventDTO) {
         Optional<LocalDateTime> startDate = Optional.ofNullable(eventDTO.getStartDate());
         Optional<LocalDateTime> endDate = Optional.ofNullable(eventDTO.getEndDate());
-        if (startDate.isPresent() && endDate.isPresent()) {
-            if (startDate.get().isAfter(endDate.get())) {
+        if (startDate.isPresent() && endDate.isPresent() && (startDate.get().isAfter(endDate.get()))) {
                 throw new IllegalArgumentException("Event start date is after event end date");
-            }
         }
         return eventMapper.eventToEventDto(eventRepository.save(eventMapper.eventDtoToEvent(eventDTO)));
     }
@@ -99,9 +97,7 @@ public class EventServiceJPA implements EventService {
             event.setStartDate(eventDTO.getStartDate());
             event.setEndDate(eventDTO.getEndDate());
             atomicReference.set(Optional.of(eventMapper.eventToEventDto(eventRepository.save(event))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }
 
@@ -126,9 +122,7 @@ public class EventServiceJPA implements EventService {
                 existingEventDTO.setNotes(eventDTO.getNotes());
             }
             atomicReference.set(Optional.of(eventMapper.eventToEventDto(eventRepository.save(foundEvent))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }
 

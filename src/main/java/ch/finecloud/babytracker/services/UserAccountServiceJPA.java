@@ -87,9 +87,7 @@ public class UserAccountServiceJPA implements UserAccountService {
             user.setEmail(userAccountDTO.getEmail());
             user.setPassword(userAccountDTO.getPassword());
             atomicReference.set(Optional.of(userAccountMapper.userToUserDto(userAccountRepository.save(user))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }
 
@@ -115,9 +113,7 @@ public class UserAccountServiceJPA implements UserAccountService {
                 existingUserAccountDTO.setPassword(userAccountDTO.getPassword());
             }
             atomicReference.set(Optional.of(userAccountMapper.userToUserDto(userAccountRepository.save(foundUser))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }
 }

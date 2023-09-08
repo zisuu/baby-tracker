@@ -203,7 +203,7 @@ public class BootstrapData implements CommandLineRunner {
                     .eventType(EventType.SLEEPING)
                     .startDate(LocalDateTime.now().minusHours(1))
                     .endDate(LocalDateTime.now())
-                    .baby(babyRepository.findBabyByName("Billy"))
+                    .baby(babyRepository.findBabyByName(BABYNAME))
                     .build();
 
             Event event12 = Event.builder()
@@ -212,7 +212,7 @@ public class BootstrapData implements CommandLineRunner {
                     .eventType(EventType.BEDTIME)
                     .startDate(LocalDateTime.now().minusHours(4))
                     .endDate(LocalDateTime.now())
-                    .baby(babyRepository.findBabyByName("Billy"))
+                    .baby(babyRepository.findBabyByName(BABYNAME))
                     .build();
 
             Event event13 = Event.builder()
@@ -221,7 +221,7 @@ public class BootstrapData implements CommandLineRunner {
                     .eventType(EventType.WAKEUP)
                     .startDate(LocalDateTime.now().minusHours(5))
                     .endDate(LocalDateTime.now())
-                    .baby(babyRepository.findBabyByName("Billy"))
+                    .baby(babyRepository.findBabyByName(BABYNAME))
                     .build();
 
             Event event2 = Event.builder()

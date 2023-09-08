@@ -14,10 +14,9 @@ public class UserCsvServiceImpl implements UserCsvService {
     @Override
     public List<UserAccountCSVRecord> convertCSV(File csvFile) {
         try {
-            List<UserAccountCSVRecord> userAccountCSVRecords = new CsvToBeanBuilder<UserAccountCSVRecord>(new FileReader(csvFile))
+            return new CsvToBeanBuilder<UserAccountCSVRecord>(new FileReader(csvFile))
                     .withType(UserAccountCSVRecord.class)
                     .build().parse();
-            return userAccountCSVRecords;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -14,10 +14,9 @@ public class EventCsvServiceImpl implements EventCsvService {
     @Override
     public List<EventCSVRecord> convertCSV(File csvFile) {
         try {
-            List<EventCSVRecord> eventCSVRecords = new CsvToBeanBuilder<EventCSVRecord>(new FileReader(csvFile))
+            return new CsvToBeanBuilder<EventCSVRecord>(new FileReader(csvFile))
                     .withType(EventCSVRecord.class)
                     .build().parse();
-            return eventCSVRecords;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

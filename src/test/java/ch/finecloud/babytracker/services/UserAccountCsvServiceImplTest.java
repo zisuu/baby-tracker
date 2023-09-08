@@ -18,6 +18,6 @@ class UserAccountCsvServiceImplTest {
         File file = ResourceUtils.getFile("classpath:csvdata/users.csv");
         List<UserAccountCSVRecord> userAccountCSVRecords = userCsvService.convertCSV(file);
         System.out.println(userAccountCSVRecords.size());
-        assertThat(userAccountCSVRecords.size()).isGreaterThan(0);
+        assertThat(userAccountCSVRecords).isNotEmpty();
     }
 }

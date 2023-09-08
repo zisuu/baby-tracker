@@ -22,41 +22,41 @@ public class EventController {
     public static final String BASE_URL_ID = BASE_URL + "/{eventId}";
 
     @PatchMapping(BASE_URL_ID)
-    public ResponseEntity updateEventPatchById(@PathVariable("eventId") UUID eventId, @RequestBody EventDTO eventDTO) {
+    public ResponseEntity<Void> updateEventPatchById(@PathVariable("eventId") UUID eventId, @RequestBody EventDTO eventDTO) {
         eventService.patchEventById(eventId, eventDTO);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(BASE_URL_ID)
-    public ResponseEntity deleteById(@PathVariable("eventId") UUID eventId) {
-        if (!eventService.deleteById(eventId)) {
+    public ResponseEntity<Void> deleteById(@PathVariable("eventId") UUID eventId) {
+        if (Boolean.FALSE.equals(eventService.deleteById(eventId))) {
             log.debug("EventController.deleteById was called with eventId: " + eventId);
             throw new NotFoundException();
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID)
-    public ResponseEntity updateById(@PathVariable("eventId") UUID eventId, @Validated @RequestBody EventDTO eventDTO) {
+    public ResponseEntity<Void> updateById(@PathVariable("eventId") UUID eventId, @Validated @RequestBody EventDTO eventDTO) {
         if (eventService.updateEventById(eventId, eventDTO).isEmpty()) {
             throw new NotFoundException();
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BASE_URL_ID + "/baby/{babyId}")
 //    @PreAuthorize("#userId == authentication.principal.id")
-    public ResponseEntity createAssociation(@PathVariable("eventId") UUID eventId, @PathVariable("babyId") UUID babyId) {
+    public ResponseEntity<Void> createAssociation(@PathVariable("eventId") UUID eventId, @PathVariable("babyId") UUID babyId) {
         eventService.createAssociation(eventId, babyId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(BASE_URL)
-    public ResponseEntity handlePost(@Validated @RequestBody EventDTO eventDTO) {
+    public ResponseEntity<Void> handlePost(@Validated @RequestBody EventDTO eventDTO) {
         EventDTO savedEventDTO = eventService.saveNewEvent(eventDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/events/" + savedEventDTO.getId().toString());
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(BASE_URL)

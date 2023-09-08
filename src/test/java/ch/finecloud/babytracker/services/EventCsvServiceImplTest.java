@@ -18,6 +18,6 @@ class EventCsvServiceImplTest {
         File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
         List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
         System.out.println(eventCSVRecords.size());
-        assertThat(eventCSVRecords.size()).isGreaterThan(0);
+        assertThat(eventCSVRecords).isNotEmpty();
     }
 }
