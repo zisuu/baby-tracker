@@ -58,7 +58,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public Optional<UserAccountDTO> getUserById(UUID id) {
-        log.debug("getUserById was called with id: " + id + ", in Service");
+        log.debug("getUserById was called with id: " + String.valueOf(id) + ", in Service");
         return Optional.of(userMap.get(id));
     }
 
