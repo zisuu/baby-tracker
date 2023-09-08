@@ -5,6 +5,8 @@ import ch.finecloud.babytracker.config.TestConfig;
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.entities.UserAccount;
+import ch.finecloud.babytracker.services.BabyCsvServiceImpl;
+import ch.finecloud.babytracker.services.EventCsvServiceImpl;
 import ch.finecloud.babytracker.services.UserCsvServiceImpl;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DataJpaTest
-@Import({BootstrapData.class, UserCsvServiceImpl.class, TestConfig.class})
+@Import({BootstrapData.class, UserCsvServiceImpl.class, EventCsvServiceImpl.class, BabyCsvServiceImpl.class, TestConfig.class})
 class BabyRepositoryTest {
 
     @Autowired

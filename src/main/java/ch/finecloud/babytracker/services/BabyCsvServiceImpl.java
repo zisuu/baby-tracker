@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class BabyCsvServiceImpl implements BabyCsvService {
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Override
     public List<BabyCSVRecord> convertCSV(File csvFile) {
         try {

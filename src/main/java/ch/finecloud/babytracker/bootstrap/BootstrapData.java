@@ -6,11 +6,15 @@ import ch.finecloud.babytracker.entities.Event;
 import ch.finecloud.babytracker.entities.Role;
 import ch.finecloud.babytracker.entities.UserAccount;
 import ch.finecloud.babytracker.mappers.BabyMapper;
+import ch.finecloud.babytracker.model.BabyCSVRecord;
+import ch.finecloud.babytracker.model.EventCSVRecord;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.model.UserAccountCSVRecord;
 import ch.finecloud.babytracker.repositories.BabyRepository;
 import ch.finecloud.babytracker.repositories.EventRepository;
 import ch.finecloud.babytracker.repositories.UserAccountRepository;
+import ch.finecloud.babytracker.services.BabyCsvService;
+import ch.finecloud.babytracker.services.EventCsvService;
 import ch.finecloud.babytracker.services.UserCsvService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +39,10 @@ public class BootstrapData implements CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final BabyRepository babyRepository;
     private final EventRepository eventRepository;
-    //    private final BabyCsvService babyCsvService;
+    private final BabyCsvService babyCsvService;
     private final UserCsvService userCsvService;
-    //    private final EventCsvService eventCsvService;
+    private final EventCsvService eventCsvService;
+
     @Autowired
     private final PasswordEncoder passwordEncoder;
     @Autowired
@@ -69,33 +74,36 @@ public class BootstrapData implements CommandLineRunner {
                         .build());
             });
         }
-//
-//        if (eventRepository.count() < 10) {
-//            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
-//
-//            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
-//
-//            eventCSVRecords.forEach(eventCSVRecord -> {
-//                EventType eventType = eventCSVRecord.getEventType();
-//
-//                eventRepository.save(Event.builder()
-//                        .eventType(eventType)
-//                        .build());
-//            });
-//        }
-//        if (babyRepository.count() < 10) {
-//            File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
-//
-//            List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
-//
-//            babyCSVRecords.forEach(babyCSVRecord -> {
-//                String name = babyCSVRecord.getName();
-//
-//                babyRepository.save(Baby.builder()
-//                        .name(name)
-//                        .build());
-//            });
-//        }
+
+        if (eventRepository.count() < 10) {
+            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
+
+            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
+
+            eventCSVRecords.forEach(eventCSVRecord -> {
+                EventType eventType = eventCSVRecord.getEventType();
+
+                eventRepository.save(Event.builder()
+                        .eventType(eventType)
+                        .build());
+            });
+        }
+
+        if (babyRepository.count() < 10) {
+            File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
+
+            List<BabyCSVRecord> babyCSVRecords = babyCsvService.convertCSV(file);
+
+            babyCSVRecords.forEach(babyCSVRecord -> {
+                String name = babyCSVRecord.getName();
+                LocalDate birthday = LocalDate.parse(babyCSVRecord.getBirthday());
+
+                babyRepository.save(Baby.builder()
+                        .name(name)
+                        .birthday(birthday)
+                        .build());
+            });
+        }
     }
 
     private void loadUserAccountData() {
