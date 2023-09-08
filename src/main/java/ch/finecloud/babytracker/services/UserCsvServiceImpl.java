@@ -1,5 +1,6 @@
 package ch.finecloud.babytracker.services;
 
+import ch.finecloud.babytracker.controller.NotFoundException;
 import ch.finecloud.babytracker.model.UserAccountCSVRecord;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class UserCsvServiceImpl implements UserCsvService {
                     .withType(UserAccountCSVRecord.class)
                     .build().parse();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new NotFoundException(e);
         }
     }
 }

@@ -65,7 +65,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public Optional<UserAccountDTO> getUserByUsername(String username) {
         log.debug("getUserByUsername was called with username: " + username + ", in Service");
-        return Optional.of(userMap.get(username));
+        return userMap.values().stream()
+                .filter(userAccountDTO -> userAccountDTO.getEmail().equals(username))
+                .findFirst();
     }
 
     @Override
