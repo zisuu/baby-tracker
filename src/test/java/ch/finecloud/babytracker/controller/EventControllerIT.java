@@ -77,7 +77,7 @@ public class EventControllerIT {
                         .queryParam("eventType", EventType.FEEDING.name())
                 .header("Authorization", "Bearer " + getJwtToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()", CoreMatchers.is(7)));
+                .andExpect(jsonPath("$.content.length()", CoreMatchers.is(25)));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class EventControllerIT {
     @Test
     void testListEvents() {
         Page<EventDTO> eventDTOList = eventController.listEvents(null, 1, 25);
-        assertThat(eventDTOList.getContent()).hasSize(7);
+        assertThat(eventDTOList.getContent()).hasSize(25);
     }
     @Rollback
     @Transactional

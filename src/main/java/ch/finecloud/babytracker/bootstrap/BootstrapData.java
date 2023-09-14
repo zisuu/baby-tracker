@@ -75,20 +75,6 @@ public class BootstrapData implements CommandLineRunner {
             });
         }
 
-        if (eventRepository.count() < 10) {
-            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
-
-            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
-
-            eventCSVRecords.forEach(eventCSVRecord -> {
-                EventType eventType = eventCSVRecord.getEventType();
-
-                eventRepository.save(Event.builder()
-                        .eventType(eventType)
-                        .build());
-            });
-        }
-
         if (babyRepository.count() < 10) {
             File file = ResourceUtils.getFile("classpath:csvdata/babies.csv");
 
@@ -100,7 +86,25 @@ public class BootstrapData implements CommandLineRunner {
 
                 babyRepository.save(Baby.builder()
                         .name(name)
+                        .userAccount(userAccountRepository.findUserAccountByEmail("userAccount2@example.com").get())
                         .birthday(birthday)
+                        .build());
+            });
+        }
+
+        if (eventRepository.count() < 10) {
+            File file = ResourceUtils.getFile("classpath:csvdata/events.csv");
+
+            List<EventCSVRecord> eventCSVRecords = eventCsvService.convertCSV(file);
+
+            eventCSVRecords.forEach(eventCSVRecord -> {
+                EventType eventType = eventCSVRecord.getEventType();
+
+                eventRepository.save(Event.builder()
+                        .eventType(eventType)
+                        .startDate(LocalDateTime.parse(eventCSVRecord.getStartDate()))
+                        .endDate(LocalDateTime.parse(eventCSVRecord.getEndDate()))
+                        .baby(babyRepository.findBabyByName("Jobie"))
                         .build());
             });
         }

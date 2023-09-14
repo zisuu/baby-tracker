@@ -12,4 +12,8 @@ public class EventCSVRecord {
     private int row;
     @CsvBindByName
     private EventType eventType;
+    @CsvBindByName
+    private String startDate;
+    @CsvBindByName
+    private String endDate;
 }
