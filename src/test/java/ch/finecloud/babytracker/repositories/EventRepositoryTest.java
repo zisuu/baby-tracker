@@ -4,6 +4,7 @@ import ch.finecloud.babytracker.bootstrap.BootstrapData;
 import ch.finecloud.babytracker.config.TestConfig;
 import ch.finecloud.babytracker.entities.Baby;
 import ch.finecloud.babytracker.entities.Event;
+import ch.finecloud.babytracker.model.BabyDTO;
 import ch.finecloud.babytracker.model.EventType;
 import ch.finecloud.babytracker.services.BabyCsvServiceImpl;
 import ch.finecloud.babytracker.services.EventCsvServiceImpl;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,10 +36,16 @@ class EventRepositoryTest {
 
 
     Baby testBaby;
+    Baby savedBaby;
 
     @BeforeEach
     void setUp() {
-        testBaby = babyRepository.findAll().get(0);
+        testBaby = Baby.builder()
+                .name("testBaby")
+                .birthday(LocalDate.now())
+                .build();
+        savedBaby = babyRepository.save(testBaby);
+        babyRepository.flush();
     }
 
     @Transactional
@@ -45,7 +54,7 @@ class EventRepositoryTest {
         Event event = Event.builder()
                 .eventType(EventType.SLEEPING)
                 .build();
-        event.setBaby(testBaby);
+        event.setBaby(savedBaby);
         Event savedEvent = eventRepository.save(event);
         eventRepository.flush();
 
@@ -65,7 +74,7 @@ class EventRepositoryTest {
         Event event = Event.builder()
                 .eventType(EventType.SLEEPING)
                 .build();
-        event.setBaby(testBaby);
+        event.setBaby(savedBaby);
         Event savedEvent = eventRepository.save(event);
         eventRepository.flush();
 
