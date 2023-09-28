@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.UUID;
 
 @Slf4j
@@ -60,11 +61,11 @@ public class BabyController {
     }
 
     @GetMapping(BASE_URL)
-    public Page<BabyDTO> listBabies(@RequestParam(required = false) String name,
-                                   @RequestParam(required = false) Integer pageNumber,
-                                   @RequestParam(required = false) Integer pageSize) {
+    public Page<BabyDTO> listBabies(@RequestParam(required = false) String babyName,
+                                    @RequestParam(required = false) Integer pageNumber,
+                                    @RequestParam(required = false) Integer pageSize, Principal principal) {
         log.debug("listBabies was called, in Controller");
-        return babyService.listBabies(name, pageNumber, pageSize);
+        return babyService.listBabiesByUserAccountEmail(principal.getName(), babyName, pageNumber, pageSize);
     }
 
     @GetMapping(BASE_URL_ID)

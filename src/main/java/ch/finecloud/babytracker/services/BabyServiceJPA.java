@@ -33,13 +33,13 @@ public class BabyServiceJPA implements BabyService {
     private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public Page<BabyDTO> listBabies(String name, Integer pageNumber, Integer pageSize) {
+    public Page<BabyDTO> listBabiesByUserAccountEmail(String userAccountEmail, String babyName, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
         Page<Baby> babyPage;
-        if (StringUtils.hasText(name)) {
-            babyPage = listBabyByName(name, pageRequest);
+        if (StringUtils.hasText(babyName)) {
+            babyPage = listBabiesByUserAccountEmailAndBabyName(userAccountEmail, babyName, pageRequest);
         } else {
-            babyPage = babyRepository.findAll(pageRequest);
+            babyPage = babyRepository.findAllByUserAccount_Email(userAccountEmail, pageRequest);
         }
         return babyPage.map(babyMapper::babyToBabyDto);
     }
@@ -65,8 +65,8 @@ public class BabyServiceJPA implements BabyService {
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
-    public Page<Baby> listBabyByName(String name, Pageable pageable) {
-        return babyRepository.findAllByNameIsLikeIgnoreCase("%" + name + "%", pageable);
+    public Page<Baby> listBabiesByUserAccountEmailAndBabyName(String userAccountEmail, String name, Pageable pageable) {
+        return babyRepository.findAllByUserAccount_EmailAndNameIsLikeIgnoreCase(userAccountEmail, "%" + name + "%", pageable);
     }
 
     @Override
