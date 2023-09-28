@@ -1,5 +1,9 @@
-package ch.finecloud.babytracker.auth;
+package ch.finecloud.babytracker.controller;
 
+import ch.finecloud.babytracker.model.AuthenticationRequest;
+import ch.finecloud.babytracker.model.AuthenticationResponse;
+import ch.finecloud.babytracker.services.AuthenticationService;
+import ch.finecloud.babytracker.model.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

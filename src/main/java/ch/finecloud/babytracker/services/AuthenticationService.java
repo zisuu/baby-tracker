@@ -1,8 +1,11 @@
-package ch.finecloud.babytracker.auth;
+package ch.finecloud.babytracker.services;
 
 import ch.finecloud.babytracker.config.JwtService;
 import ch.finecloud.babytracker.entities.Role;
 import ch.finecloud.babytracker.entities.UserAccount;
+import ch.finecloud.babytracker.model.AuthenticationRequest;
+import ch.finecloud.babytracker.model.AuthenticationResponse;
+import ch.finecloud.babytracker.model.RegisterRequest;
 import ch.finecloud.babytracker.repositories.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package ch.finecloud.babytracker.auth;
+package ch.finecloud.babytracker.controller;
 
 import ch.finecloud.babytracker.services.UserAccountService;
 import ch.finecloud.babytracker.services.UserAccountServiceImpl;

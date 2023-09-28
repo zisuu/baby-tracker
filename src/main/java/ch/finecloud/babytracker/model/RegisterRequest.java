@@ -1,4 +1,4 @@
-package ch.finecloud.babytracker.auth;
+package ch.finecloud.babytracker.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

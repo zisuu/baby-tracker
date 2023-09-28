@@ -1,4 +1,4 @@
-package ch.finecloud.babytracker.auth;
+package ch.finecloud.babytracker.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
